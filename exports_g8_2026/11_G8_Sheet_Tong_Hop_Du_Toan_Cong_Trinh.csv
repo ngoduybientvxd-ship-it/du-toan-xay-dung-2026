@@ -1,0 +1,12 @@
+﻿"BẢNG 11. TỔNG HỢP DỰ TOÁN XÂY DỰNG CÔNG TRÌNH (THÔNG TƯ 36/2026, THÔNG TƯ 38/2026 & CÔNG VĂN 12637/BXD-KTQLXD)",,,,,,
+Tùy chọn Công văn 12637/BXD-KTQLXD (G8 20/08/2026):,,,,,,
+STT,Khoản mục chi phí dự toán,Ký hiệu,Giá trị trước thuế (đ),Thuế GTGT (đ),Giá trị sau thuế (đ),Thuyết minh / Căn cứ pháp lý
+1,Chi phí xây dựng,G_XD,7439936273.0,595194902.0,8035131175.0,Bảng 3.1 & Bảng 3.8 Phụ lục III TT 36/2026/TT-BXD
+1.1," - Chi phí xây dựng công trình chính, phụ trợ",G_XDTT,7358987411.0,588718993.0,7947706404.0,Tách dòng theo Bảng 3.1 TT 36/2026 (G8 20/08/2026)
+1.2, - Chi phí nhà tạm tại hiện trường để ở và điều hành thi công,LT,80948862.0,6475909.0,87424771.0,Đính chính theo Quyết định 1538/QĐ-BXD
+2,Chi phí thiết bị,G_TB,1515000000.0,121200000.0,1636200000.0,Mua sắm + Lắp đặt + Thí nghiệm hiệu chỉnh
+3,Chi phí quản lý dự án,G_QLDA,308587104.0,24686968.0,333274072.0,Bảng 1.1 Mục I Phụ lục VIII TT 38/2026/TT-BXD
+4,Chi phí tư vấn đầu tư xây dựng,G_TV,695663346.0,55653068.0,751316414.0,Mục II Phụ lục VIII TT 38/2026/TT-BXD
+5,Chi phí khác,G_K,62657541.0,4298369.0,66955910.0,"Thẩm tra, kiểm toán, bảo hiểm, rà phá bom mìn"
+6,Chi phí dự phòng (G_DP1 + G_DP2),G_DP,751638320.0,60077498.0,811715818.0,Dự phòng khối lượng phát sinh + trượt giá
+TỔNG CỘNG,TỔNG DỰ TOÁN XÂY DỰNG CÔNG TRÌNH,G_DTXD,10773482584.0,861110805.0,11634593389.0,Tổng cộng 6 khoản mục (1+2+3+4+5+6)

@@ -1820,6 +1820,134 @@ function exportExcelWorkbook() {
   a.click();
 }
 
+function applyPeriodAndProvincePrice() {
+  const periodId = (document.getElementById("selPricePeriod") || {}).value || "q4_2026";
+  const provId = (document.getElementById("selProvincePrice") || {}).value || "ha_noi";
+  const ppData = state.regulations.price_periods_2025_2026 || {};
+  const period = (ppData.periods || []).find(p => p.id === periodId) || { vl_index: 1.0, nc_index: 1.0, diesel_price: 18500, gasoline_price: 19800, electricity_price: 2160, label: "Quý IV/2026" };
+  const prov = (ppData.provinces || []).find(pr => pr.id === provId) || { name: "TP. Hà Nội", vl_factor: 1.0, nc_factor: 1.0, mountain_island: false };
+
+  // Lưu giá gốc lần đầu nếu chưa có
+  state.prices.vat_lieu.forEach(vl => {
+    if (vl._orig_base === undefined) vl._orig_base = Number(vl.base_price || vl.price || 0);
+    vl.base_price = Math.round(vl._orig_base * Number(period.vl_index || 1.0) * Number(prov.vl_factor || 1.0));
+  });
+
+  state.project_info.location = `${prov.name} — Áp dụng đơn giá: ${period.label}`;
+  state.project_info.k_nc = Number((Number(period.nc_index || 1.0) * Number(prov.nc_factor || 1.0)).toFixed(3));
+  state.project_info.is_mountain_island = Boolean(prov.mountain_island);
+
+  const elDiesel = document.getElementById("inpDieselPrice");
+  const elGas = document.getElementById("inpGasolinePrice");
+  const elElec = document.getElementById("inpElectricPrice");
+  if (elDiesel) elDiesel.value = period.diesel_price;
+  if (elGas) elGas.value = period.gasoline_price;
+  if (elElec) elElec.value = period.electricity_price;
+
+  syncProjectInputs();
+  recalcMachinesAndLink();
+}
+
+function previewDrawingFile(event) {
+  const file = event.target.files && event.target.files[0];
+  if (!file) return;
+  const box = document.getElementById("drawingPreviewBox");
+  const url = URL.createObjectURL(file);
+  if (file.type === "application/pdf" || file.name.toLowerCase().endsWith(".pdf")) {
+    box.innerHTML = `<iframe src="${url}" style="width:100%; height:440px; border:none; border-radius:4px;"></iframe>
+      <div style="margin-top:6px; font-size:0.78rem; font-weight:700; color:var(--accent-primary);">Đã nạp Bản vẽ PDF: ${file.name} (${(file.size/1024).toFixed(1)} KB)</div>`;
+  } else {
+    box.innerHTML = `<img src="${url}" style="max-width:100%; max-height:420px; object-fit:contain; border-radius:4px;" />
+      <div style="margin-top:6px; font-size:0.78rem; font-weight:700; color:var(--accent-primary);">Đã nạp Ảnh Bản vẽ: ${file.name} (${(file.size/1024).toFixed(1)} KB)</div>`;
+  }
+}
+
+function runDrawingTakeoffToBoq(replaceAll) {
+  const fCount = Number(document.getElementById("dwFootingCount").value || 0);
+  const fL = Number(document.getElementById("dwFootingL").value || 2.2);
+  const fB = Number(document.getElementById("dwFootingB").value || 1.8);
+  const fH = Number(document.getElementById("dwFootingH").value || 0.65);
+  const pitDepth = Number(document.getElementById("dwPitDepth").value || 1.6);
+  const steelFooting = Number(document.getElementById("dwSteelFooting").value || 110);
+
+  const floors = Number(document.getElementById("dwFloors").value || 3);
+  const floorArea = Number(document.getElementById("dwFloorArea").value || 250);
+  const floorH = Number(document.getElementById("dwFloorHeight").value || 3.6);
+  const colCount = Number(document.getElementById("dwColCount").value || 14);
+  const colB = Number(document.getElementById("dwColB").value || 0.30);
+  const colH = Number(document.getElementById("dwColH").value || 0.40);
+  const slabThick = Number(document.getElementById("dwSlabThick").value || 0.12);
+  const wallLen = Number(document.getElementById("dwWallLen").value || 120);
+  const doorRatio = Number(document.getElementById("dwDoorRatioPct").value || 18) / 100.0;
+  const roadLen = Number(document.getElementById("dwRoadLen").value || 0);
+  const culvertLen = Number(document.getElementById("dwCulvertLen").value || 0);
+
+  const items = [];
+  let seq = 1;
+  function pushItem(section, norm_code, custom_name, formula, count, length, width, height, factor) {
+    const qty = Number((count * length * width * height * factor).toFixed(3));
+    if (qty > 0) {
+      items.push({ id: Date.now() + (seq++), section, norm_code, custom_name, formula, count, length, width, height, factor, quantity: qty });
+    }
+  }
+
+  if (fCount > 0) {
+    const secM = "I. PHẦN NGẦM & MÓNG (BÓC TÁCH TỪ BẢN VẼ KẾT CẤU MÓNG)";
+    pushItem(secM, "AB.25112", `Đào móng bằng máy đào 0,80m3 (${fCount} hố móng ${fL}x${fB}m sâu ${pitDepth}m, mở rộng đáy + taluy)`, `${fCount}*(${fL}+0.6)*(${fB}+0.6)*${pitDepth}*1.15`, fCount, Number((fL+0.6).toFixed(2)), Number((fB+0.6).toFixed(2)), pitDepth, 1.15);
+    pushItem(secM, "AF.11111", `Bê tông lót móng đá 4x6 M100 dày 100mm (${fCount} đài móng)`, `${fCount}*(${fL}+0.2)*(${fB}+0.2)*0.10`, fCount, Number((fL+0.2).toFixed(2)), Number((fB+0.2).toFixed(2)), 0.10, 1.0);
+    pushItem(secM, "AF.31123", `Bê tông móng đổ bằng máy bơm bê tông thương phẩm (${fCount} móng ${fL}x${fB}x${fH}m)`, `${fCount}*${fL}*${fB}*${fH}`, fCount, fL, fB, fH, 1.0);
+    pushItem(secM, "AF.81122", `Ván khuôn thành móng (${fCount} móng, ĐVT: m2)`, `${fCount}*2*(${fL}+${fB})*${fH}`, fCount, Number((2*(fL+fB)).toFixed(2)), 1.0, fH, 1.0);
+    pushItem(secM, "AF.61120", `Gia công lắp dựng cốt thép móng D <= 18mm (Hàm lượng ${steelFooting} kg/m3)`, `V_BT_móng * ${steelFooting}/1000`, fCount, fL, fB, fH, Number((steelFooting/1000).toFixed(5)));
+    pushItem(secM, "AB.13113", `Đắp đất trả hố móng bằng đầm cóc độ chặt K=0,95 (ĐVT: m3)`, `65% * V_đào`, fCount, Number((fL+0.6).toFixed(2)), Number((fB+0.6).toFixed(2)), pitDepth, 0.7475);
+  }
+
+  if (floors > 0 && floorArea > 0) {
+    const secT = "II. PHẦN THÂN KẾT CẤU BTCT (BÓC TÁCH TỪ BẢN VẼ CỘT - DẦM - SÀN)";
+    const totalCols = colCount * floors;
+    pushItem(secT, "AF.32224", `Bê tông cột thương phẩm M300 (${colCount} cột/tầng x ${floors} tầng, tiết diện ${Math.round(colB*100)}x${Math.round(colH*100)}cm)`, `${totalCols}*${colB}*${colH}*${floorH}`, totalCols, colB, colH, floorH, 1.0);
+    pushItem(secT, "AF.86312", `Ván khuôn thép định hình cột tiết diện chữ nhật (${totalCols} cột, ĐVT: m2)`, `${totalCols}*2*(${colB}+${colH})*${floorH}`, totalCols, Number((2*(colB+colH)).toFixed(2)), 1.0, floorH, 1.0);
+    pushItem(secT, "AF.61432", `Cốt thép chủ cột, dầm BTCT đường kính D > 18mm (Thép CB400-V)`, `V_BT_cột * 145kg/m3 / 1000`, totalCols, colB, colH, floorH, 0.145);
+    pushItem(secT, "AF.61422", `Cốt thép đai & cấu tạo cột BTCT đường kính D <= 18mm`, `V_BT_cột * 42kg/m3 / 1000`, totalCols, colB, colH, floorH, 0.042);
+    pushItem(secT, "AF.32314", `Bê tông dầm, sàn các tầng thương phẩm M300 (${floors} tầng x ${floorArea}m2, sàn dày ${Math.round(slabThick*100)}cm + dầm)`, `${floors}*${floorArea}*${slabThick}*1.38`, floors, floorArea, 1.0, slabThick, 1.38);
+    pushItem(secT, "AF.86312", `Ván khuôn thép định hình dầm, sàn các tầng (${floors} tầng x ${floorArea}m2 x hệ số triển khai 1.28, ĐVT: m2)`, `${floors}*${floorArea}*1.28`, floors, floorArea, 1.0, 1.0, 1.28);
+    pushItem(secT, "AF.61522", `Cốt thép chịu lực dầm, sàn đường kính D <= 18mm`, `V_BT_dầm_sàn * 133kg/m3 / 1000`, floors, floorArea, 1.0, slabThick, Number((1.38*0.133).toFixed(5)));
+  }
+
+  if (floors > 0 && wallLen > 0) {
+    const secK = "III. PHẦN KIẾN TRÚC & HOÀN THIỆN (BÓC TÁCH TỪ BẢN VẼ KIẾN TRÚC)";
+    const netWall = Number((1.0 - doorRatio).toFixed(3));
+    const hWall = Number((floorH - 0.4).toFixed(2));
+    pushItem(secK, "AE.52213", `Xây tường bao gạch ống 8x8x18 dày 220mm vữa XM M75 (Đã trừ ${Math.round(doorRatio*100)}% lỗ mở cửa)`, `${floors}*(${wallLen}*0.6)*0.22*${hWall}*${netWall}`, floors, Number((wallLen*0.6).toFixed(2)), 0.22, hWall, netWall);
+    pushItem(secK, "AE.22113", `Xây tường ngăn dày 110mm vữa XM M75 (Đã trừ lỗ mở cửa)`, `${floors}*(${wallLen}*0.4)*0.11*${hWall}*${netWall}`, floors, Number((wallLen*0.4).toFixed(2)), 0.11, hWall, netWall);
+    pushItem(secK, "AK.21123", `Trát tường ngoài dày 1,5cm vữa XM M75 (Mặt ngoài trừ cửa)`, `${floors}*${wallLen}*${hWall}*${netWall}`, floors, wallLen, 1.0, hWall, netWall);
+    pushItem(secK, "AK.21223", `Trát tường trong dày 1,5cm vữa XM M75 (Mặt trong trừ cửa)`, `${floors}*${wallLen}*${hWall}*${netWall}`, floors, wallLen, 1.0, hWall, netWall);
+    pushItem(secK, "AK.51240", `Lát nền gạch Ceramic / Granite 600x600mm các tầng (${floors} tầng x 88% diện tích sàn)`, `${floors}*${floorArea}*0.88`, floors, floorArea, 1.0, 1.0, 0.88);
+    pushItem(secK, "AK.84113", `Sơn dầm, trần, tường trong ngoài 1 lót 2 phủ (ĐVT: m2)`, `S_trát 2 mặt`, floors, wallLen, 2.0, hWall, netWall);
+    pushItem(secK, "AL.63110", `Sản xuất, lắp dựng cửa nhôm hệ Xingfa kính an toàn 8,38mm (Theo thống kê cửa)`, `${floors}*${wallLen}*${hWall}*${doorRatio}`, floors, wallLen, 1.0, hWall, doorRatio);
+  }
+
+  if (roadLen > 0 || culvertLen > 0) {
+    const secG = "IV. PHẦN ĐƯỜNG GIAO THÔNG & HẠ TẦNG THOÁT NƯỚC (TỔNG MẶT BẰNG)";
+    if (roadLen > 0) {
+      pushItem(secG, "AD.11212", `Làm móng cấp phối đá dăm lớp dưới loại II dày 20cm (Đường dài ${roadLen}m rộng 7m, ĐVT: 100m3)`, `${roadLen}*7.0*0.20/100`, 1, roadLen, 7.0, 0.20, 0.01);
+      pushItem(secG, "AD.11222", `Làm móng cấp phối đá dăm lớp trên loại I dày 15cm (Đường dài ${roadLen}m rộng 7m, ĐVT: 100m3)`, `${roadLen}*7.0*0.15/100`, 1, roadLen, 7.0, 0.15, 0.01);
+      pushItem(secG, "AD.23214", `Rải thảm mặt đường bê tông nhựa nóng hạt trung C19 dày 7cm (ĐVT: 100m2)`, `${roadLen}*7.0/100`, 1, roadLen, 7.0, 1.0, 0.01);
+      pushItem(secG, "AD.23223", `Rải thảm mặt đường bê tông nhựa nóng hạt mịn C12.5 dày 5cm (ĐVT: 100m2)`, `${roadLen}*7.0/100`, 1, roadLen, 7.0, 1.0, 0.01);
+    }
+    if (culvertLen > 0) {
+      pushItem(secG, "AL.12211", `Lắp đặt cống tròn thoát nước BTCT ly tâm D600 dài ${culvertLen}m (ĐVT: 100m)`, `${culvertLen}/100`, 1, culvertLen, 1.0, 1.0, 0.01);
+    }
+  }
+
+  if (replaceAll) {
+    state.boq_items = items;
+  } else {
+    state.boq_items = state.boq_items.concat(items);
+  }
+  calculateAll();
+  switchTab("tab-cong-trinh");
+}
+
 window.addEventListener("DOMContentLoaded", () => {
   const sel = document.getElementById("addNormSelect");
   if (sel) {

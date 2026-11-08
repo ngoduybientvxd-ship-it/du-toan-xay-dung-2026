@@ -166,7 +166,42 @@ class TestDuToan2026Engine(unittest.TestCase):
             res_no_lt["total_summary"]["G_QLDA"]["before_tax"],
         )
 
+    def test_drawing_takeoff_to_full_estimate(self):
+        """Kiểm tra bóc tách khối lượng từ thông số Bản vẽ (Móng, Thân, Kiến trúc, Đường GT) sang Dự toán G8."""
+        from drawing_takeoff_engine import takeoff_building_from_drawing_specs
+
+        boq = takeoff_building_from_drawing_specs({
+            "footing_count": 14,
+            "footing_l": 2.2,
+            "footing_b": 1.8,
+            "footing_h": 0.65,
+            "pit_depth": 1.6,
+            "floors": 3,
+            "floor_area_m2": 250.0,
+            "floor_height_m": 3.6,
+            "col_count_per_floor": 14,
+            "col_b": 0.30,
+            "col_h": 0.40,
+            "slab_thick_m": 0.12,
+            "wall_length_per_floor_m": 120.0,
+            "door_window_ratio": 0.18,
+            "road_length_m": 60.0,
+            "culvert_d600_length_m": 60.0,
+        })
+        self.assertEqual(len(boq), 25)
+        preset = self.data["presets"]["presets"]["dan_dung_tru_so"]
+        res = calculate_project_estimate(
+            preset["project_info"],
+            boq,
+            preset["equipment_items"],
+            self.data["prices"],
+            self.data["norms"],
+            self.data["regulations"],
+        )
+        self.assertGreater(res["total_summary"]["TOTAL_DTXD"]["after_tax"], 0)
+
 
 if __name__ == "__main__":
     unittest.main(verbosity=2)
+
 

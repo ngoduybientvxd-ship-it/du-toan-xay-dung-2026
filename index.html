@@ -44,29 +44,42 @@
   <!-- G8 CONFIGURATION RIBBON BAR -->
   <div class="g8-ribbon">
     <div class="g8-ribbon-item">
-      <span class="g8-ribbon-label">Tỉnh / TP:</span>
-      <span class="g8-ribbon-badge">Định mức Bộ XD (Theo K1 Đ12 NĐ 144/2025/NĐ-CP)</span>
+      <span class="g8-ribbon-label">Tỉnh / TP (CBG Sở XD):</span>
+      <select id="selProvincePrice" class="form-control" style="height:24px; padding:1px 6px; font-size:0.74rem; font-weight:700;" onchange="applyPeriodAndProvincePrice()">
+        <option value="ha_noi">TP. Hà Nội (Vùng I)</option>
+        <option value="tphcm">TP. Hồ Chí Minh (Vùng I)</option>
+        <option value="hai_phong">TP. Hải Phòng (Vùng I)</option>
+        <option value="quang_ninh">Tỉnh Quảng Ninh (Vùng I)</option>
+        <option value="dong_nai">Tỉnh Đồng Nai (Vùng I)</option>
+        <option value="da_nang">TP. Đà Nẵng (Vùng II)</option>
+        <option value="bac_ninh">Tỉnh Bắc Ninh (Vùng II)</option>
+        <option value="can_tho">TP. Cần Thơ (Vùng II)</option>
+        <option value="nghe_an">Tỉnh Nghệ An (Vùng III)</option>
+        <option value="son_la">Tỉnh Sơn La — Miền núi (Vùng III)</option>
+      </select>
+    </div>
+    <div class="g8-ribbon-item">
+      <span class="g8-ribbon-label">Thời điểm Đơn giá:</span>
+      <select id="selPricePeriod" class="form-control" style="height:24px; padding:1px 6px; font-size:0.74rem; font-weight:700; color:var(--accent-primary);" onchange="applyPeriodAndProvincePrice()">
+        <option value="q4_2026" selected>Quý IV/2026 - Tháng 11/2026 (Hiện hành)</option>
+        <option value="q3_2026">Quý III/2026 (Thời điểm hiệu lực TT 36-37-38/2026)</option>
+        <option value="q1_2026">Quý I/2026 (Đầu năm Luật XD 135/2025/QH15)</option>
+        <option value="q3_2025">Quý III/2025 (Thời điểm NĐ 144 & 254/2025/NĐ-CP)</option>
+        <option value="q1_2025">Quý I/2025 (Đơn giá gốc đối chiếu bù giá)</option>
+      </select>
     </div>
     <div class="g8-ribbon-item">
       <span class="g8-ribbon-label">Bộ Định mức:</span>
-      <span class="g8-ribbon-badge">38/2026/TT-BXD (Phần XD, LĐ, KS, SC)</span>
+      <span class="g8-ribbon-badge">38/2026/TT-BXD (XD, GT, HT, LĐ, SC)</span>
     </div>
     <div class="g8-ribbon-item">
       <span class="g8-ribbon-label">Thông tư CPXD:</span>
       <span class="g8-ribbon-badge">36/2026/TT-BXD & QĐ 1538/QĐ-BXD</span>
     </div>
-    <div class="g8-ribbon-item">
-      <span class="g8-ribbon-label">Nhân công & Máy:</span>
-      <span class="g8-ribbon-badge">37/2026/TT-BXD</span>
-    </div>
-    <div class="g8-ribbon-item">
-      <span class="g8-ribbon-label">QLDA & Tư vấn:</span>
-      <span class="g8-ribbon-badge">PL VIII 38/2026/TT-BXD + CV 12637/BXD-KTQLXD</span>
-    </div>
     <div class="g8-ribbon-item" style="margin-left:auto;">
       <label style="display:inline-flex; align-items:center; gap:5px; font-weight:700; color:var(--accent-primary); cursor:pointer;" title="Theo cập nhật 20/08/2026 của Dự toán G8 hướng dẫn Công văn 12637/BXD-KTQLXD ngày 11/08/2026">
         <input type="checkbox" id="chkIncludeLtInQldaTv" checked onchange="toggleIncludeLtInQldaTv(this.checked)" />
-        Tính QLDA & Tư vấn bao gồm Chi phí nhà tạm (Tùy chọn CV 12637/BXD-KTQLXD)
+        Tính QLDA & Tư vấn gồm Nhà tạm (CV 12637/BXD-KTQLXD)
       </label>
     </div>
   </div>
@@ -125,6 +138,9 @@
 
   <!-- G8 SHEET TABS -->
   <nav class="nav-tabs" id="g8SheetTabs">
+    <button class="nav-tab" data-tab="tab-boc-tach-ban-ve" onclick="switchTab('tab-boc-tach-ban-ve')">
+      📐 0. Bóc tách Bản vẽ <span class="tab-badge">CAD/PDF → BOQ</span>
+    </button>
     <button class="nav-tab active" data-tab="tab-cong-trinh" onclick="switchTab('tab-cong-trinh')">
       1. Công trình <span class="tab-badge" id="badgeBoqCount">27</span>
     </button>
@@ -165,6 +181,137 @@
 
   <!-- WORKSPACE -->
   <main class="workspace">
+    <!-- SHEET 0: BÓC TÁCH BẢN VẼ TỰ ĐỘNG SANG TIÊN LƯỢNG G8 (CAD / PDF / THỐNG KÊ CẤU KIỆN) -->
+    <section id="tab-boc-tach-ban-ve" class="tab-panel">
+      <div class="legal-banner">
+        <strong>Module Bóc tách Bản vẽ Thiết kế sang Tiên lượng G8 (Drawing-to-BOQ Engine):</strong> Bạn có thể mở tệp Bản vẽ (<code>.pdf</code>, <code>.png</code>, <code>.jpg</code>) ngay tại khung bên trái để đối chiếu kích thước, nhập thông số Kết cấu Móng - Cột - Dầm - Sàn - Kiến trúc - Đường giao thông bên phải và bấm <strong>"⚡ Tự động Bóc tách Khối lượng Bản vẽ → Đẩy sang Sheet 1. Công trình"</strong>. Phần mềm sẽ tự động tính Đào đất có mở rộng đáy + taluy, Bê tông lót, Bê tông kết cấu, Ván khuôn, Cốt thép phân nhóm đường kính ($D \le 10, D \le 18, D > 18$), Xây tường trừ lỗ mở cửa, Hoàn thiện và Áo đường giao thông theo đúng <strong>Định mức 38/2026/TT-BXD</strong> và <strong>Đơn giá tại Thời điểm đang chọn</strong>!
+      </div>
+      <div class="grid-2">
+        <div class="card">
+          <div class="card-header">
+            <div>
+              <div class="card-title">1. Trình xem & Đối chiếu Bản vẽ Thiết kế (PDF / Ảnh Mặt bằng - Mặt cắt - Thống kê Thép)</div>
+              <div class="card-subtitle">Hỗ trợ nạp bản vẽ PDF hoặc ảnh chụp bản vẽ mặt bằng, mặt cắt kết cấu ngay trên trình duyệt</div>
+            </div>
+            <div>
+              <label class="btn btn-primary btn-sm" style="margin:0; cursor:pointer;">
+                📂 Chọn Tệp Bản Vẽ (PDF / Ảnh)
+                <input type="file" id="drawingFileInput" accept=".pdf,image/*" style="display:none;" onchange="previewDrawingFile(event)" />
+              </label>
+            </div>
+          </div>
+          <div class="card-body">
+            <div id="drawingPreviewBox" style="min-height:420px; border:2px dashed var(--border-strong); border-radius:6px; display:flex; align-items:center; justify-content:center; flex-direction:column; padding:16px; text-align:center; background:var(--bg-surface-alt);">
+              <div style="font-size:2.2rem; margin-bottom:8px;">📐</div>
+              <div style="font-weight:700; color:var(--text-primary); margin-bottom:6px;">Chưa chọn tệp Bản vẽ để hiển thị trực tiếp</div>
+              <div style="font-size:0.82rem; color:var(--text-secondary); max-width:460px;">
+                Bấm nút <strong>"📂 Chọn Tệp Bản Vẽ (PDF / Ảnh)"</strong> ở góc trên để mở bản vẽ thiết kế trên màn hình này, hoặc gửi trực tiếp tệp Bản vẽ (PDF / Ảnh / CAD) vào khung Chat với Chuyên gia G8 để được đọc bản vẽ tự động!
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <div>
+              <div class="card-title">2. Thông số Cấu kiện đọc từ Bản vẽ → Tự động Sinh Tiên lượng G8</div>
+              <div class="card-subtitle">Tự động nội suy Đào đất (mở rộng đáy + taluy), BT lót, BT kết cấu, Ván khuôn, Cốt thép (D≤10, D≤18, D>18), Xây trát (trừ cửa) & Đường GT</div>
+            </div>
+          </div>
+          <div class="card-body">
+            <div style="font-weight:700; color:var(--accent-primary); margin-bottom:6px; font-size:0.8rem;">A. BẢN VẼ KẾT CẤU MÓNG & CÔNG TÁC ĐẤT</div>
+            <div class="grid-3">
+              <div class="form-group">
+                <label class="form-label">Số lượng đài/đơn móng (cái)</label>
+                <input type="number" id="dwFootingCount" class="form-control" value="14" />
+              </div>
+              <div class="form-group">
+                <label class="form-label">Chiều dài móng L_móng (m)</label>
+                <input type="number" step="0.1" id="dwFootingL" class="form-control" value="2.2" />
+              </div>
+              <div class="form-group">
+                <label class="form-label">Chiều rộng móng B_móng (m)</label>
+                <input type="number" step="0.1" id="dwFootingB" class="form-control" value="1.8" />
+              </div>
+            </div>
+            <div class="grid-3">
+              <div class="form-group">
+                <label class="form-label">Chiều cao đài móng H_móng (m)</label>
+                <input type="number" step="0.05" id="dwFootingH" class="form-control" value="0.65" />
+              </div>
+              <div class="form-group">
+                <label class="form-label">Chiều sâu đào hố móng (m)</label>
+                <input type="number" step="0.1" id="dwPitDepth" class="form-control" value="1.6" />
+              </div>
+              <div class="form-group">
+                <label class="form-label">Hàm lượng thép móng (kg/m³)</label>
+                <input type="number" step="5" id="dwSteelFooting" class="form-control" value="110" />
+              </div>
+            </div>
+
+            <div style="font-weight:700; color:var(--accent-primary); margin:8px 0 6px; font-size:0.8rem;">B. BẢN VẼ KẾT CẤU THÂN (CỘT - DẦM - SÀN) & KIẾN TRÚC</div>
+            <div class="grid-3">
+              <div class="form-group">
+                <label class="form-label">Số tầng công trình (tầng)</label>
+                <input type="number" id="dwFloors" class="form-control" value="3" />
+              </div>
+              <div class="form-group">
+                <label class="form-label">Diện tích 1 sàn xây dựng (m²)</label>
+                <input type="number" step="10" id="dwFloorArea" class="form-control" value="250" />
+              </div>
+              <div class="form-group">
+                <label class="form-label">Chiều cao tầng điển hình (m)</label>
+                <input type="number" step="0.1" id="dwFloorHeight" class="form-control" value="3.6" />
+              </div>
+            </div>
+            <div class="grid-3">
+              <div class="form-group">
+                <label class="form-label">Số cột BTCT trên 1 tầng (cột)</label>
+                <input type="number" id="dwColCount" class="form-control" value="14" />
+              </div>
+              <div class="form-group">
+                <label class="form-label">Tiết diện cột B×H (m × m)</label>
+                <div style="display:flex; gap:4px;">
+                  <input type="number" step="0.05" id="dwColB" class="form-control" value="0.30" title="B cột (m)" />
+                  <input type="number" step="0.05" id="dwColH" class="form-control" value="0.40" title="H cột (m)" />
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Chiều dày bản sàn BTCT (m)</label>
+                <input type="number" step="0.01" id="dwSlabThick" class="form-control" value="0.12" />
+              </div>
+            </div>
+            <div class="grid-3">
+              <div class="form-group">
+                <label class="form-label">Tổng chiều dài tường xây/tầng (m)</label>
+                <input type="number" step="5" id="dwWallLen" class="form-control" value="120" />
+              </div>
+              <div class="form-group">
+                <label class="form-label">Tỷ lệ diện tích lỗ mở cửa (%)</label>
+                <input type="number" step="1" id="dwDoorRatioPct" class="form-control" value="18" />
+              </div>
+              <div class="form-group">
+                <label class="form-label">Đường nội bộ & Cống D600 (m dài)</label>
+                <div style="display:flex; gap:4px;">
+                  <input type="number" step="10" id="dwRoadLen" class="form-control" value="60" title="Chiều dài đường BTN (m)" />
+                  <input type="number" step="10" id="dwCulvertLen" class="form-control" value="60" title="Chiều dài cống D600 (m)" />
+                </div>
+              </div>
+            </div>
+
+            <div style="display:flex; gap:8px; flex-wrap:wrap; margin-top:10px; padding-top:10px; border-top:1px solid var(--border-light);">
+              <button class="btn btn-primary" onclick="runDrawingTakeoffToBoq(true)">
+                ⚡ Tự động Bóc tách Khối lượng Bản vẽ → Thay thế Sheet 1. Công trình
+              </button>
+              <button class="btn btn-success" onclick="runDrawingTakeoffToBoq(false)">
+                ➕ Bóc tách & Nối thêm vào cuối Sheet 1. Công trình
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <!-- SHEET 1: CÔNG TRÌNH (BOQ + QUẢN LÝ HẠNG MỤC + THIẾT BỊ) -->
     <section id="tab-cong-trinh" class="tab-panel active">
       <div class="card">

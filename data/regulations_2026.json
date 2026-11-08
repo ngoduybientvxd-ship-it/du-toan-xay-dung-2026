@@ -1417,5 +1417,147 @@
       "loai_3": 3400,
       "loai_4": 4200
     }
+  },
+  "price_periods_2025_2026": {
+    "description": "Bộ cơ sở dữ liệu hệ số điều chỉnh đơn giá Vật liệu, Nhân công, Nhiên liệu Ca máy theo từng thời điểm công bố giá của Sở Xây dựng và Liên Bộ",
+    "periods": [
+      {
+        "id": "q1_2025",
+        "label": "Quý I / 2025 (Đơn giá đầu năm 2025)",
+        "effective_date": "2025-01-01",
+        "vl_index": 0.925,
+        "nc_index": 0.94,
+        "diesel_price": 17600,
+        "gasoline_price": 19100,
+        "electricity_price": 2006,
+        "note": "Mặt bằng giá Quý I/2025 theo Công bố giá VLXD Sở Xây dựng đầu năm 2025"
+      },
+      {
+        "id": "q3_2025",
+        "label": "Quý III / 2025 (Thời điểm ban hành NĐ 144/2025 & NĐ 254/2025)",
+        "effective_date": "2025-07-01",
+        "vl_index": 0.955,
+        "nc_index": 0.965,
+        "diesel_price": 18100,
+        "gasoline_price": 19500,
+        "electricity_price": 2103,
+        "note": "Mặt bằng giá Quý III/2025 khi bắt đầu áp dụng Nghị định 144/2025/NĐ-CP"
+      },
+      {
+        "id": "q1_2026",
+        "label": "Quý I / 2026 (Luật Xây dựng 135/2025/QH15 có hiệu lực 01/01/2026)",
+        "effective_date": "2026-01-01",
+        "vl_index": 0.975,
+        "nc_index": 0.985,
+        "diesel_price": 18300,
+        "gasoline_price": 19650,
+        "electricity_price": 2103,
+        "note": "Mặt bằng giá Quý I/2026 theo Công bố giá VLXD đầu năm 2026"
+      },
+      {
+        "id": "q3_2026",
+        "label": "Quý III / 2026 (Hiệu lực TT 36, 37, 38, 40/2026/TT-BXD & CV 12637)",
+        "effective_date": "2026-08-15",
+        "vl_index": 0.99,
+        "nc_index": 1.0,
+        "diesel_price": 18400,
+        "gasoline_price": 19750,
+        "electricity_price": 2160,
+        "note": "Mặt bằng giá Quý III/2026 khi Thông tư 36, 37, 38/2026/TT-BXD có hiệu lực từ 15/08/2026"
+      },
+      {
+        "id": "q4_2026",
+        "label": "Quý IV / 2026 - Tháng 11/2026 (Mới nhất hiện hành)",
+        "effective_date": "2026-11-01",
+        "vl_index": 1.0,
+        "nc_index": 1.0,
+        "diesel_price": 18500,
+        "gasoline_price": 19800,
+        "electricity_price": 2160,
+        "note": "Mặt bằng giá hiện hành Quý IV/2026 (Tháng 11/2026) - Đã cập nhật QĐ 1538/QĐ-BXD"
+      }
+    ],
+    "provinces": [
+      {
+        "id": "ha_noi",
+        "name": "TP. Hà Nội",
+        "region": "vung_1",
+        "vl_factor": 1.0,
+        "nc_factor": 1.05,
+        "mountain_island": false
+      },
+      {
+        "id": "tphcm",
+        "name": "TP. Hồ Chí Minh",
+        "region": "vung_1",
+        "vl_factor": 1.02,
+        "nc_factor": 1.06,
+        "mountain_island": false
+      },
+      {
+        "id": "hai_phong",
+        "name": "TP. Hải Phòng",
+        "region": "vung_1",
+        "vl_factor": 0.99,
+        "nc_factor": 1.02,
+        "mountain_island": false
+      },
+      {
+        "id": "quang_ninh",
+        "name": "Tỉnh Quảng Ninh",
+        "region": "vung_1",
+        "vl_factor": 1.01,
+        "nc_factor": 1.03,
+        "mountain_island": false
+      },
+      {
+        "id": "da_nang",
+        "name": "TP. Đà Nẵng",
+        "region": "vung_2",
+        "vl_factor": 0.98,
+        "nc_factor": 0.96,
+        "mountain_island": false
+      },
+      {
+        "id": "bac_ninh",
+        "name": "Tỉnh Bắc Ninh",
+        "region": "vung_2",
+        "vl_factor": 0.98,
+        "nc_factor": 0.97,
+        "mountain_island": false
+      },
+      {
+        "id": "nghe_an",
+        "name": "Tỉnh Nghệ An",
+        "region": "vung_3",
+        "vl_factor": 0.96,
+        "nc_factor": 0.9,
+        "mountain_island": false
+      },
+      {
+        "id": "son_la",
+        "name": "Tỉnh Sơn La (Miền núi)",
+        "region": "vung_3",
+        "vl_factor": 1.06,
+        "nc_factor": 0.92,
+        "mountain_island": true
+      },
+      {
+        "id": "can_tho",
+        "name": "TP. Cần Thơ",
+        "region": "vung_2",
+        "vl_factor": 1.01,
+        "nc_factor": 0.95,
+        "mountain_island": false
+      },
+      {
+        "id": "dong_nai",
+        "name": "Tỉnh Đồng Nai",
+        "region": "vung_1",
+        "vl_factor": 1.0,
+        "nc_factor": 1.02,
+        "mountain_island": false
+      }
+    ]
   }
 }

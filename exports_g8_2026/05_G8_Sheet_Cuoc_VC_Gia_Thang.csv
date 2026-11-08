@@ -1,0 +1,35 @@
+﻿BẢNG 5 & 6. CƯỚC VẬN CHUYỂN Ô TÔ & GIÁ THÁNG HIỆN TRƯỜNG (SHEET CƯỚC VC & GIÁ THÁNG G8),,,,,,,,,
+Mã VL,Tên vật liệu xây dựng,ĐVT,Giá thông báo gốc (đ),Trọng lượng (tấn/ĐVT),Cự ly VC (km),Loại đường,Đơn giá cước (đ/tấn.km),Cước vận chuyển (đ/ĐVT),Giá hiện trường chân công trình (đ/ĐVT)
+VL001,Xi măng PCB40 (bao),kg,1750.0,0.001,15.0,loai_1,2400.0,36.0,1786.0
+VL002,Cát mịn xây trát (cát đen/cát mịn đạt TCVN),m3,245000.0,1.35,18.0,loai_2,3200.0,77760.0,322760.0
+VL003,Cát vàng đổ bê tông (hạt trung - thô đạt TCVN),m3,395000.0,1.45,22.0,loai_2,3200.0,102080.0,497080.0
+VL004,Đá dăm 1x2 đổ bê tông,m3,360000.0,1.55,25.0,loai_2,3200.0,124000.0,484000.0
+VL005,Đá dăm 4x6 lót móng,m3,310000.0,1.5,25.0,loai_2,3200.0,120000.0,430000.0
+VL006,Nước sạch thi công,lít,12.0,0.0,0.0,loai_1,2400.0,0.0,12.0
+VL007,Gạch đặc đất sét nung hoặc gạch không nung 6x10.5x22cm,viên,1450.0,0.0018,12.0,loai_1,2400.0,52.0,1502.0
+VL008,Gạch ống 4 lỗ 8x8x18cm,viên,1320.0,0.0014,12.0,loai_1,2400.0,40.0,1360.0
+VL009,Thép tròn cuộn D<=10mm (CB240-T),kg,16200.0,0.001,20.0,loai_1,2400.0,48.0,16248.0
+VL010,Thép thanh vằn D12-D18mm (CB300-V / CB400-V),kg,16500.0,0.001,20.0,loai_1,2400.0,48.0,16548.0
+VL011,Thép thanh vằn D>18mm (CB400-V),kg,16650.0,0.001,20.0,loai_1,2400.0,48.0,16698.0
+VL012,"Thép hình (U, I, V, L) kết cấu nhà xưởng",kg,19800.0,0.001,20.0,loai_1,2400.0,48.0,19848.0
+VL013,Dây thép buộc 1mm,kg,23000.0,0.0,0.0,loai_1,2400.0,0.0,23000.0
+VL014,Que hàn điện 4mm,kg,32000.0,0.0,0.0,loai_1,2400.0,0.0,32000.0
+VL015,Ván khuôn thép định hình + cây chống thép,kg,22500.0,0.0,0.0,loai_1,2400.0,0.0,22500.0
+VL016,Gỗ ván khuôn nhóm IV,m3,5400000.0,0.0,0.0,loai_1,2400.0,0.0,5400000.0
+VL017,Đinh các loại,kg,25000.0,0.0,0.0,loai_1,2400.0,0.0,25000.0
+VL018,Bê tông thương phẩm M250 (C20/25) độ sụt 10-12cm,m3,1280000.0,0.0,0.0,loai_1,2400.0,0.0,1280000.0
+VL019,Bê tông thương phẩm M300 (C25/30) độ sụt 10-12cm,m3,1365000.0,0.0,0.0,loai_1,2400.0,0.0,1365000.0
+VL020,Gạch Ceramic / Granite lát nền 600x600mm chống trượt,m2,235000.0,0.0,0.0,loai_1,2400.0,0.0,235000.0
+VL021,Gạch Ceramic ốp tường 300x600mm,m2,195000.0,0.0,0.0,loai_1,2400.0,0.0,195000.0
+VL022,Xi măng trắng chà mạch,kg,4500.0,0.0,0.0,loai_1,2400.0,0.0,4500.0
+VL023,Bột bả tường nội/ngoại thất cao cấp,kg,11500.0,0.0,0.0,loai_1,2400.0,0.0,11500.0
+VL024,Sơn lót kháng kiềm,kg,68000.0,0.0,0.0,loai_1,2400.0,0.0,68000.0
+VL025,Sơn phủ hoàn thiện 2 lớp,kg,85000.0,0.0,0.0,loai_1,2400.0,0.0,85000.0
+VL026,Tôn lợp mái mạ màu sóng vuông dày 0.45mm,m2,158000.0,0.0,0.0,loai_1,2400.0,0.0,158000.0
+VL027,Cửa nhôm hệ Xingfa kính an toàn 8.38mm đồng bộ phụ kiện,m2,1850000.0,0.0,0.0,loai_1,2400.0,0.0,1850000.0
+VL028,Tấm thạch cao khung xương chìm Vĩnh Tường tiêu chuẩn,m2,165000.0,0.0,0.0,loai_1,2400.0,0.0,165000.0
+VL029,Ống nhựa uPVC D90 thoát nước (C2),m,64000.0,0.0,0.0,loai_1,2400.0,0.0,64000.0
+VL030,Ống nhựa PPR D32 cấp nước chịu nhiệt PN10,m,42000.0,0.0,0.0,loai_1,2400.0,0.0,42000.0
+VL031,Dây cáp điện đồng CV 2x4.0mm2 luồn ống,m,29500.0,0.0,0.0,loai_1,2400.0,0.0,29500.0
+VL032,Bộ đèn LED Panel 600x600mm 40W âm trần,bộ,420000.0,0.0,0.0,loai_1,2400.0,0.0,420000.0
+VL033,Cọc bê tông cốt thép预 ứng lực / vuông 250x250mm M300,m,345000.0,0.156,25.0,loai_1,2400.0,9360.0,354360.0

@@ -5,7 +5,12 @@
     "name": "Đào móng bằng thủ công, chiều rộng móng <= 3m, sâu <= 1m, đất cấp II",
     "unit": "m3",
     "vl": [],
-    "nc": [{"id": "NC001", "qty": 0.61}],
+    "nc": [
+      {
+        "id": "NC001",
+        "qty": 0.61
+      }
+    ],
     "m": []
   },
   {
@@ -14,8 +19,22 @@
     "name": "Đào móng công trình bằng máy đào 0,80m3, đất cấp II",
     "unit": "m3",
     "vl": [],
-    "nc": [{"id": "NC001", "qty": 0.058}],
-    "m": [{"id": "M001", "qty": 0.0041}, {"id": "M002", "qty": 0.0005}]
+    "nc": [
+      {
+        "id": "NC001",
+        "qty": 0.058
+      }
+    ],
+    "m": [
+      {
+        "id": "M001",
+        "qty": 0.0041
+      },
+      {
+        "id": "M002",
+        "qty": 0.0005
+      }
+    ]
   },
   {
     "code": "AB.41312",
@@ -24,7 +43,12 @@
     "unit": "m3",
     "vl": [],
     "nc": [],
-    "m": [{"id": "M014", "qty": 0.0112}]
+    "m": [
+      {
+        "id": "M014",
+        "qty": 0.0112
+      }
+    ]
   },
   {
     "code": "AB.13113",
@@ -32,8 +56,18 @@
     "name": "Đắp đất nền móng công trình bằng đầm cóc, độ chặt yêu cầu K=0,95",
     "unit": "m3",
     "vl": [],
-    "nc": [{"id": "NC001", "qty": 0.21}],
-    "m": [{"id": "M003", "qty": 0.038}]
+    "nc": [
+      {
+        "id": "NC001",
+        "qty": 0.21
+      }
+    ],
+    "m": [
+      {
+        "id": "M003",
+        "qty": 0.038
+      }
+    ]
   },
   {
     "code": "AC.26111",
@@ -41,14 +75,34 @@
     "name": "Ép trước cọc BTCT vuông 250x250mm chiều dài cọc > 4m bằng máy ép thủy lực, đất cấp II",
     "unit": "m",
     "vl": [
-      {"id": "VL033", "qty": 1.01},
-      {"id": "VL014", "qty": 0.08}
+      {
+        "id": "VL033",
+        "qty": 1.01
+      },
+      {
+        "id": "VL014",
+        "qty": 0.08
+      }
     ],
-    "nc": [{"id": "NC002", "qty": 0.075}],
+    "nc": [
+      {
+        "id": "NC002",
+        "qty": 0.075
+      }
+    ],
     "m": [
-      {"id": "M013", "qty": 0.0085},
-      {"id": "M012", "qty": 0.0085},
-      {"id": "M010", "qty": 0.004}
+      {
+        "id": "M013",
+        "qty": 0.0085
+      },
+      {
+        "id": "M012",
+        "qty": 0.0085
+      },
+      {
+        "id": "M010",
+        "qty": 0.004
+      }
     ]
   },
   {
@@ -57,15 +111,38 @@
     "name": "Bê tông lót móng sản xuất qua máy trộn tại hiện trường, chiều rộng <= 250cm, đá 4x6, vữa BT M100",
     "unit": "m3",
     "vl": [
-      {"id": "VL001", "qty": 225.0},
-      {"id": "VL003", "qty": 0.525},
-      {"id": "VL005", "qty": 0.893},
-      {"id": "VL006", "qty": 185.0}
+      {
+        "id": "VL001",
+        "qty": 225.0
+      },
+      {
+        "id": "VL003",
+        "qty": 0.525
+      },
+      {
+        "id": "VL005",
+        "qty": 0.893
+      },
+      {
+        "id": "VL006",
+        "qty": 185.0
+      }
     ],
-    "nc": [{"id": "NC001", "qty": 1.25}],
+    "nc": [
+      {
+        "id": "NC001",
+        "qty": 1.25
+      }
+    ],
     "m": [
-      {"id": "M004", "qty": 0.095},
-      {"id": "M007", "qty": 0.089}
+      {
+        "id": "M004",
+        "qty": 0.095
+      },
+      {
+        "id": "M007",
+        "qty": 0.089
+      }
     ]
   },
   {
@@ -74,13 +151,30 @@
     "name": "Bê tông móng đổ bằng máy bơm bê tông, bê tông thương phẩm M250 (C20/25), chiều rộng móng <= 250cm",
     "unit": "m3",
     "vl": [
-      {"id": "VL018", "qty": 1.015},
-      {"id": "VL006", "qty": 30.0}
+      {
+        "id": "VL018",
+        "qty": 1.015
+      },
+      {
+        "id": "VL006",
+        "qty": 30.0
+      }
     ],
-    "nc": [{"id": "NC002", "qty": 0.56}],
+    "nc": [
+      {
+        "id": "NC002",
+        "qty": 0.56
+      }
+    ],
     "m": [
-      {"id": "M008", "qty": 0.033},
-      {"id": "M006", "qty": 0.089}
+      {
+        "id": "M008",
+        "qty": 0.033
+      },
+      {
+        "id": "M006",
+        "qty": 0.089
+      }
     ]
   },
   {
@@ -89,13 +183,30 @@
     "name": "Bê tông cột, tiết diện cột > 0,1m2, cao <= 28m, đổ bằng bơm BT thương phẩm M300 (C25/30)",
     "unit": "m3",
     "vl": [
-      {"id": "VL019", "qty": 1.015},
-      {"id": "VL006", "qty": 45.0}
+      {
+        "id": "VL019",
+        "qty": 1.015
+      },
+      {
+        "id": "VL006",
+        "qty": 45.0
+      }
     ],
-    "nc": [{"id": "NC002", "qty": 1.38}],
+    "nc": [
+      {
+        "id": "NC002",
+        "qty": 1.38
+      }
+    ],
     "m": [
-      {"id": "M008", "qty": 0.042},
-      {"id": "M006", "qty": 0.18}
+      {
+        "id": "M008",
+        "qty": 0.042
+      },
+      {
+        "id": "M006",
+        "qty": 0.18
+      }
     ]
   },
   {
@@ -104,14 +215,34 @@
     "name": "Bê tông xà dầm, giằng, sàn mái cao <= 28m, đổ bằng bơm BT thương phẩm M300 (C25/30)",
     "unit": "m3",
     "vl": [
-      {"id": "VL019", "qty": 1.015},
-      {"id": "VL006", "qty": 45.0}
+      {
+        "id": "VL019",
+        "qty": 1.015
+      },
+      {
+        "id": "VL006",
+        "qty": 45.0
+      }
     ],
-    "nc": [{"id": "NC002", "qty": 1.12}],
+    "nc": [
+      {
+        "id": "NC002",
+        "qty": 1.12
+      }
+    ],
     "m": [
-      {"id": "M008", "qty": 0.038},
-      {"id": "M006", "qty": 0.14},
-      {"id": "M007", "qty": 0.07}
+      {
+        "id": "M008",
+        "qty": 0.038
+      },
+      {
+        "id": "M006",
+        "qty": 0.14
+      },
+      {
+        "id": "M007",
+        "qty": 0.07
+      }
     ]
   },
   {
@@ -120,15 +251,38 @@
     "name": "Bê tông nền nhà xưởng / nền tầng trệt sản xuất tại chỗ, đá 1x2, M250",
     "unit": "m3",
     "vl": [
-      {"id": "VL001", "qty": 348.0},
-      {"id": "VL003", "qty": 0.468},
-      {"id": "VL004", "qty": 0.871},
-      {"id": "VL006", "qty": 185.0}
+      {
+        "id": "VL001",
+        "qty": 348.0
+      },
+      {
+        "id": "VL003",
+        "qty": 0.468
+      },
+      {
+        "id": "VL004",
+        "qty": 0.871
+      },
+      {
+        "id": "VL006",
+        "qty": 185.0
+      }
     ],
-    "nc": [{"id": "NC001", "qty": 1.32}],
+    "nc": [
+      {
+        "id": "NC001",
+        "qty": 1.32
+      }
+    ],
     "m": [
-      {"id": "M004", "qty": 0.095},
-      {"id": "M007", "qty": 0.089}
+      {
+        "id": "M004",
+        "qty": 0.095
+      },
+      {
+        "id": "M007",
+        "qty": 0.089
+      }
     ]
   },
   {
@@ -137,11 +291,27 @@
     "name": "Gia công lắp dựng cốt thép móng, đường kính cốt thép <= 10mm",
     "unit": "tấn",
     "vl": [
-      {"id": "VL009", "qty": 1005.0},
-      {"id": "VL013", "qty": 16.5}
+      {
+        "id": "VL009",
+        "qty": 1005.0
+      },
+      {
+        "id": "VL013",
+        "qty": 16.5
+      }
     ],
-    "nc": [{"id": "NC002", "qty": 9.85}],
-    "m": [{"id": "M009", "qty": 0.40}]
+    "nc": [
+      {
+        "id": "NC002",
+        "qty": 9.85
+      }
+    ],
+    "m": [
+      {
+        "id": "M009",
+        "qty": 0.4
+      }
+    ]
   },
   {
     "code": "AF.61120",
@@ -149,13 +319,30 @@
     "name": "Gia công lắp dựng cốt thép móng, đường kính cốt thép <= 18mm",
     "unit": "tấn",
     "vl": [
-      {"id": "VL010", "qty": 1020.0},
-      {"id": "VL013", "qty": 14.2}
+      {
+        "id": "VL010",
+        "qty": 1020.0
+      },
+      {
+        "id": "VL013",
+        "qty": 14.2
+      }
     ],
-    "nc": [{"id": "NC002", "qty": 7.12}],
+    "nc": [
+      {
+        "id": "NC002",
+        "qty": 7.12
+      }
+    ],
     "m": [
-      {"id": "M009", "qty": 0.32},
-      {"id": "M010", "qty": 0.55}
+      {
+        "id": "M009",
+        "qty": 0.32
+      },
+      {
+        "id": "M010",
+        "qty": 0.55
+      }
     ]
   },
   {
@@ -164,15 +351,38 @@
     "name": "Gia công lắp dựng cốt thép cột, trụ, đường kính cốt thép <= 18mm, cao <= 28m",
     "unit": "tấn",
     "vl": [
-      {"id": "VL010", "qty": 1020.0},
-      {"id": "VL013", "qty": 14.5},
-      {"id": "VL014", "qty": 2.3}
+      {
+        "id": "VL010",
+        "qty": 1020.0
+      },
+      {
+        "id": "VL013",
+        "qty": 14.5
+      },
+      {
+        "id": "VL014",
+        "qty": 2.3
+      }
     ],
-    "nc": [{"id": "NC002", "qty": 9.20}],
+    "nc": [
+      {
+        "id": "NC002",
+        "qty": 9.2
+      }
+    ],
     "m": [
-      {"id": "M009", "qty": 0.32},
-      {"id": "M010", "qty": 1.15},
-      {"id": "M011", "qty": 0.28}
+      {
+        "id": "M009",
+        "qty": 0.32
+      },
+      {
+        "id": "M010",
+        "qty": 1.15
+      },
+      {
+        "id": "M011",
+        "qty": 0.28
+      }
     ]
   },
   {
@@ -181,15 +391,38 @@
     "name": "Gia công lắp dựng cốt thép cột, dầm, đường kính > 18mm, cao <= 28m",
     "unit": "tấn",
     "vl": [
-      {"id": "VL011", "qty": 1020.0},
-      {"id": "VL013", "qty": 9.8},
-      {"id": "VL014", "qty": 4.6}
+      {
+        "id": "VL011",
+        "qty": 1020.0
+      },
+      {
+        "id": "VL013",
+        "qty": 9.8
+      },
+      {
+        "id": "VL014",
+        "qty": 4.6
+      }
     ],
-    "nc": [{"id": "NC002", "qty": 6.85}],
+    "nc": [
+      {
+        "id": "NC002",
+        "qty": 6.85
+      }
+    ],
     "m": [
-      {"id": "M009", "qty": 0.25},
-      {"id": "M010", "qty": 1.50},
-      {"id": "M011", "qty": 0.28}
+      {
+        "id": "M009",
+        "qty": 0.25
+      },
+      {
+        "id": "M010",
+        "qty": 1.5
+      },
+      {
+        "id": "M011",
+        "qty": 0.28
+      }
     ]
   },
   {
@@ -198,14 +431,34 @@
     "name": "Gia công lắp dựng cốt thép xà dầm, giằng, sàn, đường kính <= 18mm, cao <= 28m",
     "unit": "tấn",
     "vl": [
-      {"id": "VL010", "qty": 1020.0},
-      {"id": "VL013", "qty": 15.6}
+      {
+        "id": "VL010",
+        "qty": 1020.0
+      },
+      {
+        "id": "VL013",
+        "qty": 15.6
+      }
     ],
-    "nc": [{"id": "NC002", "qty": 8.95}],
+    "nc": [
+      {
+        "id": "NC002",
+        "qty": 8.95
+      }
+    ],
     "m": [
-      {"id": "M009", "qty": 0.32},
-      {"id": "M010", "qty": 0.85},
-      {"id": "M011", "qty": 0.28}
+      {
+        "id": "M009",
+        "qty": 0.32
+      },
+      {
+        "id": "M010",
+        "qty": 0.85
+      },
+      {
+        "id": "M011",
+        "qty": 0.28
+      }
     ]
   },
   {
@@ -214,10 +467,21 @@
     "name": "Ván khuôn gỗ cho móng dài, bệ máy (tính cho 100m2 ván khuôn quy đổi về 1m2)",
     "unit": "m2",
     "vl": [
-      {"id": "VL016", "qty": 0.0079},
-      {"id": "VL017", "qty": 0.15}
+      {
+        "id": "VL016",
+        "qty": 0.0079
+      },
+      {
+        "id": "VL017",
+        "qty": 0.15
+      }
     ],
-    "nc": [{"id": "NC002", "qty": 0.245}],
+    "nc": [
+      {
+        "id": "NC002",
+        "qty": 0.245
+      }
+    ],
     "m": []
   },
   {
@@ -226,13 +490,30 @@
     "name": "Ván khuôn thép định hình + hệ giáo chống cho cột, dầm, sàn chiều cao <= 28m",
     "unit": "m2",
     "vl": [
-      {"id": "VL015", "qty": 1.35},
-      {"id": "VL014", "qty": 0.05}
+      {
+        "id": "VL015",
+        "qty": 1.35
+      },
+      {
+        "id": "VL014",
+        "qty": 0.05
+      }
     ],
-    "nc": [{"id": "NC002", "qty": 0.365}],
+    "nc": [
+      {
+        "id": "NC002",
+        "qty": 0.365
+      }
+    ],
     "m": [
-      {"id": "M011", "qty": 0.015},
-      {"id": "M010", "qty": 0.012}
+      {
+        "id": "M011",
+        "qty": 0.015
+      },
+      {
+        "id": "M010",
+        "qty": 0.012
+      }
     ]
   },
   {
@@ -241,15 +522,38 @@
     "name": "Xây tường thẳng bằng gạch đặc 6x10,5x22cm chiều dày <= 11cm, cao <= 28m, vữa XM M75",
     "unit": "m3",
     "vl": [
-      {"id": "VL007", "qty": 643.0},
-      {"id": "VL001", "qty": 77.5},
-      {"id": "VL002", "qty": 0.28},
-      {"id": "VL006", "qty": 72.0}
+      {
+        "id": "VL007",
+        "qty": 643.0
+      },
+      {
+        "id": "VL001",
+        "qty": 77.5
+      },
+      {
+        "id": "VL002",
+        "qty": 0.28
+      },
+      {
+        "id": "VL006",
+        "qty": 72.0
+      }
     ],
-    "nc": [{"id": "NC002", "qty": 1.92}],
+    "nc": [
+      {
+        "id": "NC002",
+        "qty": 1.92
+      }
+    ],
     "m": [
-      {"id": "M005", "qty": 0.045},
-      {"id": "M011", "qty": 0.032}
+      {
+        "id": "M005",
+        "qty": 0.045
+      },
+      {
+        "id": "M011",
+        "qty": 0.032
+      }
     ]
   },
   {
@@ -258,15 +562,38 @@
     "name": "Xây tường thẳng bằng gạch đặc 6x10,5x22cm chiều dày <= 33cm (tường 220), cao <= 28m, vữa XM M75",
     "unit": "m3",
     "vl": [
-      {"id": "VL007", "qty": 550.0},
-      {"id": "VL001", "qty": 90.3},
-      {"id": "VL002", "qty": 0.326},
-      {"id": "VL006", "qty": 84.0}
+      {
+        "id": "VL007",
+        "qty": 550.0
+      },
+      {
+        "id": "VL001",
+        "qty": 90.3
+      },
+      {
+        "id": "VL002",
+        "qty": 0.326
+      },
+      {
+        "id": "VL006",
+        "qty": 84.0
+      }
     ],
-    "nc": [{"id": "NC002", "qty": 1.68}],
+    "nc": [
+      {
+        "id": "NC002",
+        "qty": 1.68
+      }
+    ],
     "m": [
-      {"id": "M005", "qty": 0.052},
-      {"id": "M011", "qty": 0.032}
+      {
+        "id": "M005",
+        "qty": 0.052
+      },
+      {
+        "id": "M011",
+        "qty": 0.032
+      }
     ]
   },
   {
@@ -275,15 +602,38 @@
     "name": "Xây tường thẳng bằng gạch ống 8x8x18cm chiều dày <= 30cm, cao <= 28m, vữa XM M75",
     "unit": "m3",
     "vl": [
-      {"id": "VL008", "qty": 475.0},
-      {"id": "VL001", "qty": 82.0},
-      {"id": "VL002", "qty": 0.295},
-      {"id": "VL006", "qty": 76.0}
+      {
+        "id": "VL008",
+        "qty": 475.0
+      },
+      {
+        "id": "VL001",
+        "qty": 82.0
+      },
+      {
+        "id": "VL002",
+        "qty": 0.295
+      },
+      {
+        "id": "VL006",
+        "qty": 76.0
+      }
     ],
-    "nc": [{"id": "NC002", "qty": 1.54}],
+    "nc": [
+      {
+        "id": "NC002",
+        "qty": 1.54
+      }
+    ],
     "m": [
-      {"id": "M005", "qty": 0.048},
-      {"id": "M011", "qty": 0.032}
+      {
+        "id": "M005",
+        "qty": 0.048
+      },
+      {
+        "id": "M011",
+        "qty": 0.032
+      }
     ]
   },
   {
@@ -292,13 +642,30 @@
     "name": "Gia công và lắp dựng cột, vì kèo, xà gồ thép hình nhà xưởng công nghiệp",
     "unit": "tấn",
     "vl": [
-      {"id": "VL012", "qty": 1030.0},
-      {"id": "VL014", "qty": 18.5}
+      {
+        "id": "VL012",
+        "qty": 1030.0
+      },
+      {
+        "id": "VL014",
+        "qty": 18.5
+      }
     ],
-    "nc": [{"id": "NC003", "qty": 14.5}],
+    "nc": [
+      {
+        "id": "NC003",
+        "qty": 14.5
+      }
+    ],
     "m": [
-      {"id": "M012", "qty": 0.65},
-      {"id": "M010", "qty": 3.20}
+      {
+        "id": "M012",
+        "qty": 0.65
+      },
+      {
+        "id": "M010",
+        "qty": 3.2
+      }
     ]
   },
   {
@@ -307,12 +674,31 @@
     "name": "Trát tường ngoài dày 1,5cm, vữa xi măng M75",
     "unit": "m2",
     "vl": [
-      {"id": "VL001", "qty": 4.92},
-      {"id": "VL002", "qty": 0.018},
-      {"id": "VL006", "qty": 4.5}
+      {
+        "id": "VL001",
+        "qty": 4.92
+      },
+      {
+        "id": "VL002",
+        "qty": 0.018
+      },
+      {
+        "id": "VL006",
+        "qty": 4.5
+      }
     ],
-    "nc": [{"id": "NC002", "qty": 0.22}],
-    "m": [{"id": "M005", "qty": 0.0032}]
+    "nc": [
+      {
+        "id": "NC002",
+        "qty": 0.22
+      }
+    ],
+    "m": [
+      {
+        "id": "M005",
+        "qty": 0.0032
+      }
+    ]
   },
   {
     "code": "AK.21223",
@@ -320,12 +706,31 @@
     "name": "Trát tường trong dày 1,5cm, vữa xi măng M75",
     "unit": "m2",
     "vl": [
-      {"id": "VL001", "qty": 4.65},
-      {"id": "VL002", "qty": 0.017},
-      {"id": "VL006", "qty": 4.2}
+      {
+        "id": "VL001",
+        "qty": 4.65
+      },
+      {
+        "id": "VL002",
+        "qty": 0.017
+      },
+      {
+        "id": "VL006",
+        "qty": 4.2
+      }
     ],
-    "nc": [{"id": "NC002", "qty": 0.18}],
-    "m": [{"id": "M005", "qty": 0.003}]
+    "nc": [
+      {
+        "id": "NC002",
+        "qty": 0.18
+      }
+    ],
+    "m": [
+      {
+        "id": "M005",
+        "qty": 0.003
+      }
+    ]
   },
   {
     "code": "AK.23113",
@@ -333,12 +738,31 @@
     "name": "Trát trần, dầm dày 1,0cm - 1,5cm, vữa xi măng M75",
     "unit": "m2",
     "vl": [
-      {"id": "VL001", "qty": 4.15},
-      {"id": "VL002", "qty": 0.015},
-      {"id": "VL006", "qty": 4.0}
+      {
+        "id": "VL001",
+        "qty": 4.15
+      },
+      {
+        "id": "VL002",
+        "qty": 0.015
+      },
+      {
+        "id": "VL006",
+        "qty": 4.0
+      }
     ],
-    "nc": [{"id": "NC002", "qty": 0.25}],
-    "m": [{"id": "M005", "qty": 0.0028}]
+    "nc": [
+      {
+        "id": "NC002",
+        "qty": 0.25
+      }
+    ],
+    "m": [
+      {
+        "id": "M005",
+        "qty": 0.0028
+      }
+    ]
   },
   {
     "code": "AK.51240",
@@ -346,13 +770,35 @@
     "name": "Lát nền, sàn bằng gạch Ceramic / Granite 600x600mm, vữa lót XM M75",
     "unit": "m2",
     "vl": [
-      {"id": "VL020", "qty": 1.02},
-      {"id": "VL001", "qty": 6.15},
-      {"id": "VL002", "qty": 0.025},
-      {"id": "VL022", "qty": 0.15}
+      {
+        "id": "VL020",
+        "qty": 1.02
+      },
+      {
+        "id": "VL001",
+        "qty": 6.15
+      },
+      {
+        "id": "VL002",
+        "qty": 0.025
+      },
+      {
+        "id": "VL022",
+        "qty": 0.15
+      }
     ],
-    "nc": [{"id": "NC002", "qty": 0.21}],
-    "m": [{"id": "M005", "qty": 0.004}]
+    "nc": [
+      {
+        "id": "NC002",
+        "qty": 0.21
+      }
+    ],
+    "m": [
+      {
+        "id": "M005",
+        "qty": 0.004
+      }
+    ]
   },
   {
     "code": "AK.31130",
@@ -360,21 +806,53 @@
     "name": "Ốp tường khu vệ sinh bằng gạch Ceramic 300x600mm",
     "unit": "m2",
     "vl": [
-      {"id": "VL021", "qty": 1.03},
-      {"id": "VL001", "qty": 5.20},
-      {"id": "VL002", "qty": 0.018},
-      {"id": "VL022", "qty": 0.18}
+      {
+        "id": "VL021",
+        "qty": 1.03
+      },
+      {
+        "id": "VL001",
+        "qty": 5.2
+      },
+      {
+        "id": "VL002",
+        "qty": 0.018
+      },
+      {
+        "id": "VL022",
+        "qty": 0.18
+      }
     ],
-    "nc": [{"id": "NC002", "qty": 0.34}],
-    "m": [{"id": "M005", "qty": 0.003}]
+    "nc": [
+      {
+        "id": "NC002",
+        "qty": 0.34
+      }
+    ],
+    "m": [
+      {
+        "id": "M005",
+        "qty": 0.003
+      }
+    ]
   },
   {
     "code": "AK.82410",
     "category": "Công tác Sơn bả, Trần, Cửa, Mái (Chương AK, AL - PL II TT 38/2026)",
     "name": "Bả bằng bột bả vào tường, cột, dầm trần",
     "unit": "m2",
-    "vl": [{"id": "VL023", "qty": 1.15}],
-    "nc": [{"id": "NC002", "qty": 0.085}],
+    "vl": [
+      {
+        "id": "VL023",
+        "qty": 1.15
+      }
+    ],
+    "nc": [
+      {
+        "id": "NC002",
+        "qty": 0.085
+      }
+    ],
     "m": []
   },
   {
@@ -383,10 +861,21 @@
     "name": "Sơn dầm, trần, tường trong và ngoài nhà đã bả: 1 nước lót + 2 nước phủ",
     "unit": "m2",
     "vl": [
-      {"id": "VL024", "qty": 0.11},
-      {"id": "VL025", "qty": 0.18}
+      {
+        "id": "VL024",
+        "qty": 0.11
+      },
+      {
+        "id": "VL025",
+        "qty": 0.18
+      }
     ],
-    "nc": [{"id": "NC002", "qty": 0.092}],
+    "nc": [
+      {
+        "id": "NC002",
+        "qty": 0.092
+      }
+    ],
     "m": []
   },
   {
@@ -394,8 +883,18 @@
     "category": "Công tác Sơn bả, Trần, Cửa, Mái (Chương AK, AL - PL II TT 38/2026)",
     "name": "Làm trần thạch cao khung xương chìm phẳng hoàn chỉnh",
     "unit": "m2",
-    "vl": [{"id": "VL028", "qty": 1.03}],
-    "nc": [{"id": "NC002", "qty": 0.24}],
+    "vl": [
+      {
+        "id": "VL028",
+        "qty": 1.03
+      }
+    ],
+    "nc": [
+      {
+        "id": "NC002",
+        "qty": 0.24
+      }
+    ],
     "m": []
   },
   {
@@ -403,8 +902,18 @@
     "category": "Công tác Sơn bả, Trần, Cửa, Mái (Chương AK, AL - PL II TT 38/2026)",
     "name": "Lợp mái tôn múi mạ màu dày 0,45mm trên hệ xà gồ",
     "unit": "m2",
-    "vl": [{"id": "VL026", "qty": 1.08}],
-    "nc": [{"id": "NC002", "qty": 0.11}],
+    "vl": [
+      {
+        "id": "VL026",
+        "qty": 1.08
+      }
+    ],
+    "nc": [
+      {
+        "id": "NC002",
+        "qty": 0.11
+      }
+    ],
     "m": []
   },
   {
@@ -412,8 +921,18 @@
     "category": "Công tác Sơn bả, Trần, Cửa, Mái (Chương AK, AL - PL II TT 38/2026)",
     "name": "Lắp dựng cửa đi, cửa sổ khung nhôm hệ Xingfa kính an toàn 8,38mm đồng bộ phụ kiện",
     "unit": "m2",
-    "vl": [{"id": "VL027", "qty": 1.00}],
-    "nc": [{"id": "NC003", "qty": 0.28}],
+    "vl": [
+      {
+        "id": "VL027",
+        "qty": 1.0
+      }
+    ],
+    "nc": [
+      {
+        "id": "NC003",
+        "qty": 0.28
+      }
+    ],
     "m": []
   },
   {
@@ -421,8 +940,18 @@
     "category": "Công tác Lắp đặt Điện & Cấp thoát nước MEP (PL III TT 38/2026)",
     "name": "Lắp đặt ống nhựa uPVC D90 thoát nước nối bằng phương pháp dán keo",
     "unit": "m",
-    "vl": [{"id": "VL029", "qty": 1.02}],
-    "nc": [{"id": "NC003", "qty": 0.085}],
+    "vl": [
+      {
+        "id": "VL029",
+        "qty": 1.02
+      }
+    ],
+    "nc": [
+      {
+        "id": "NC003",
+        "qty": 0.085
+      }
+    ],
     "m": []
   },
   {
@@ -430,8 +959,18 @@
     "category": "Công tác Lắp đặt Điện & Cấp thoát nước MEP (PL III TT 38/2026)",
     "name": "Lắp đặt ống nhựa PPR D32 cấp nước nối bằng phương pháp hàn nhiệt",
     "unit": "m",
-    "vl": [{"id": "VL030", "qty": 1.02}],
-    "nc": [{"id": "NC003", "qty": 0.072}],
+    "vl": [
+      {
+        "id": "VL030",
+        "qty": 1.02
+      }
+    ],
+    "nc": [
+      {
+        "id": "NC003",
+        "qty": 0.072
+      }
+    ],
     "m": []
   },
   {
@@ -439,8 +978,18 @@
     "category": "Công tác Lắp đặt Điện & Cấp thoát nước MEP (PL III TT 38/2026)",
     "name": "Kéo rải dây điện đôi CV 2x4,0mm2 luồn trong ống bảo vệ",
     "unit": "m",
-    "vl": [{"id": "VL031", "qty": 1.02}],
-    "nc": [{"id": "NC003", "qty": 0.038}],
+    "vl": [
+      {
+        "id": "VL031",
+        "qty": 1.02
+      }
+    ],
+    "nc": [
+      {
+        "id": "NC003",
+        "qty": 0.038
+      }
+    ],
     "m": []
   },
   {
@@ -448,8 +997,300 @@
     "category": "Công tác Lắp đặt Điện & Cấp thoát nước MEP (PL III TT 38/2026)",
     "name": "Lắp đặt bộ đèn LED Panel 600x600mm âm trần",
     "unit": "bộ",
-    "vl": [{"id": "VL032", "qty": 1.00}],
-    "nc": [{"id": "NC003", "qty": 0.22}],
+    "vl": [
+      {
+        "id": "VL032",
+        "qty": 1.0
+      }
+    ],
+    "nc": [
+      {
+        "id": "NC003",
+        "qty": 0.22
+      }
+    ],
+    "m": []
+  },
+  {
+    "code": "AA.22111",
+    "chapter": "AA - Phá dỡ & Chuẩn bị mặt bằng",
+    "name": "Phá dỡ kết cấu bê tông cốt thép bằng máy đào gắn búa thủy lực",
+    "unit": "m3",
+    "vl": [],
+    "nc": [
+      {
+        "id": "NC001",
+        "qty": 0.45
+      }
+    ],
+    "m": [
+      {
+        "id": "M001",
+        "qty": 0.185
+      }
+    ]
+  },
+  {
+    "code": "AC.25212",
+    "chapter": "AC - Công tác đóng, ép cọc & khoan nhồi",
+    "name": "Ép trước cọc BTCT vuông 250x250mm trên cạn bằng máy ép thủy lực, đất cấp II",
+    "unit": "100m",
+    "vl": [
+      {
+        "id": "VL029",
+        "qty": 101.0
+      }
+    ],
+    "nc": [
+      {
+        "id": "NC002",
+        "qty": 8.25
+      }
+    ],
+    "m": [
+      {
+        "id": "M015",
+        "qty": 1.35
+      },
+      {
+        "id": "M008",
+        "qty": 1.35
+      }
+    ]
+  },
+  {
+    "code": "AD.11212",
+    "chapter": "AD - Công tác làm đường giao thông",
+    "name": "Làm móng cấp phối đá dăm lớp dưới (loại II), chiều dày lớp đá đã lèn ép <= 20cm",
+    "unit": "100m3",
+    "vl": [
+      {
+        "id": "VL022",
+        "qty": 142.0
+      }
+    ],
+    "nc": [
+      {
+        "id": "NC001",
+        "qty": 11.4
+      }
+    ],
+    "m": [
+      {
+        "id": "M002",
+        "qty": 0.42
+      },
+      {
+        "id": "M014",
+        "qty": 1.85
+      }
+    ]
+  },
+  {
+    "code": "AD.11222",
+    "chapter": "AD - Công tác làm đường giao thông",
+    "name": "Làm móng cấp phối đá dăm loại I (lớp trên), chiều dày lớp đá đã lèn ép <= 18cm",
+    "unit": "100m3",
+    "vl": [
+      {
+        "id": "VL021",
+        "qty": 143.0
+      }
+    ],
+    "nc": [
+      {
+        "id": "NC001",
+        "qty": 12.1
+      }
+    ],
+    "m": [
+      {
+        "id": "M002",
+        "qty": 0.45
+      },
+      {
+        "id": "M014",
+        "qty": 1.98
+      }
+    ]
+  },
+  {
+    "code": "AD.23223",
+    "chapter": "AD - Công tác làm đường giao thông",
+    "name": "Rải thảm mặt đường bê tông nhựa nóng hạt mịn C12.5 dày 5cm",
+    "unit": "100m2",
+    "vl": [
+      {
+        "id": "VL023",
+        "qty": 11.85
+      },
+      {
+        "id": "VL026",
+        "qty": 50.0
+      }
+    ],
+    "nc": [
+      {
+        "id": "NC002",
+        "qty": 3.45
+      }
+    ],
+    "m": [
+      {
+        "id": "M012",
+        "qty": 0.145
+      },
+      {
+        "id": "M013",
+        "qty": 0.22
+      },
+      {
+        "id": "M014",
+        "qty": 0.18
+      }
+    ]
+  },
+  {
+    "code": "AD.23214",
+    "chapter": "AD - Công tác làm đường giao thông",
+    "name": "Rải thảm mặt đường bê tông nhựa nóng hạt trung C19 dày 7cm",
+    "unit": "100m2",
+    "vl": [
+      {
+        "id": "VL024",
+        "qty": 16.45
+      },
+      {
+        "id": "VL026",
+        "qty": 80.0
+      }
+    ],
+    "nc": [
+      {
+        "id": "NC002",
+        "qty": 4.1
+      }
+    ],
+    "m": [
+      {
+        "id": "M012",
+        "qty": 0.185
+      },
+      {
+        "id": "M013",
+        "qty": 0.28
+      },
+      {
+        "id": "M014",
+        "qty": 0.22
+      }
+    ]
+  },
+  {
+    "code": "AL.12211",
+    "chapter": "AL - Hạ tầng kỹ thuật & Cống thoát nước",
+    "name": "Lắp đặt cống tròn BTCT ly tâm D600 bằng cần trục ô tô",
+    "unit": "100m",
+    "vl": [
+      {
+        "id": "VL027",
+        "qty": 100.0
+      },
+      {
+        "id": "VL001",
+        "qty": 950.0
+      },
+      {
+        "id": "VL004",
+        "qty": 3.2
+      }
+    ],
+    "nc": [
+      {
+        "id": "NC002",
+        "qty": 26.5
+      }
+    ],
+    "m": [
+      {
+        "id": "M008",
+        "qty": 2.45
+      }
+    ]
+  },
+  {
+    "code": "AL.12214",
+    "chapter": "AL - Hạ tầng kỹ thuật & Cống thoát nước",
+    "name": "Lắp đặt cống tròn BTCT ly tâm D1000 bằng cần trục ô tô",
+    "unit": "100m",
+    "vl": [
+      {
+        "id": "VL028",
+        "qty": 100.0
+      },
+      {
+        "id": "VL001",
+        "qty": 1650.0
+      },
+      {
+        "id": "VL004",
+        "qty": 5.5
+      }
+    ],
+    "nc": [
+      {
+        "id": "NC002",
+        "qty": 38.0
+      }
+    ],
+    "m": [
+      {
+        "id": "M008",
+        "qty": 3.85
+      }
+    ]
+  },
+  {
+    "code": "BA.16304",
+    "chapter": "BA - Lắp đặt hệ thống điện công trình",
+    "name": "Rải cáp điện lực ngầm dưới rãnh đất 4 ruột tiết diện đến 50mm2",
+    "unit": "100m",
+    "vl": [
+      {
+        "id": "VL031",
+        "qty": 102.0
+      }
+    ],
+    "nc": [
+      {
+        "id": "NC003",
+        "qty": 11.2
+      }
+    ],
+    "m": [
+      {
+        "id": "M008",
+        "qty": 0.25
+      }
+    ]
+  },
+  {
+    "code": "BB.11206",
+    "chapter": "BB - Lắp đặt ống cấp thoát nước công trình",
+    "name": "Lắp đặt ống nhựa uPVC cấp thoát nước D110 nối bằng keo dán",
+    "unit": "100m",
+    "vl": [
+      {
+        "id": "VL030",
+        "qty": 102.0
+      }
+    ],
+    "nc": [
+      {
+        "id": "NC002",
+        "qty": 14.8
+      }
+    ],
     "m": []
   }
 ]

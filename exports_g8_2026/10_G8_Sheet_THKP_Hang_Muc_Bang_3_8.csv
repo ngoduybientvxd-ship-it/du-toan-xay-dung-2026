@@ -1,0 +1,15 @@
+﻿BẢNG 10. TỔNG HỢP DỰ TOÁN CHI PHÍ XÂY DỰNG HẠNG MỤC (MẪU BẢNG 3.8 PL III TT 36/2026 & QĐ 1538/QĐ-BXD),,,,
+STT,Khoản mục chi phí,Ký hiệu,Cách tính / Tỷ lệ định mức,Giá trị (Đồng)
+I,CHI PHÍ TRỰC TIẾP,T,VL + NC + M,6360321527.0
+1,Chi phí vật liệu,VL,Tổng hợp từ bảng Tiên lượng & Giá hiện trường,4218038130.0
+2,Chi phí nhân công,NC,Theo TT 37/2026/TT-BXD (K_NC = 1.0),1856190938.0
+3,Chi phí máy và thiết bị thi công,M,Theo TT 37/2026/TT-BXD (K_M = 1.0),286092459.0
+II,CHI PHÍ GIÁN TIẾP,GT,C + TT + LT,704260371.0
+1,Chi phí chung,C,T × 7.3% (Bảng 3.3 PL III TT 36/2026),464303471.0
+2,Chi phí một số công việc không xác định được khối lượng từ thiết kế,TT,T × 2.5% (Bảng 3.5 PL III TT 36/2026),159008038.0
+III,THU NHẬP CHỊU THUẾ TÍNH TRƯỚC,TL,(T + C) × 5.5% (Bảng 3.6 PL III TT 36/2026),375354375.0
+IV,CHI PHÍ XÂY DỰNG TRƯỚC THUẾ (CHƯA GỒM NHÀ TẠM),G_XDTT,T + C + TL + TT,7358987411.0
+V,CHI PHÍ NHÀ TẠM TẠI HIỆN TRƯỜNG ĐỂ Ở VÀ ĐIỀU HÀNH THI CÔNG,LT,G_XDTT × 1.1% (Bảng 3.7 PL III TT 36/2026),80948862.0
+VI,TỔNG CHI PHÍ XÂY DỰNG TRƯỚC THUẾ,G_XD_trước_thuế,G_XDTT + LT_trước_thuế,7439936273.0
+VII,THUẾ GIÁ TRỊ GIA TĂNG,GTGT,G_XD_trước_thuế × 8.0%,595194902.0
+VIII,TỔNG CHI PHÍ XÂY DỰNG SAU THUẾ (Đính chính QĐ 1538/QĐ-BXD),G_XD_sau_thuế,G_XD_trước_thuế + GTGT (LT_sau_thuế = LT_trước_thuế + LT_GTGT),8035131175.0

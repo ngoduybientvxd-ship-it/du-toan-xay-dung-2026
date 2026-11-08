@@ -658,6 +658,23 @@
       "nc_id": "NC002",
       "nc_qty": 1.0,
       "announced_price": 2750000
+    },
+    {
+      "id": "M015",
+      "name": "Máy ép cọc thủy lực 150 tấn - 250 tấn",
+      "unit": "ca",
+      "price": 3850000,
+      "announced_price": 3850000,
+      "nguyen_gia": 2650000000,
+      "so_ca_nam": 230,
+      "khau_hao": 14.0,
+      "sua_chua": 6.0,
+      "khac": 5.0,
+      "fuel_type": "electricity",
+      "fuel_qty": 240.0,
+      "nc_id": "NC003",
+      "nc_qty": 2.0,
+      "source": "Phụ lục V TT 37/2026/TT-BXD"
     }
   ]
 }
