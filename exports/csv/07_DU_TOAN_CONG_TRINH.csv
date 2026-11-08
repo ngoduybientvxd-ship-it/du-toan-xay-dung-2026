@@ -1,0 +1,12 @@
+"BẢNG TỔNG HỢP DỰ TOÁN XÂY DỰNG CÔNG TRÌNH (NGHỊ ĐỊNH 206/2026/NĐ-CP & THÔNG TƯ 36, 38/2026/TT-BXD)",,,,,,
+STT,NỘI DUNG KHOẢN MỤC CHI PHÍ,CĂN CỨ PHÁP LÝ / ĐỊNH MỨC,TỶ LỆ (%),TRƯỚC THUẾ (VNĐ),THUẾ GTGT (VNĐ),SAU THUẾ (VNĐ)
+I,CHI PHÍ XÂY DỰNG (G_XD),Bảng 3.8 PL III TT 36/2026 & QĐ 1538/QĐ-BXD,,='06_BANG_3_8_CHI_PHI_XD'!F16,='06_BANG_3_8_CHI_PHI_XD'!F17-E3,='06_BANG_3_8_CHI_PHI_XD'!F17
+II,CHI PHÍ THIẾT BỊ (G_TB),Chương II Thông tư 36/2026/TT-BXD,,1515000000.0,"=ROUND(E4*0.08, 0)",=E4+F4
+III,CHI PHÍ QUẢN LÝ DỰ ÁN (G_QLDA),Bảng 1.1 Phụ lục VIII Thông tư 38/2026/TT-BXD,3.446,"=ROUND((E3+E4)*D5/100, 0)","=ROUND(E5*0.08, 0)",=E5+F5
+IV,CHI PHÍ TƯ VẤN ĐẦU TƯ XÂY DỰNG (G_TV),Phần II Phụ lục VIII Thông tư 38/2026/TT-BXD,,695663346.0,55653068.0,=E6+F6
+V,CHI PHÍ KHÁC (G_K),Điều 11 Nghị định 206/2026/NĐ-CP,,62657541.0,4298369.0,=E7+F7
+CỘNG,TỔNG CỘNG TRƯỚC DỰ PHÒNG (I + II + III + IV + V),Cơ sở tính chi phí dự phòng,,=SUM(E3:E7),=SUM(F3:F7),=SUM(G3:G7)
+VI,CHI PHÍ DỰ PHÒNG (G_DP = G_DP1 + G_DP2),Điều 12 Nghị định 206/2026/NĐ-CP,7.5,=E10+E11,=F10+F11,=G10+G11
+6.1,Dự phòng khối lượng công việc phát sinh (G_DP1),"5,0% × Tổng trước dự phòng",5.0,"=ROUND(E8*D10/100, 0)","=ROUND(F8*D10/100, 0)",=E10+F10
+6.2,Dự phòng cho yếu tố trượt giá (G_DP2),"2,5% × Tổng trước dự phòng",2.5,"=ROUND(E8*D11/100, 0)","=ROUND(F8*D11/100, 0)",=E11+F11
+TỔNG,TỔNG DỰ TOÁN XÂY DỰNG CÔNG TRÌNH (G_DTXD),I + II + III + IV + V + VI,,=E8+E9,=F8+F9,=G8+G9

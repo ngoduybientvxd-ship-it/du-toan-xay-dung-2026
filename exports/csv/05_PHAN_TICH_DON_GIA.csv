@@ -1,0 +1,116 @@
+BẢNG PHÂN TÍCH VẬT TƯ & CHIẾT TÍNH ĐƠN GIÁ XÂY DỰNG CHI TIẾT (THÔNG TƯ 38/2026/TT-BXD),,,,,,,,,,
+STT BOQ,Mã ĐM,Tên công tác xây dựng,Loại HP,Mã VT,Tên Vật liệu / Nhân công / Máy,ĐVT,Định mức hao phí,Khối lượng hao phí,Đơn giá (VNĐ),Thành tiền (VNĐ)
+1,AB.25112,"Đào móng công trình bằng máy đào 0,80m3, đất cấp II",NC,NC001,"Nhân công bậc 3,0/7 - Nhóm nhân công xây dựng (TT 37/2026/TT-BXD)",công,0.058,19.9947,295000.0,5898433.0
+1,AB.25112,"Đào móng công trình bằng máy đào 0,80m3, đất cấp II",M,M001,"Máy đào một gầu bánh xích dung tích gầu 0,80 m3",ca,0.0041,1.4134,3450000.0,4876291.0
+1,AB.25112,"Đào móng công trình bằng máy đào 0,80m3, đất cấp II",M,M002,Máy ủi bánh xích công suất 110 CV,ca,0.0005,0.1724,2890000.0,498144.0
+2,AB.11442,"Đào sửa hố móng bằng thủ công, đất cấp II",NC,NC001,"Nhân công bậc 3,0/7 - Nhóm nhân công xây dựng (TT 37/2026/TT-BXD)",công,0.61,23.3654,295000.0,6892805.0
+3,AC.26111,Ép cọc BTCT vuông 250x250mm M300 bằng máy ép thủy lực,VL,VL033,Cọc bê tông cốt thép预 ứng lực / vuông 250x250mm M300,m,1.01,727.2,345000.0,250884000.0
+3,AC.26111,Ép cọc BTCT vuông 250x250mm M300 bằng máy ép thủy lực,VL,VL014,Que hàn điện 4mm,kg,0.08,57.6,32000.0,1843200.0
+3,AC.26111,Ép cọc BTCT vuông 250x250mm M300 bằng máy ép thủy lực,NC,NC002,"Nhân công bậc 3,5/7 - Nhóm nhân công xây dựng (TT 37/2026/TT-BXD)",công,0.075,54.0,322000.0,17388000.0
+3,AC.26111,Ép cọc BTCT vuông 250x250mm M300 bằng máy ép thủy lực,M,M013,Máy ép cọc thủy lực 120 - 150 tấn,ca,0.0085,6.12,4600000.0,28152000.0
+3,AC.26111,Ép cọc BTCT vuông 250x250mm M300 bằng máy ép thủy lực,M,M012,Cần trục tháp sức nâng 25 tấn / Cần trục bánh lốp 16 tấn,ca,0.0085,6.12,4850000.0,29682000.0
+3,AC.26111,Ép cọc BTCT vuông 250x250mm M300 bằng máy ép thủy lực,M,M010,Máy hàn điện 23 kW,ca,0.004,2.88,620000.0,1785600.0
+4,AF.11111,Bê tông lót móng đá 4x6 M100 dày 10cm,VL,VL001,Xi măng PCB40 (bao),kg,225.0,2562.3,1750.0,4484025.0
+4,AF.11111,Bê tông lót móng đá 4x6 M100 dày 10cm,VL,VL003,Cát vàng đổ bê tông (hạt trung - thô đạt TCVN),m3,0.525,5.9787,395000.0,2361586.0
+4,AF.11111,Bê tông lót móng đá 4x6 M100 dày 10cm,VL,VL005,Đá dăm 4x6 lót móng,m3,0.893,10.1695,310000.0,3152540.0
+4,AF.11111,Bê tông lót móng đá 4x6 M100 dày 10cm,VL,VL006,Nước sạch thi công,lít,185.0,2106.78,12.0,25281.0
+4,AF.11111,Bê tông lót móng đá 4x6 M100 dày 10cm,NC,NC001,"Nhân công bậc 3,0/7 - Nhóm nhân công xây dựng (TT 37/2026/TT-BXD)",công,1.25,14.235,295000.0,4199325.0
+4,AF.11111,Bê tông lót móng đá 4x6 M100 dày 10cm,M,M004,Máy trộn bê tông 250 lít,ca,0.095,1.0819,430000.0,465200.0
+4,AF.11111,Bê tông lót móng đá 4x6 M100 dày 10cm,M,M007,"Máy đầm bàn 1,0 kW",ca,0.089,1.0135,315000.0,319263.0
+5,AF.31123,Bê tông đài móng & giằng móng thương phẩm M250 đổ bằng máy bơm,VL,VL018,Bê tông thương phẩm M250 (C20/25) độ sụt 10-12cm,m3,1.015,76.3524,1280000.0,97731021.0
+5,AF.31123,Bê tông đài móng & giằng móng thương phẩm M250 đổ bằng máy bơm,VL,VL006,Nước sạch thi công,lít,30.0,2256.72,12.0,27081.0
+5,AF.31123,Bê tông đài móng & giằng móng thương phẩm M250 đổ bằng máy bơm,NC,NC002,"Nhân công bậc 3,5/7 - Nhóm nhân công xây dựng (TT 37/2026/TT-BXD)",công,0.56,42.1254,322000.0,13564392.0
+5,AF.31123,Bê tông đài móng & giằng móng thương phẩm M250 đổ bằng máy bơm,M,M008,Máy bơm bê tông 50 m3/h,ca,0.033,2.4824,4250000.0,10550166.0
+5,AF.31123,Bê tông đài móng & giằng móng thương phẩm M250 đổ bằng máy bơm,M,M006,"Máy đầm bê tông dùi 1,5 kW",ca,0.089,6.6949,325000.0,2175854.0
+6,AF.61120,"Cốt thép đài móng, giằng móng đường kính <= 18mm",VL,VL010,Thép thanh vằn D12-D18mm (CB300-V / CB400-V),kg,1020.0,8823.0,16500.0,145579500.0
+6,AF.61120,"Cốt thép đài móng, giằng móng đường kính <= 18mm",VL,VL013,Dây thép buộc 1mm,kg,14.2,122.83,23000.0,2825090.0
+6,AF.61120,"Cốt thép đài móng, giằng móng đường kính <= 18mm",NC,NC002,"Nhân công bậc 3,5/7 - Nhóm nhân công xây dựng (TT 37/2026/TT-BXD)",công,7.12,61.588,322000.0,19831336.0
+6,AF.61120,"Cốt thép đài móng, giằng móng đường kính <= 18mm",M,M009,Máy cắt uốn cốt thép 5 kW,ca,0.32,2.768,440000.0,1217920.0
+6,AF.61120,"Cốt thép đài móng, giằng móng đường kính <= 18mm",M,M010,Máy hàn điện 23 kW,ca,0.55,4.7575,620000.0,2949650.0
+7,AF.81122,Ván khuôn móng và giằng móng,VL,VL016,Gỗ ván khuôn nhóm IV,m3,0.0079,1.5038,5400000.0,8120758.0
+7,AF.81122,Ván khuôn móng và giằng móng,VL,VL017,Đinh các loại,kg,0.15,28.554,25000.0,713850.0
+7,AF.81122,Ván khuôn móng và giằng móng,NC,NC002,"Nhân công bậc 3,5/7 - Nhóm nhân công xây dựng (TT 37/2026/TT-BXD)",công,0.245,46.6382,322000.0,15017500.0
+8,AB.13113,"Đắp đất hố móng và tôn nền bằng đầm cóc K=0,95",NC,NC001,"Nhân công bậc 3,0/7 - Nhóm nhân công xây dựng (TT 37/2026/TT-BXD)",công,0.21,59.85,295000.0,17655750.0
+8,AB.13113,"Đắp đất hố móng và tôn nền bằng đầm cóc K=0,95",M,M003,Máy đầm đất cầm tay (đầm cóc) 70kg,ca,0.038,10.83,465000.0,5035950.0
+9,AF.32224,Bê tông cột tầng 1 - tầng 3 thương phẩm M300 đổ bằng bơm,VL,VL019,Bê tông thương phẩm M300 (C25/30) độ sụt 10-12cm,m3,1.015,66.649,1365000.0,90975830.0
+9,AF.32224,Bê tông cột tầng 1 - tầng 3 thương phẩm M300 đổ bằng bơm,VL,VL006,Nước sạch thi công,lít,45.0,2954.88,12.0,35459.0
+9,AF.32224,Bê tông cột tầng 1 - tầng 3 thương phẩm M300 đổ bằng bơm,NC,NC002,"Nhân công bậc 3,5/7 - Nhóm nhân công xây dựng (TT 37/2026/TT-BXD)",công,1.38,90.6163,322000.0,29178455.0
+9,AF.32224,Bê tông cột tầng 1 - tầng 3 thương phẩm M300 đổ bằng bơm,M,M008,Máy bơm bê tông 50 m3/h,ca,0.042,2.7579,4250000.0,11721024.0
+9,AF.32224,Bê tông cột tầng 1 - tầng 3 thương phẩm M300 đổ bằng bơm,M,M006,"Máy đầm bê tông dùi 1,5 kW",ca,0.18,11.8195,325000.0,3841344.0
+10,AF.32314,"Bê tông dầm, sàn các tầng và sàn mái thương phẩm M300 đổ bằng bơm",VL,VL019,Bê tông thương phẩm M300 (C25/30) độ sụt 10-12cm,m3,1.015,262.1745,1365000.0,357868192.0
+10,AF.32314,"Bê tông dầm, sàn các tầng và sàn mái thương phẩm M300 đổ bằng bơm",VL,VL006,Nước sạch thi công,lít,45.0,11623.5,12.0,139482.0
+10,AF.32314,"Bê tông dầm, sàn các tầng và sàn mái thương phẩm M300 đổ bằng bơm",NC,NC002,"Nhân công bậc 3,5/7 - Nhóm nhân công xây dựng (TT 37/2026/TT-BXD)",công,1.12,289.296,322000.0,93153312.0
+10,AF.32314,"Bê tông dầm, sàn các tầng và sàn mái thương phẩm M300 đổ bằng bơm",M,M008,Máy bơm bê tông 50 m3/h,ca,0.038,9.8154,4250000.0,41715450.0
+10,AF.32314,"Bê tông dầm, sàn các tầng và sàn mái thương phẩm M300 đổ bằng bơm",M,M006,"Máy đầm bê tông dùi 1,5 kW",ca,0.14,36.162,325000.0,11752650.0
+10,AF.32314,"Bê tông dầm, sàn các tầng và sàn mái thương phẩm M300 đổ bằng bơm",M,M007,"Máy đầm bàn 1,0 kW",ca,0.07,18.081,315000.0,5695515.0
+11,AF.61432,"Cốt thép chủ cột, dầm chính đường kính > 18mm",VL,VL011,Thép thanh vằn D>18mm (CB400-V),kg,1020.0,29070.0,16650.0,484015500.0
+11,AF.61432,"Cốt thép chủ cột, dầm chính đường kính > 18mm",VL,VL013,Dây thép buộc 1mm,kg,9.8,279.3,23000.0,6423900.0
+11,AF.61432,"Cốt thép chủ cột, dầm chính đường kính > 18mm",VL,VL014,Que hàn điện 4mm,kg,4.6,131.1,32000.0,4195200.0
+11,AF.61432,"Cốt thép chủ cột, dầm chính đường kính > 18mm",NC,NC002,"Nhân công bậc 3,5/7 - Nhóm nhân công xây dựng (TT 37/2026/TT-BXD)",công,6.85,195.225,322000.0,62862450.0
+11,AF.61432,"Cốt thép chủ cột, dầm chính đường kính > 18mm",M,M009,Máy cắt uốn cốt thép 5 kW,ca,0.25,7.125,440000.0,3135000.0
+11,AF.61432,"Cốt thép chủ cột, dầm chính đường kính > 18mm",M,M010,Máy hàn điện 23 kW,ca,1.5,42.75,620000.0,26505000.0
+11,AF.61432,"Cốt thép chủ cột, dầm chính đường kính > 18mm",M,M011,"Vận thăng lồng / Tời điện 0,8 tấn",ca,0.28,7.98,690000.0,5506200.0
+12,AF.61522,"Cốt thép dầm phụ, bản sàn các tầng đường kính <= 18mm",VL,VL010,Thép thanh vằn D12-D18mm (CB300-V / CB400-V),kg,1020.0,26928.0,16500.0,444312000.0
+12,AF.61522,"Cốt thép dầm phụ, bản sàn các tầng đường kính <= 18mm",VL,VL013,Dây thép buộc 1mm,kg,15.6,411.84,23000.0,9472320.0
+12,AF.61522,"Cốt thép dầm phụ, bản sàn các tầng đường kính <= 18mm",NC,NC002,"Nhân công bậc 3,5/7 - Nhóm nhân công xây dựng (TT 37/2026/TT-BXD)",công,8.95,236.28,322000.0,76082160.0
+12,AF.61522,"Cốt thép dầm phụ, bản sàn các tầng đường kính <= 18mm",M,M009,Máy cắt uốn cốt thép 5 kW,ca,0.32,8.448,440000.0,3717120.0
+12,AF.61522,"Cốt thép dầm phụ, bản sàn các tầng đường kính <= 18mm",M,M010,Máy hàn điện 23 kW,ca,0.85,22.44,620000.0,13912800.0
+12,AF.61522,"Cốt thép dầm phụ, bản sàn các tầng đường kính <= 18mm",M,M011,"Vận thăng lồng / Tời điện 0,8 tấn",ca,0.28,7.392,690000.0,5100480.0
+13,AF.86312,"Ván khuôn thép định hình + giáo chống cột, dầm, sàn các tầng",VL,VL015,Ván khuôn thép định hình + cây chống thép,kg,1.35,3348.0,22500.0,75330000.0
+13,AF.86312,"Ván khuôn thép định hình + giáo chống cột, dầm, sàn các tầng",VL,VL014,Que hàn điện 4mm,kg,0.05,124.0,32000.0,3968000.0
+13,AF.86312,"Ván khuôn thép định hình + giáo chống cột, dầm, sàn các tầng",NC,NC002,"Nhân công bậc 3,5/7 - Nhóm nhân công xây dựng (TT 37/2026/TT-BXD)",công,0.365,905.2,322000.0,291474400.0
+13,AF.86312,"Ván khuôn thép định hình + giáo chống cột, dầm, sàn các tầng",M,M011,"Vận thăng lồng / Tời điện 0,8 tấn",ca,0.015,37.2,690000.0,25668000.0
+13,AF.86312,"Ván khuôn thép định hình + giáo chống cột, dầm, sàn các tầng",M,M010,Máy hàn điện 23 kW,ca,0.012,29.76,620000.0,18451200.0
+14,AE.22223,Xây tường bao che dày 220mm gạch đặc vữa XM M75,VL,VL007,Gạch đặc đất sét nung hoặc gạch không nung 6x10.5x22cm,viên,550.0,118250.0,1450.0,171462500.0
+14,AE.22223,Xây tường bao che dày 220mm gạch đặc vữa XM M75,VL,VL001,Xi măng PCB40 (bao),kg,90.3,19414.5,1750.0,33975375.0
+14,AE.22223,Xây tường bao che dày 220mm gạch đặc vữa XM M75,VL,VL002,Cát mịn xây trát (cát đen/cát mịn đạt TCVN),m3,0.326,70.09,245000.0,17172050.0
+14,AE.22223,Xây tường bao che dày 220mm gạch đặc vữa XM M75,VL,VL006,Nước sạch thi công,lít,84.0,18060.0,12.0,216720.0
+14,AE.22223,Xây tường bao che dày 220mm gạch đặc vữa XM M75,NC,NC002,"Nhân công bậc 3,5/7 - Nhóm nhân công xây dựng (TT 37/2026/TT-BXD)",công,1.68,361.2,322000.0,116306400.0
+14,AE.22223,Xây tường bao che dày 220mm gạch đặc vữa XM M75,M,M005,Máy trộn vữa 150 lít,ca,0.052,11.18,360000.0,4024800.0
+14,AE.22223,Xây tường bao che dày 220mm gạch đặc vữa XM M75,M,M011,"Vận thăng lồng / Tời điện 0,8 tấn",ca,0.032,6.88,690000.0,4747200.0
+15,AE.22113,Xây tường ngăn phòng dày 110mm gạch đặc vữa XM M75,VL,VL007,Gạch đặc đất sét nung hoặc gạch không nung 6x10.5x22cm,viên,643.0,75874.0,1450.0,110017300.0
+15,AE.22113,Xây tường ngăn phòng dày 110mm gạch đặc vữa XM M75,VL,VL001,Xi măng PCB40 (bao),kg,77.5,9145.0,1750.0,16003750.0
+15,AE.22113,Xây tường ngăn phòng dày 110mm gạch đặc vữa XM M75,VL,VL002,Cát mịn xây trát (cát đen/cát mịn đạt TCVN),m3,0.28,33.04,245000.0,8094800.0
+15,AE.22113,Xây tường ngăn phòng dày 110mm gạch đặc vữa XM M75,VL,VL006,Nước sạch thi công,lít,72.0,8496.0,12.0,101952.0
+15,AE.22113,Xây tường ngăn phòng dày 110mm gạch đặc vữa XM M75,NC,NC002,"Nhân công bậc 3,5/7 - Nhóm nhân công xây dựng (TT 37/2026/TT-BXD)",công,1.92,226.56,322000.0,72952320.0
+15,AE.22113,Xây tường ngăn phòng dày 110mm gạch đặc vữa XM M75,M,M005,Máy trộn vữa 150 lít,ca,0.045,5.31,360000.0,1911600.0
+15,AE.22113,Xây tường ngăn phòng dày 110mm gạch đặc vữa XM M75,M,M011,"Vận thăng lồng / Tời điện 0,8 tấn",ca,0.032,3.776,690000.0,2605440.0
+16,AK.21123,"Trát tường ngoài nhà dày 1,5cm vữa XM M75",VL,VL001,Xi măng PCB40 (bao),kg,4.92,8118.0,1750.0,14206500.0
+16,AK.21123,"Trát tường ngoài nhà dày 1,5cm vữa XM M75",VL,VL002,Cát mịn xây trát (cát đen/cát mịn đạt TCVN),m3,0.018,29.7,245000.0,7276500.0
+16,AK.21123,"Trát tường ngoài nhà dày 1,5cm vữa XM M75",VL,VL006,Nước sạch thi công,lít,4.5,7425.0,12.0,89100.0
+16,AK.21123,"Trát tường ngoài nhà dày 1,5cm vữa XM M75",NC,NC002,"Nhân công bậc 3,5/7 - Nhóm nhân công xây dựng (TT 37/2026/TT-BXD)",công,0.22,363.0,322000.0,116886000.0
+16,AK.21123,"Trát tường ngoài nhà dày 1,5cm vữa XM M75",M,M005,Máy trộn vữa 150 lít,ca,0.0032,5.28,360000.0,1900800.0
+17,AK.21223,"Trát tường trong nhà dày 1,5cm vữa XM M75",VL,VL001,Xi măng PCB40 (bao),kg,4.65,15903.0,1750.0,27830250.0
+17,AK.21223,"Trát tường trong nhà dày 1,5cm vữa XM M75",VL,VL002,Cát mịn xây trát (cát đen/cát mịn đạt TCVN),m3,0.017,58.14,245000.0,14244300.0
+17,AK.21223,"Trát tường trong nhà dày 1,5cm vữa XM M75",VL,VL006,Nước sạch thi công,lít,4.2,14364.0,12.0,172368.0
+17,AK.21223,"Trát tường trong nhà dày 1,5cm vữa XM M75",NC,NC002,"Nhân công bậc 3,5/7 - Nhóm nhân công xây dựng (TT 37/2026/TT-BXD)",công,0.18,615.6,322000.0,198223200.0
+17,AK.21223,"Trát tường trong nhà dày 1,5cm vữa XM M75",M,M005,Máy trộn vữa 150 lít,ca,0.003,10.26,360000.0,3693600.0
+18,AK.51240,Lát nền gạch Granite 600x600mm các tầng làm việc & sảnh,VL,VL020,Gạch Ceramic / Granite lát nền 600x600mm chống trượt,m2,1.02,1754.4,235000.0,412284000.0
+18,AK.51240,Lát nền gạch Granite 600x600mm các tầng làm việc & sảnh,VL,VL001,Xi măng PCB40 (bao),kg,6.15,10578.0,1750.0,18511500.0
+18,AK.51240,Lát nền gạch Granite 600x600mm các tầng làm việc & sảnh,VL,VL002,Cát mịn xây trát (cát đen/cát mịn đạt TCVN),m3,0.025,43.0,245000.0,10535000.0
+18,AK.51240,Lát nền gạch Granite 600x600mm các tầng làm việc & sảnh,VL,VL022,Xi măng trắng chà mạch,kg,0.15,258.0,4500.0,1161000.0
+18,AK.51240,Lát nền gạch Granite 600x600mm các tầng làm việc & sảnh,NC,NC002,"Nhân công bậc 3,5/7 - Nhóm nhân công xây dựng (TT 37/2026/TT-BXD)",công,0.21,361.2,322000.0,116306400.0
+18,AK.51240,Lát nền gạch Granite 600x600mm các tầng làm việc & sảnh,M,M005,Máy trộn vữa 150 lít,ca,0.004,6.88,360000.0,2476800.0
+19,AK.31130,Ốp tường khu vệ sinh gạch Ceramic 300x600mm,VL,VL021,Gạch Ceramic ốp tường 300x600mm,m2,1.03,288.4,195000.0,56238000.0
+19,AK.31130,Ốp tường khu vệ sinh gạch Ceramic 300x600mm,VL,VL001,Xi măng PCB40 (bao),kg,5.2,1456.0,1750.0,2548000.0
+19,AK.31130,Ốp tường khu vệ sinh gạch Ceramic 300x600mm,VL,VL002,Cát mịn xây trát (cát đen/cát mịn đạt TCVN),m3,0.018,5.04,245000.0,1234800.0
+19,AK.31130,Ốp tường khu vệ sinh gạch Ceramic 300x600mm,VL,VL022,Xi măng trắng chà mạch,kg,0.18,50.4,4500.0,226800.0
+19,AK.31130,Ốp tường khu vệ sinh gạch Ceramic 300x600mm,NC,NC002,"Nhân công bậc 3,5/7 - Nhóm nhân công xây dựng (TT 37/2026/TT-BXD)",công,0.34,95.2,322000.0,30654400.0
+19,AK.31130,Ốp tường khu vệ sinh gạch Ceramic 300x600mm,M,M005,Máy trộn vữa 150 lít,ca,0.003,0.84,360000.0,302400.0
+20,AK.62120,Trần thạch cao khung xương chìm phẳng các phòng làm việc,VL,VL028,Tấm thạch cao khung xương chìm Vĩnh Tường tiêu chuẩn,m2,1.03,1606.8,165000.0,265122000.0
+20,AK.62120,Trần thạch cao khung xương chìm phẳng các phòng làm việc,NC,NC002,"Nhân công bậc 3,5/7 - Nhóm nhân công xây dựng (TT 37/2026/TT-BXD)",công,0.24,374.4,322000.0,120556800.0
+21,AK.82410,"Bả bột bả vào tường, cột trong và ngoài nhà",VL,VL023,Bột bả tường nội/ngoại thất cao cấp,kg,1.15,5830.5,11500.0,67050750.0
+21,AK.82410,"Bả bột bả vào tường, cột trong và ngoài nhà",NC,NC002,"Nhân công bậc 3,5/7 - Nhóm nhân công xây dựng (TT 37/2026/TT-BXD)",công,0.085,430.95,322000.0,138765900.0
+22,AK.84113,"Sơn tường, trần 1 lớp lót + 2 lớp phủ hoàn thiện",VL,VL024,Sơn lót kháng kiềm,kg,0.11,729.3,68000.0,49592400.0
+22,AK.84113,"Sơn tường, trần 1 lớp lót + 2 lớp phủ hoàn thiện",VL,VL025,Sơn phủ hoàn thiện 2 lớp,kg,0.18,1193.4,85000.0,101439000.0
+22,AK.84113,"Sơn tường, trần 1 lớp lót + 2 lớp phủ hoàn thiện",NC,NC002,"Nhân công bậc 3,5/7 - Nhóm nhân công xây dựng (TT 37/2026/TT-BXD)",công,0.092,609.96,322000.0,196407120.0
+23,AL.63110,"Cửa đi, cửa sổ nhôm hệ Xingfa kính an toàn 8,38mm đồng bộ",VL,VL027,Cửa nhôm hệ Xingfa kính an toàn 8.38mm đồng bộ phụ kiện,m2,1.0,345.0,1850000.0,638250000.0
+23,AL.63110,"Cửa đi, cửa sổ nhôm hệ Xingfa kính an toàn 8,38mm đồng bộ",NC,NC003,"Nhân công bậc 4,0/7 - Nhóm nhân công xây dựng & lắp đặt (TT 37/2026/TT-BXD)",công,0.28,96.6,352000.0,34003200.0
+24,BB.19214,Lắp đặt ống nhựa uPVC D90 thoát nước trục đứng & nhánh,VL,VL029,Ống nhựa uPVC D90 thoát nước (C2),m,1.02,265.2,64000.0,16972800.0
+24,BB.19214,Lắp đặt ống nhựa uPVC D90 thoát nước trục đứng & nhánh,NC,NC003,"Nhân công bậc 4,0/7 - Nhóm nhân công xây dựng & lắp đặt (TT 37/2026/TT-BXD)",công,0.085,22.1,352000.0,7779200.0
+25,BB.19305,Lắp đặt ống nhựa PPR D32 cấp nước chịu nhiệt,VL,VL030,Ống nhựa PPR D32 cấp nước chịu nhiệt PN10,m,1.02,326.4,42000.0,13708800.0
+25,BB.19305,Lắp đặt ống nhựa PPR D32 cấp nước chịu nhiệt,NC,NC003,"Nhân công bậc 4,0/7 - Nhóm nhân công xây dựng & lắp đặt (TT 37/2026/TT-BXD)",công,0.072,23.04,352000.0,8110080.0
+26,BA.16204,"Kéo rải dây cáp điện đồng CV 2x4,0mm2 luồn ống",VL,VL031,Dây cáp điện đồng CV 2x4.0mm2 luồn ống,m,1.02,2448.0,29500.0,72216000.0
+26,BA.16204,"Kéo rải dây cáp điện đồng CV 2x4,0mm2 luồn ống",NC,NC003,"Nhân công bậc 4,0/7 - Nhóm nhân công xây dựng & lắp đặt (TT 37/2026/TT-BXD)",công,0.038,91.2,352000.0,32102400.0
+27,BA.12302,Lắp đặt bộ đèn LED Panel 600x600mm 40W âm trần,VL,VL032,Bộ đèn LED Panel 600x600mm 40W âm trần,bộ,1.0,180.0,420000.0,75600000.0
+27,BA.12302,Lắp đặt bộ đèn LED Panel 600x600mm 40W âm trần,NC,NC003,"Nhân công bậc 4,0/7 - Nhóm nhân công xây dựng & lắp đặt (TT 37/2026/TT-BXD)",công,0.22,39.6,352000.0,13939200.0

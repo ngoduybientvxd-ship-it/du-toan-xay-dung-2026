@@ -1,0 +1,95 @@
+{
+  "presets": {
+    "dan_dung_tru_so": {
+      "project_info": {
+        "project_name": "Dự án Đầu tư Xây dựng Trụ sở Làm việc & Trung tâm Hành chính Công",
+        "building_name": "Khối nhà làm việc chính 3 tầng + 1 tum (Diện tích sàn 1.850 m2)",
+        "investor": "Ban Quản lý Dự án Đầu tư Xây dựng Công trình Dân dụng & Công nghiệp",
+        "location": "Khu trung tâm hành chính - Vùng II",
+        "funding_source": "Vốn đầu tư công (Ngân sách Nhà nước)",
+        "building_type": "dan_dung",
+        "building_grade": "cap_3",
+        "design_step": "tkbvtc_2_buoc",
+        "is_bcktkt": true,
+        "is_mountain_island": false,
+        "vat_rate": 8.0,
+        "k_nc": 1.0,
+        "k_m": 1.0,
+        "contingency_volume_rate": 5.0,
+        "contingency_escalation_rate": 2.5,
+        "tmdt_gxdtt_approved_ty": 15.0
+      },
+      "boq_items": [
+        {"id": 1, "section": "I. PHẦN MÓNG & CÔNG TÁC NGẦM", "norm_code": "AB.25112", "custom_name": "Đào móng công trình bằng máy đào 0,80m3, đất cấp II", "formula": "12 * 4.2 * 3.8 * 1.8", "count": 12, "length": 4.2, "width": 3.8, "height": 1.8, "factor": 1.0, "quantity": 344.736},
+        {"id": 2, "section": "I. PHẦN MÓNG & CÔNG TÁC NGẦM", "norm_code": "AB.11442", "custom_name": "Đào sửa hố móng bằng thủ công, đất cấp II", "formula": "12 * 4.2 * 3.8 * 0.2", "count": 12, "length": 4.2, "width": 3.8, "height": 0.2, "factor": 1.0, "quantity": 38.304},
+        {"id": 3, "section": "I. PHẦN MÓNG & CÔNG TÁC NGẦM", "norm_code": "AC.26111", "custom_name": "Ép cọc BTCT vuông 250x250mm M300 bằng máy ép thủy lực", "formula": "48 * 15.0", "count": 48, "length": 15.0, "width": 1.0, "height": 1.0, "factor": 1.0, "quantity": 720.0},
+        {"id": 4, "section": "I. PHẦN MÓNG & CÔNG TÁC NGẦM", "norm_code": "AF.11111", "custom_name": "Bê tông lót móng đá 4x6 M100 dày 10cm", "formula": "12 * 2.6 * 2.4 * 0.1 + 65 * 0.6 * 0.1", "count": 1, "length": 11.388, "width": 1.0, "height": 1.0, "factor": 1.0, "quantity": 11.388},
+        {"id": 5, "section": "I. PHẦN MÓNG & CÔNG TÁC NGẦM", "norm_code": "AF.31123", "custom_name": "Bê tông đài móng & giằng móng thương phẩm M250 đổ bằng máy bơm", "formula": "12 * 2.4 * 2.2 * 0.9 + 65 * 0.4 * 0.7", "count": 1, "length": 75.224, "width": 1.0, "height": 1.0, "factor": 1.0, "quantity": 75.224},
+        {"id": 6, "section": "I. PHẦN MÓNG & CÔNG TÁC NGẦM", "norm_code": "AF.61120", "custom_name": "Cốt thép đài móng, giằng móng đường kính <= 18mm", "formula": "75.224 * 0.115", "count": 1, "length": 8.65, "width": 1.0, "height": 1.0, "factor": 1.0, "quantity": 8.65},
+        {"id": 7, "section": "I. PHẦN MÓNG & CÔNG TÁC NGẦM", "norm_code": "AF.81122", "custom_name": "Ván khuôn móng và giằng móng", "formula": "12 * (2.4+2.2)*2 * 0.9 + 65 * 2 * 0.7", "count": 1, "length": 190.36, "width": 1.0, "height": 1.0, "factor": 1.0, "quantity": 190.36},
+        {"id": 8, "section": "I. PHẦN MÓNG & CÔNG TÁC NGẦM", "norm_code": "AB.13113", "custom_name": "Đắp đất hố móng và tôn nền bằng đầm cóc K=0,95", "formula": "285.0", "count": 1, "length": 285.0, "width": 1.0, "height": 1.0, "factor": 1.0, "quantity": 285.0},
+        {"id": 9, "section": "II. PHẦN THÂN & KẾT CẤU BTCT", "norm_code": "AF.32224", "custom_name": "Bê tông cột tầng 1 - tầng 3 thương phẩm M300 đổ bằng bơm", "formula": "36 * 0.4 * 0.4 * 11.4", "count": 36, "length": 0.4, "width": 0.4, "height": 11.4, "factor": 1.0, "quantity": 65.664},
+        {"id": 10, "section": "II. PHẦN THÂN & KẾT CẤU BTCT", "norm_code": "AF.32314", "custom_name": "Bê tông dầm, sàn các tầng và sàn mái thương phẩm M300 đổ bằng bơm", "formula": "3 * 615 * 0.14", "count": 3, "length": 615.0, "width": 1.0, "height": 0.14, "factor": 1.0, "quantity": 258.3},
+        {"id": 11, "section": "II. PHẦN THÂN & KẾT CẤU BTCT", "norm_code": "AF.61432", "custom_name": "Cốt thép chủ cột, dầm chính đường kính > 18mm", "formula": "28.5", "count": 1, "length": 28.5, "width": 1.0, "height": 1.0, "factor": 1.0, "quantity": 28.5},
+        {"id": 12, "section": "II. PHẦN THÂN & KẾT CẤU BTCT", "norm_code": "AF.61522", "custom_name": "Cốt thép dầm phụ, bản sàn các tầng đường kính <= 18mm", "formula": "26.4", "count": 1, "length": 26.4, "width": 1.0, "height": 1.0, "factor": 1.0, "quantity": 26.4},
+        {"id": 13, "section": "II. PHẦN THÂN & KẾT CẤU BTCT", "norm_code": "AF.86312", "custom_name": "Ván khuôn thép định hình + giáo chống cột, dầm, sàn các tầng", "formula": "2480.0", "count": 1, "length": 2480.0, "width": 1.0, "height": 1.0, "factor": 1.0, "quantity": 2480.0},
+        {"id": 14, "section": "II. PHẦN THÂN & KẾT CẤU BTCT", "norm_code": "AE.22223", "custom_name": "Xây tường bao che dày 220mm gạch đặc vữa XM M75", "formula": "215.0", "count": 1, "length": 215.0, "width": 1.0, "height": 1.0, "factor": 1.0, "quantity": 215.0},
+        {"id": 15, "section": "II. PHẦN THÂN & KẾT CẤU BTCT", "norm_code": "AE.22113", "custom_name": "Xây tường ngăn phòng dày 110mm gạch đặc vữa XM M75", "formula": "118.0", "count": 1, "length": 118.0, "width": 1.0, "height": 1.0, "factor": 1.0, "quantity": 118.0},
+        {"id": 16, "section": "III. PHẦN HOÀN THIỆN KIẾN TRÚC", "norm_code": "AK.21123", "custom_name": "Trát tường ngoài nhà dày 1,5cm vữa XM M75", "formula": "1650.0", "count": 1, "length": 1650.0, "width": 1.0, "height": 1.0, "factor": 1.0, "quantity": 1650.0},
+        {"id": 17, "section": "III. PHẦN HOÀN THIỆN KIẾN TRÚC", "norm_code": "AK.21223", "custom_name": "Trát tường trong nhà dày 1,5cm vữa XM M75", "formula": "3420.0", "count": 1, "length": 3420.0, "width": 1.0, "height": 1.0, "factor": 1.0, "quantity": 3420.0},
+        {"id": 18, "section": "III. PHẦN HOÀN THIỆN KIẾN TRÚC", "norm_code": "AK.51240", "custom_name": "Lát nền gạch Granite 600x600mm các tầng làm việc & sảnh", "formula": "1720.0", "count": 1, "length": 1720.0, "width": 1.0, "height": 1.0, "factor": 1.0, "quantity": 1720.0},
+        {"id": 19, "section": "III. PHẦN HOÀN THIỆN KIẾN TRÚC", "norm_code": "AK.31130", "custom_name": "Ốp tường khu vệ sinh gạch Ceramic 300x600mm", "formula": "280.0", "count": 1, "length": 280.0, "width": 1.0, "height": 1.0, "factor": 1.0, "quantity": 280.0},
+        {"id": 20, "section": "III. PHẦN HOÀN THIỆN KIẾN TRÚC", "norm_code": "AK.62120", "custom_name": "Trần thạch cao khung xương chìm phẳng các phòng làm việc", "formula": "1560.0", "count": 1, "length": 1560.0, "width": 1.0, "height": 1.0, "factor": 1.0, "quantity": 1560.0},
+        {"id": 21, "section": "III. PHẦN HOÀN THIỆN KIẾN TRÚC", "norm_code": "AK.82410", "custom_name": "Bả bột bả vào tường, cột trong và ngoài nhà", "formula": "5070.0", "count": 1, "length": 5070.0, "width": 1.0, "height": 1.0, "factor": 1.0, "quantity": 5070.0},
+        {"id": 22, "section": "III. PHẦN HOÀN THIỆN KIẾN TRÚC", "norm_code": "AK.84113", "custom_name": "Sơn tường, trần 1 lớp lót + 2 lớp phủ hoàn thiện", "formula": "6630.0", "count": 1, "length": 6630.0, "width": 1.0, "height": 1.0, "factor": 1.0, "quantity": 6630.0},
+        {"id": 23, "section": "III. PHẦN HOÀN THIỆN KIẾN TRÚC", "norm_code": "AL.63110", "custom_name": "Cửa đi, cửa sổ nhôm hệ Xingfa kính an toàn 8,38mm đồng bộ", "formula": "345.0", "count": 1, "length": 345.0, "width": 1.0, "height": 1.0, "factor": 1.0, "quantity": 345.0},
+        {"id": 24, "section": "IV. HỆ THỐNG ĐIỆN & CẤP THOÁT NƯỚC (MEP)", "norm_code": "BB.19214", "custom_name": "Lắp đặt ống nhựa uPVC D90 thoát nước trục đứng & nhánh", "formula": "260.0", "count": 1, "length": 260.0, "width": 1.0, "height": 1.0, "factor": 1.0, "quantity": 260.0},
+        {"id": 25, "section": "IV. HỆ THỐNG ĐIỆN & CẤP THOÁT NƯỚC (MEP)", "norm_code": "BB.19305", "custom_name": "Lắp đặt ống nhựa PPR D32 cấp nước chịu nhiệt", "formula": "320.0", "count": 1, "length": 320.0, "width": 1.0, "height": 1.0, "factor": 1.0, "quantity": 320.0},
+        {"id": 26, "section": "IV. HỆ THỐNG ĐIỆN & CẤP THOÁT NƯỚC (MEP)", "norm_code": "BA.16204", "custom_name": "Kéo rải dây cáp điện đồng CV 2x4,0mm2 luồn ống", "formula": "2400.0", "count": 1, "length": 2400.0, "width": 1.0, "height": 1.0, "factor": 1.0, "quantity": 2400.0},
+        {"id": 27, "section": "IV. HỆ THỐNG ĐIỆN & CẤP THOÁT NƯỚC (MEP)", "norm_code": "BA.12302", "custom_name": "Lắp đặt bộ đèn LED Panel 600x600mm 40W âm trần", "formula": "180.0", "count": 180, "length": 1.0, "width": 1.0, "height": 1.0, "factor": 1.0, "quantity": 180.0}
+      ],
+      "equipment_items": [
+        {"id": 1, "name": "Hệ thống điều hòa không khí trung tâm VRV/VRF đồng bộ dàn nóng & dàn lạnh âm trần", "unit": "hệ thống", "quantity": 1, "unit_price": 680000000},
+        {"id": 2, "name": "Thang máy tải khách 750kg (10 người) - 4 điểm dừng đồng bộ", "unit": "bộ", "quantity": 1, "unit_price": 590000000},
+        {"id": 3, "name": "Tủ điện tổng MSB, tủ phân phối tầng DB & hệ thống báo cháy tự động trung tâm", "unit": "hệ thống", "quantity": 1, "unit_price": 245000000}
+      ]
+    },
+    "cong_nghiep_nha_xuong": {
+      "project_info": {
+        "project_name": "Dự án Đầu tư Xây dựng Nhà xưởng Sản xuất & Kho vận Công nghiệp",
+        "building_name": "Nhà xưởng sản xuất chính khung thép tiền chế khẩu độ 36m (Diện tích 3.600 m2)",
+        "investor": "Ban Quản lý Khu Công nghiệp & Đầu tư Xây dựng",
+        "location": "Khu Công nghiệp Tập trung - Vùng II",
+        "funding_source": "Vốn đầu tư công / Vốn nhà nước ngoài ngân sách",
+        "building_type": "cong_nghiep",
+        "building_grade": "cap_3",
+        "design_step": "tkbvtc_2_buoc",
+        "is_bcktkt": false,
+        "is_mountain_island": false,
+        "vat_rate": 8.0,
+        "k_nc": 1.0,
+        "k_m": 1.0,
+        "contingency_volume_rate": 5.0,
+        "contingency_escalation_rate": 3.0,
+        "tmdt_gxdtt_approved_ty": 25.0
+      },
+      "boq_items": [
+        {"id": 1, "section": "I. PHẦN NỀN MÓNG NHÀ XƯỞNG", "norm_code": "AB.25112", "custom_name": "Đào móng trụ khung thép & đà kiềng bằng máy đào 0,80m3", "formula": "24 * 3.2 * 3.2 * 2.0", "count": 24, "length": 3.2, "width": 3.2, "height": 2.0, "factor": 1.0, "quantity": 491.52},
+        {"id": 2, "section": "I. PHẦN NỀN MÓNG NHÀ XƯỞNG", "norm_code": "AF.11111", "custom_name": "Bê tông lót móng đá 4x6 M100", "formula": "24 * 2.6 * 2.6 * 0.1", "count": 24, "length": 2.6, "width": 2.6, "height": 0.1, "factor": 1.0, "quantity": 16.224},
+        {"id": 3, "section": "I. PHẦN NỀN MÓNG NHÀ XƯỞNG", "norm_code": "AF.31123", "custom_name": "Bê tông móng trụ, cổ cột & giằng móng thương phẩm M250", "formula": "24 * 2.4 * 2.4 * 0.8 + 45.0", "count": 1, "length": 155.592, "width": 1.0, "height": 1.0, "factor": 1.0, "quantity": 155.592},
+        {"id": 4, "section": "I. PHẦN NỀN MÓNG NHÀ XƯỞNG", "norm_code": "AF.61120", "custom_name": "Cốt thép móng & cổ cột đường kính <= 18mm", "formula": "18.5", "count": 1, "length": 18.5, "width": 1.0, "height": 1.0, "factor": 1.0, "quantity": 18.5},
+        {"id": 5, "section": "I. PHẦN NỀN MÓNG NHÀ XƯỞNG", "norm_code": "AF.15113", "custom_name": "Bê tông nền nhà xưởng chịu tải nặng dày 20cm đá 1x2 M250", "formula": "3600 * 0.2", "count": 1, "length": 3600.0, "width": 1.0, "height": 0.2, "factor": 1.0, "quantity": 720.0},
+        {"id": 6, "section": "I. PHẦN NỀN MÓNG NHÀ XƯỞNG", "norm_code": "AF.61110", "custom_name": "Thép lưới nền nhà xưởng 2 lớp D10a200", "formula": "44.5", "count": 1, "length": 44.5, "width": 1.0, "height": 1.0, "factor": 1.0, "quantity": 44.5},
+        {"id": 7, "section": "II. KẾT CẤU KHUNG THÉP & BAO CHE NHÀ XƯỞNG", "norm_code": "AI.11221", "custom_name": "Gia công và lắp dựng cột, kèo, xà gồ thép tổ hợp nhà xưởng công nghiệp", "formula": "142.0", "count": 1, "length": 142.0, "width": 1.0, "height": 1.0, "factor": 1.0, "quantity": 142.0},
+        {"id": 8, "section": "II. KẾT CẤU KHUNG THÉP & BAO CHE NHÀ XƯỞNG", "norm_code": "AL.16111", "custom_name": "Lợp mái tôn & vách tôn mạ màu dày 0,45mm", "formula": "4850.0", "count": 1, "length": 4850.0, "width": 1.0, "height": 1.0, "factor": 1.0, "quantity": 4850.0},
+        {"id": 9, "section": "II. KẾT CẤU KHUNG THÉP & BAO CHE NHÀ XƯỞNG", "norm_code": "AE.52213", "custom_name": "Xây tường bao chân vách nhà xưởng cao 2,2m bằng gạch ống vữa XM M75", "formula": "148.0", "count": 1, "length": 148.0, "width": 1.0, "height": 1.0, "factor": 1.0, "quantity": 148.0},
+        {"id": 10, "section": "II. KẾT CẤU KHUNG THÉP & BAO CHE NHÀ XƯỞNG", "norm_code": "AK.21123", "custom_name": "Trát tường bao nhà xưởng ngoài và trong dày 1,5cm vữa XM M75", "formula": "1350.0", "count": 1, "length": 1350.0, "width": 1.0, "height": 1.0, "factor": 1.0, "quantity": 1350.0}
+      ],
+      "equipment_items": [
+        {"id": 1, "name": "Cầu trục dầm đôi nhà xưởng sức nâng 10 tấn khẩu độ 34m đồng bộ đường ray", "unit": "bộ", "quantity": 2, "unit_price": 820000000},
+        {"id": 2, "name": "Trạm biến áp 1000kVA - 22/0,4kV và tủ điện phân phối công nghiệp", "unit": "hệ thống", "quantity": 1, "unit_price": 980000000},
+        {"id": 3, "name": "Hệ thống thông gió làm mát áp suất âm và PCCC vách tường tự động", "unit": "hệ thống", "quantity": 1, "unit_price": 540000000}
+      ]
+    }
+  }
+}

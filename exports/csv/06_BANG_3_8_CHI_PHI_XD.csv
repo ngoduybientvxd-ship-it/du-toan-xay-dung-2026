@@ -1,0 +1,17 @@
+BẢNG 3.8 — BẢNG TỔNG HỢP DỰ TOÁN CHI PHÍ XÂY DỰNG (PHỤ LỤC III TT 36/2026/TT-BXD & ĐÍNH CHÍNH QĐ 1538/QĐ-BXD),,,,,,
+STT,KHOẢN MỤC CHI PHÍ,CÔNG THỨC XÁC ĐỊNH,TỶ LỆ (%),KÝ HIỆU,GIÁ TRỊ (ĐỒNG),CĂN CỨ PHÁP LÝ
+I,CHI PHÍ TRỰC TIẾP,T = VL + NC + M,,T,=SUM(F4:F6),Tổng hợp từ Bảng 04_TIEN_LUONG_BOQ
+1,Chi phí vật liệu,∑ (KL_i × ĐG_VL_i),,VL,"=ROUND('04_TIEN_LUONG_BOQ'!K30, 0)",Theo công bố giá VLXD địa phương
+2,Chi phí nhân công,∑ (KL_i × ĐG_NC_i) × K_NC,,NC,"=ROUND('04_TIEN_LUONG_BOQ'!L30, 0)",Thông tư 37/2026/TT-BXD
+3,Chi phí máy và thiết bị thi công,∑ (KL_i × ĐG_M_i) × K_M,,M,"=ROUND('04_TIEN_LUONG_BOQ'!M30, 0)",Thông tư 37/2026/TT-BXD
+II,CHI PHÍ GIÁN TIẾP (Chưa gồm nhà tạm),C + TT,,GT,=F8+F9,Điều 13 Nghị định 206/2026/NĐ-CP
+1,Chi phí chung,T × Định mức CPC (%),7.3,C,"=ROUND(F3*D8/100, 0)",Bảng 3.3 Phụ lục III TT 36/2026/TT-BXD
+2,Chi phí một số công việc không xác định được khối lượng từ thiết kế,T × Định mức TT (%),2.5,TT,"=ROUND(F3*D9/100, 0)",Bảng 3.5 Phụ lục III TT 36/2026/TT-BXD
+III,THU NHẬP CHỊU THUẾ TÍNH TRƯỚC,(T + C) × Định mức TL (%),5.5,TL,"=ROUND((F3+F8)*D10/100, 0)",Bảng 3.6 Phụ lục III TT 36/2026/TT-BXD
+IV,CHI PHÍ XÂY DỰNG TRƯỚC THUẾ (Chưa gồm nhà tạm),G = T + C + TL + TT,,G_XDTT,=F3+F8+F9+F10,Bảng 3.8 Phụ lục III TT 36/2026/TT-BXD
+V,THUẾ GIÁ TRỊ GIA TĂNG XÂY DỰNG,G_XDTT × T_GTGT (%),8.0,GTGT,"=ROUND(F11*D12/100, 0)",Thuế suất GTGT hiện hành
+VI,CHI PHÍ XÂY DỰNG SAU THUẾ (Chưa gồm nhà tạm),G_XDTT + GTGT,,G_XDST,=F11+F12,Bảng 3.8 Phụ lục III TT 36/2026/TT-BXD
+VII,CHI PHÍ NHÀ TẠM ĐỂ Ở VÀ ĐIỀU HÀNH THI CÔNG (Trước thuế),G_XDTT × Định mức LT (%),1.1,LT_TT,"=ROUND(F11*D14/100, 0)",Bảng 3.7 Phụ lục III TT 36/2026/TT-BXD
+VIII,CHI PHÍ NHÀ TẠM ĐỂ Ở VÀ ĐIỀU HÀNH THI CÔNG (Sau thuế),G_XDTT × Tỷ lệ × (1 + T_GTGT),1.1,LT,"=F14+ROUND(F14*D12/100, 0)",Đính chính theo Quyết định 1538/QĐ-BXD ngày 28/08/2026
+TỔNG,"TỔNG CHI PHÍ XÂY DỰNG HẠNG MỤC (TRƯỚC THUẾ, GỒM NHÀ TẠM)",G_XDTT + LT_TT,,G_XD_TT,=F11+F14,Đưa vào Bảng Tổng hợp Dự toán Công trình
+TỔNG,"TỔNG CHI PHÍ XÂY DỰNG HẠNG MỤC (SAU THUẾ, GỒM NHÀ TẠM)",G_XDST + LT,,G_XD,=F13+F15,Đưa vào Bảng Tổng hợp Dự toán Công trình
