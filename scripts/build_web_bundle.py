@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 Script đóng gói dữ liệu JSON vào app.js và tạo đồng thời file HTML tự chứa (Artifact)
-cho Hệ thống Tính Dự toán Xây dựng Công trình Nguồn vốn Nhà nước 2026.
+cho Hệ thống Chuyên gia DỰ TOÁN G8 VERSION 2026 (12 Sheet chuẩn G8).
 """
 
 import json
@@ -18,16 +18,29 @@ presets = json.loads((DATA_DIR / "du_an_mau_dan_dung.json").read_text(encoding="
 
 JS_LOGIC = r"""
 // ============================================================================
-// BỘ MÁY TÍNH DỰ TOÁN XÂY DỰNG CÔNG TRÌNH NGUỒN VỐN NHÀ NƯỚC 2026 (FRONTEND)
+// BỘ MÁY TÍNH DỰ TOÁN G8 VERSION 2026 — 12 SHEET CHUYÊN GIA NGUỒN VỐN NHÀ NƯỚC
 // ============================================================================
 
 let state = {
-  project_info: {},
+  project_info: {
+    include_lt_in_qlda_tv: true
+  },
   boq_items: [],
   equipment_items: [],
   prices: JSON.parse(JSON.stringify(EMBEDDED_PRICES)),
   norms: JSON.parse(JSON.stringify(EMBEDDED_NORMS)),
   regulations: EMBEDDED_REGULATIONS,
+  fuel_prices: {
+    diesel: 18500,
+    gasoline: 19800,
+    electric: 2160
+  },
+  road_rates: {
+    loai_1: 2400,
+    loai_2: 2850,
+    loai_3: 3400,
+    loai_4: 4200
+  },
   computed: null
 };
 
@@ -103,6 +116,37 @@ function interpolateRateTT38(gtTy, thresholds, rates) {
   };
 }
 
+function calcMachineShiftTT37(m, ncMap) {
+  const ng = Number(m.nguyen_gia || 50000000);
+  const caNam = Math.max(Number(m.so_ca_nam || 220), 1);
+  const khPct = Number(m.khau_hao || 16) / 100.0;
+  const scPct = Number(m.sua_chua || 6) / 100.0;
+  const khacPct = Number(m.khac || 5) / 100.0;
+
+  const c_kh = Math.round((ng * khPct) / caNam);
+  const c_sc = Math.round((ng * scPct) / caNam);
+  const c_k = Math.round((ng * khacPct) / caNam);
+
+  const fType = m.fuel_type || "diesel";
+  const fQty = Number(m.fuel_qty || 0);
+  let fPrice = state.fuel_prices.diesel;
+  let kp = 1.03;
+  if (fType === "gasoline") {
+    fPrice = state.fuel_prices.gasoline;
+    kp = 1.02;
+  } else if (fType === "electric") {
+    fPrice = state.fuel_prices.electric;
+    kp = 1.00;
+  }
+  const c_nl = Math.round(fQty * fPrice * kp);
+
+  const ncObj = ncMap[m.nc_id || "NC002"] || { price: 322000 };
+  const c_nc = Math.round(Number(m.nc_qty || 1) * Number(ncObj.price || 322000) * Number(state.project_info.k_nc || 1));
+
+  const c_cm = c_kh + c_sc + c_k + c_nl + c_nc;
+  return { c_kh, c_sc, c_k, c_nl, c_nc, c_cm };
+}
+
 function calculateAll() {
   const pi = state.project_info;
   const k_nc = Number(pi.k_nc || 1.0);
@@ -114,11 +158,27 @@ function calculateAll() {
   const is_bcktkt = Boolean(pi.is_bcktkt);
   const is_mountain_island = Boolean(pi.is_mountain_island);
   const is_linear_project = Boolean(pi.is_linear_project);
+  const include_lt_in_qlda_tv = pi.include_lt_in_qlda_tv !== false;
 
   const resMap = {};
-  state.prices.vat_lieu.forEach(r => resMap[r.id] = { ...r, type: "VL" });
-  state.prices.nhan_cong.forEach(r => resMap[r.id] = { ...r, type: "NC" });
-  state.prices.may_thi_cong.forEach(r => resMap[r.id] = { ...r, type: "M" });
+  const ncMap = {};
+  state.prices.nhan_cong.forEach(r => {
+    ncMap[r.id] = r;
+    resMap[r.id] = { ...r, type: "NC" };
+  });
+  state.prices.vat_lieu.forEach(r => {
+    const w = Number(r.weight_ton || 0);
+    const d = Number(r.dist_km || 0);
+    const rc = r.road_class || "loai_1";
+    const rRate = Number(state.road_rates[rc] || 2400);
+    r.transport_cost = Math.round(w * d * rRate);
+    resMap[r.id] = { ...r, type: "VL" };
+  });
+  state.prices.may_thi_cong.forEach(r => {
+    const tt37 = calcMachineShiftTT37(r, ncMap);
+    r.tt37_calc = tt37;
+    resMap[r.id] = { ...r, type: "M" };
+  });
 
   const normMap = {};
   state.norms.forEach(n => normMap[n.code] = n);
@@ -147,9 +207,10 @@ function calculateAll() {
 
     groups.forEach(([cType, cList]) => {
       cList.forEach(comp => {
-        const rInfo = resMap[comp.id] || { id: comp.id, name: comp.id, unit: "", price: 0, source: "" };
+        const rInfo = resMap[comp.id] || { id: comp.id, name: comp.id, unit: "", price: 0, transport_cost: 0, source: "" };
         const factorK = cType === "NC" ? k_nc : (cType === "M" ? k_m : 1.0);
-        const effPrice = Number(rInfo.price || 0) * factorK;
+        const transCost = cType === "VL" ? Number(rInfo.transport_cost || 0) : 0;
+        const effPrice = Number(rInfo.price || 0) * factorK + transCost;
         const normQty = Number(comp.qty || 0);
         const uCost = normQty * effPrice;
         const totQty = normQty * qty;
@@ -179,6 +240,8 @@ function calculateAll() {
             unit: rInfo.unit,
             base_price: rInfo.price,
             factor_k: factorK,
+            transport_cost: transCost,
+            site_price: effPrice,
             total_qty: 0,
             total_cost: 0,
             source: rInfo.source
@@ -215,7 +278,7 @@ function calculateAll() {
     });
   });
 
-  // Bảng 3.8 Phụ lục III TT 36/2026/TT-BXD (Đính chính bởi QĐ 1538/QĐ-BXD)
+  // Bảng 3.8 Phụ lục III TT 36/2026/TT-BXD & Đính chính QĐ 1538/QĐ-BXD
   const T = total_vl + total_nc + total_m;
   const tt36 = state.regulations.tt36_phu_luc_3;
   const b33 = tt36.bang_3_3_cpc_du_toan;
@@ -233,12 +296,28 @@ function calculateAll() {
   }
 
   const rate_cpc = cpcLookup.rate;
-  const C = Math.round(T * (rate_cpc / 100.0));
-
   const rate_tl = Number(tt36.bang_3_6_thu_nhap_chiu_thue.rates[building_type] || 5.5);
-  const TL = Math.round((T + C) * (rate_tl / 100.0));
-
   const rate_tt = Number(tt36.bang_3_5_chi_phi_tt.rates[building_type] || 2.5);
+
+  // Chiết tính Đơn giá chi tiết & Dự thầu cho từng công tác (Sheet 8 & Sheet 9)
+  detailed_boq.forEach(row => {
+    const u_t = row.unit_direct;
+    const u_c = Math.round(u_t * (rate_cpc / 100.0));
+    const u_tt = Math.round(u_t * (rate_tt / 100.0));
+    const u_tl = Math.round((u_t + u_c) * (rate_tl / 100.0));
+    const u_before = u_t + u_c + u_tt + u_tl;
+    const u_after = Math.round(u_before * (1 + vat_rate));
+    row.unit_c = u_c;
+    row.unit_tt = u_tt;
+    row.unit_tl = u_tl;
+    row.unit_full_before = u_before;
+    row.unit_full_after = u_after;
+    row.total_bid_before = Math.round(u_before * row.quantity);
+    row.total_bid_after = Math.round(u_after * row.quantity);
+  });
+
+  const C = Math.round(T * (rate_cpc / 100.0));
+  const TL = Math.round((T + C) * (rate_tl / 100.0));
   const TT = Math.round(T * (rate_tt / 100.0));
 
   const G_XDTT = T + C + TL + TT;
@@ -266,23 +345,19 @@ function calculateAll() {
     const b = Math.round(q * p);
     const v = Math.round(b * vat_rate);
     G_TB_BEFORE += b;
-    return {
-      ...eq,
-      stt: idx + 1,
-      before_tax: b,
-      vat: v,
-      after_tax: b + v
-    };
+    return { ...eq, stt: idx + 1, before_tax: b, vat: v, after_tax: b + v };
   });
   const G_TB_VAT = Math.round(G_TB_BEFORE * vat_rate);
   const G_TB_AFTER = G_TB_BEFORE + G_TB_VAT;
 
-  // Phụ lục VIII Thông tư 38/2026/TT-BXD
-  const pl8 = state.regulations.tt38_phu_luc_8;
-  const g_xd_ty = G_XD_TOTAL_BEFORE / 1e9;
+  // Cơ sở tính QLDA & Tư vấn theo Công văn 12637/BXD-KTQLXD ngày 11/08/2026 trên G8 Version 2026
+  const G_XD_BASIS_QLDA_TV = include_lt_in_qlda_tv ? G_XD_TOTAL_BEFORE : G_XDTT;
+  const g_xd_ty = G_XD_BASIS_QLDA_TV / 1e9;
   const g_tb_ty = G_TB_BEFORE / 1e9;
-  const g_xd_tb_before = G_XD_TOTAL_BEFORE + G_TB_BEFORE;
+  const g_xd_tb_before = G_XD_BASIS_QLDA_TV + G_TB_BEFORE;
   const g_xd_tb_ty = g_xd_tb_before / 1e9;
+
+  const pl8 = state.regulations.tt38_phu_luc_8;
   const baseTypeKey = building_type.startsWith("cong_nghiep") ? "cong_nghiep" :
                       (building_type.startsWith("dan_dung") ? "dan_dung" : building_type);
 
@@ -297,6 +372,8 @@ function calculateAll() {
 
   // Tư vấn ĐTXD (G_TV)
   const consulting = [];
+  const gxdLabel = include_lt_in_qlda_tv ? "G_XD trước thuế (gồm nhà tạm)" : "G_XDTT trước thuế (không gồm nhà tạm - CV 12637/BXD)";
+
   if (is_bcktkt) {
     const b24 = pl8.bang_2_4_bc_ktkt;
     const interp = interpolateRateTT38(g_xd_tb_ty, b24.thresholds_ty_dong, b24.rates[baseTypeKey] || b24.rates.dan_dung);
@@ -305,7 +382,7 @@ function calculateAll() {
     consulting.push({
       code: "TV.01",
       name: "Chi phí lập Báo cáo kinh tế - kỹ thuật (Bảng 2.4 PL VIII TT 38/2026)",
-      basis: "(G_XD + G_TB) trước thuế",
+      basis: `(${gxdLabel} + G_TB)`,
       rate_pct: interp.rate,
       formula: interp.formula,
       before_tax: bf,
@@ -320,7 +397,7 @@ function calculateAll() {
     consulting.push({
       code: "TV.01",
       name: "Chi phí lập Báo cáo nghiên cứu khả thi ĐTXD (Bảng 2.3 PL VIII TT 38/2026)",
-      basis: "(G_XD + G_TB) trước thuế",
+      basis: `(${gxdLabel} + G_TB)`,
       rate_pct: interp1.rate,
       formula: interp1.formula,
       before_tax: bf1,
@@ -333,12 +410,12 @@ function calculateAll() {
       : (design_step === "tkkt_3_buoc" ? "bang_2_7_tkkt_dan_dung" : "bang_2_8_tkbvtc_dan_dung");
     const tkTbl = pl8[tkKey];
     const interp2 = interpolateRateTT38(g_xd_ty, tkTbl.thresholds_ty_dong, tkTbl.rates_by_grade[building_grade] || tkTbl.rates_by_grade.cap_3);
-    const bf2 = Math.round(G_XD_TOTAL_BEFORE * (interp2.rate / 100.0));
+    const bf2 = Math.round(G_XD_BASIS_QLDA_TV * (interp2.rate / 100.0));
     const vt2 = Math.round(bf2 * vat_rate);
     consulting.push({
       code: "TV.02",
       name: `Chi phí thiết kế xây dựng (${tkTbl.title})`,
-      basis: "G_XD trước thuế",
+      basis: gxdLabel,
       rate_pct: interp2.rate,
       formula: interp2.formula,
       before_tax: bf2,
@@ -347,55 +424,27 @@ function calculateAll() {
     });
   }
 
-  // Thẩm tra TK (Bảng 2.19)
-  const b219 = pl8.bang_2_19_tham_tra_thiet_ke;
-  const i219 = interpolateRateTT38(g_xd_ty, b219.thresholds_ty_dong, b219.rates[baseTypeKey] || b219.rates.dan_dung);
-  const bf219 = Math.round(G_XD_TOTAL_BEFORE * (i219.rate / 100.0));
-  const vt219 = Math.round(bf219 * vat_rate);
-  consulting.push({
-    code: "TV.03",
-    name: "Chi phí thẩm tra thiết kế xây dựng (Bảng 2.19 PL VIII TT 38/2026)",
-    basis: "G_XD trước thuế",
-    rate_pct: i219.rate,
-    formula: i219.formula,
-    before_tax: bf219,
-    vat: vt219,
-    after_tax: bf219 + vt219
+  [
+    ["TV.03", "bang_2_19_tham_tra_thiet_ke", "Chi phí thẩm tra thiết kế xây dựng (Bảng 2.19 PL VIII TT 38/2026)"],
+    ["TV.04", "bang_2_20_tham_tra_du_toan", "Chi phí thẩm tra dự toán xây dựng (Bảng 2.20 PL VIII TT 38/2026)"],
+    ["TV.05", "bang_2_22_hsmt_xay_dung", "Chi phí lập HSMT, đánh giá HSDT thi công xây dựng (Bảng 2.22 PL VIII TT 38/2026)"]
+  ].forEach(([code, key, title]) => {
+    const tbl = pl8[key];
+    const interp = interpolateRateTT38(g_xd_ty, tbl.thresholds_ty_dong, tbl.rates[baseTypeKey] || tbl.rates.dan_dung);
+    const bf = Math.round(G_XD_BASIS_QLDA_TV * (interp.rate / 100.0));
+    const vt = Math.round(bf * vat_rate);
+    consulting.push({
+      code,
+      name: title,
+      basis: gxdLabel,
+      rate_pct: interp.rate,
+      formula: interp.formula,
+      before_tax: bf,
+      vat: vt,
+      after_tax: bf + vt
+    });
   });
 
-  // Thẩm tra Dự toán (Bảng 2.20)
-  const b220 = pl8.bang_2_20_tham_tra_du_toan;
-  const i220 = interpolateRateTT38(g_xd_ty, b220.thresholds_ty_dong, b220.rates[baseTypeKey] || b220.rates.dan_dung);
-  const bf220 = Math.round(G_XD_TOTAL_BEFORE * (i220.rate / 100.0));
-  const vt220 = Math.round(bf220 * vat_rate);
-  consulting.push({
-    code: "TV.04",
-    name: "Chi phí thẩm tra dự toán xây dựng (Bảng 2.20 PL VIII TT 38/2026)",
-    basis: "G_XD trước thuế",
-    rate_pct: i220.rate,
-    formula: i220.formula,
-    before_tax: bf220,
-    vat: vt220,
-    after_tax: bf220 + vt220
-  });
-
-  // HSMT XD (Bảng 2.22)
-  const b222 = pl8.bang_2_22_hsmt_xay_dung;
-  const i222 = interpolateRateTT38(g_xd_ty, b222.thresholds_ty_dong, b222.rates[baseTypeKey] || b222.rates.dan_dung);
-  const bf222 = Math.round(G_XD_TOTAL_BEFORE * (i222.rate / 100.0));
-  const vt222 = Math.round(bf222 * vat_rate);
-  consulting.push({
-    code: "TV.05",
-    name: "Chi phí lập HSMT, đánh giá HSDT thi công xây dựng (Bảng 2.22 PL VIII TT 38/2026)",
-    basis: "G_XD trước thuế",
-    rate_pct: i222.rate,
-    formula: i222.formula,
-    before_tax: bf222,
-    vat: vt222,
-    after_tax: bf222 + vt222
-  });
-
-  // HSMT TB (Bảng 2.23)
   if (G_TB_BEFORE > 0) {
     const b223 = pl8.bang_2_23_hsmt_thiet_bi;
     const i223 = interpolateRateTT38(g_tb_ty, b223.thresholds_ty_dong, b223.rates[baseTypeKey] || b223.rates.dan_dung);
@@ -413,15 +462,14 @@ function calculateAll() {
     });
   }
 
-  // Giám sát TCXD (Bảng 2.24)
   const b224 = pl8.bang_2_24_giam_sat_tcxd;
   const i224 = interpolateRateTT38(g_xd_ty, b224.thresholds_ty_dong, b224.rates[baseTypeKey] || b224.rates.dan_dung);
-  const bf224 = Math.round(G_XD_TOTAL_BEFORE * (i224.rate / 100.0));
+  const bf224 = Math.round(G_XD_BASIS_QLDA_TV * (i224.rate / 100.0));
   const vt224 = Math.round(bf224 * vat_rate);
   consulting.push({
     code: "TV.07",
     name: "Chi phí giám sát thi công xây dựng (Bảng 2.24 PL VIII TT 38/2026)",
-    basis: "G_XD trước thuế",
+    basis: gxdLabel,
     rate_pct: i224.rate,
     formula: i224.formula,
     before_tax: bf224,
@@ -429,7 +477,6 @@ function calculateAll() {
     after_tax: bf224 + vt224
   });
 
-  // Giám sát LĐTB (Bảng 2.25)
   if (G_TB_BEFORE > 0) {
     const b225 = pl8.bang_2_25_giam_sat_ldtb;
     const i225 = interpolateRateTT38(g_tb_ty, b225.thresholds_ty_dong, b225.rates[baseTypeKey] || b225.rates.dan_dung);
@@ -452,10 +499,11 @@ function calculateAll() {
   const G_TV_AFTER = consulting.reduce((s, x) => s + x.after_tax, 0);
 
   // Chi phí khác (G_K)
+  const full_gxd_gtb = G_XD_TOTAL_BEFORE + G_TB_BEFORE;
   const ck1_bf = Math.round(G_XD_TOTAL_BEFORE * 0.0012);
-  const ck2_bf = Math.round(g_xd_tb_before * 0.0015);
+  const ck2_bf = Math.round(full_gxd_gtb * 0.0015);
   const ck2_vt = Math.round(ck2_bf * vat_rate);
-  const ck3_bf = Math.round(g_xd_tb_before * 0.0045);
+  const ck3_bf = Math.round(full_gxd_gtb * 0.0045);
   const ck3_vt = Math.round(ck3_bf * vat_rate);
 
   const other_costs = [
@@ -496,7 +544,6 @@ function calculateAll() {
   const SUB_VAT = G_XD_TOTAL_VAT + G_TB_VAT + G_QLDA_VAT + G_TV_VAT + G_K_VAT;
   const SUB_AFTER = G_XD_TOTAL_AFTER + G_TB_AFTER + G_QLDA_AFTER + G_TV_AFTER + G_K_AFTER;
 
-  // Dự phòng phí (G_DP = G_DP1 + G_DP2)
   const dp1_rate = Number(pi.contingency_volume_rate || 5.0) / 100.0;
   const dp2_rate = Number(pi.contingency_escalation_rate || 2.5) / 100.0;
 
@@ -550,7 +597,8 @@ function calculateAll() {
       interp: qldaInterp,
       before_tax: G_QLDA_BEFORE,
       vat: G_QLDA_VAT,
-      after_tax: G_QLDA_AFTER
+      after_tax: G_QLDA_AFTER,
+      include_lt_in_qlda_tv
     },
     consulting,
     other_costs,
@@ -575,12 +623,11 @@ function renderAll() {
   const c = state.computed;
   if (!c) return;
 
-  // 1. Update KPI Strip
   document.getElementById("kpiTotalAfterTax").textContent = fmtVND(c.totals.TOTAL.after);
   document.getElementById("kpiTotalBeforeTax").textContent = "Trước thuế: " + fmtVND(c.totals.TOTAL.before);
 
   document.getElementById("kpiGxdAfterTax").textContent = fmtVND(c.totals.G_XD.after);
-  document.getElementById("kpiGxdBeforeTax").textContent = "Chi phí trực tiếp T: " + fmtVND(c.b38.T);
+  document.getElementById("kpiGxdBeforeTax").textContent = "Trực tiếp T: " + fmtVND(c.b38.T);
   document.getElementById("kpiCpcBadge").textContent = `CPC ${c.b38.rate_cpc}%`;
 
   document.getElementById("kpiGtbAfterTax").textContent = fmtVND(c.totals.G_TB.after);
@@ -599,78 +646,27 @@ function renderAll() {
   const totalRes = state.prices.vat_lieu.length + state.prices.nhan_cong.length + state.prices.may_thi_cong.length;
   document.getElementById("badgeResCount").textContent = totalRes;
 
-  renderActiveRatesTable();
+  const bot = document.getElementById("g8BottomSummary");
+  if (bot) {
+    bot.textContent = `T: ${fmtVND(c.b38.T)} | G_XD: ${fmtVND(c.totals.G_XD.after)} | TỔNG DỰ TOÁN G_DTXD: ${fmtVND(c.totals.TOTAL.after)}`;
+  }
+
   renderBoqTable();
   renderEquipmentTable();
+  renderActiveRatesTable();
+  renderNhanCongSheet();
+  renderMaySheet();
+  renderCuocVcSheet();
   renderResourcesTable();
   renderUnitPriceAnalysis();
+  renderDonGiaChiTietSheet();
+  renderDuThauSheet();
   renderBang38Table();
-  renderTotalEstimateTable();
+  renderBang31AndTotalEstimate();
   renderBang33Reference();
+  renderSettlementTables();
   renderNormDatabase();
   runInteractiveInterpolation();
-}
-
-function renderActiveRatesTable() {
-  const c = state.computed;
-  const tbody = document.getElementById("activeRatesTbody");
-  const rows = [
-    {
-      stt: 1,
-      name: "Định mức Chi phí chung (C) tính trên chi phí trực tiếp",
-      basis: "Bảng 3.3 Phụ lục III Thông tư 36/2026/TT-BXD",
-      method: c.b38.cpcLookup.matched_label,
-      rate: c.b38.rate_cpc.toFixed(2) + "%"
-    },
-    {
-      stt: 2,
-      name: "Định mức Chi phí một số công việc không xác định được khối lượng từ thiết kế (TT)",
-      basis: "Bảng 3.5 Phụ lục III Thông tư 36/2026/TT-BXD",
-      method: "Tra trực tiếp theo loại công trình",
-      rate: c.b38.rate_tt.toFixed(2) + "%"
-    },
-    {
-      stt: 3,
-      name: "Định mức Thu nhập chịu thuế tính trước (TL) tính trên (T + C)",
-      basis: "Bảng 3.6 Phụ lục III Thông tư 36/2026/TT-BXD",
-      method: "Tra trực tiếp theo loại công trình",
-      rate: c.b38.rate_tl.toFixed(2) + "%"
-    },
-    {
-      stt: 4,
-      name: "Định mức Chi phí nhà tạm để ở và điều hành thi công (LT)",
-      basis: "Bảng 3.7, 3.8 PL III TT 36/2026 (Đã đính chính bởi QĐ 1538/QĐ-BXD)",
-      method: `Tra cận trên (${c.b38.ltLookup.matched_label}): LT = G_XDTT × ${c.b38.rate_lt}% × (1 + T_GTGT)`,
-      rate: c.b38.rate_lt.toFixed(2) + "%"
-    },
-    {
-      stt: 5,
-      name: "Định mức Chi phí Quản lý dự án (G_QLDA)",
-      basis: "Bảng 1.1 Phụ lục VIII Thông tư 38/2026/TT-BXD",
-      method: c.qlda.interp.formula,
-      rate: c.qlda.rate_pct.toFixed(4) + "%"
-    }
-  ];
-
-  c.consulting.forEach((tv, i) => {
-    rows.push({
-      stt: 6 + i,
-      name: tv.name,
-      basis: `Phụ lục VIII Thông tư 38/2026/TT-BXD (Tính trên ${tv.basis})`,
-      method: tv.formula,
-      rate: tv.rate_pct.toFixed(4) + "%"
-    });
-  });
-
-  tbody.innerHTML = rows.map(r => `
-    <tr>
-      <td class="center">${r.stt}</td>
-      <td><strong>${r.name}</strong></td>
-      <td>${r.basis}</td>
-      <td><code>${r.method}</code></td>
-      <td class="num"><strong>${r.rate}</strong></td>
-    </tr>
-  `).join("");
 }
 
 function renderBoqTable() {
@@ -684,7 +680,7 @@ function renderBoqTable() {
       currentSection = row.section;
       html += `
         <tr class="section-row">
-          <td colspan="12">${currentSection}</td>
+          <td colspan="14">HẠNG MỤC: ${currentSection}</td>
         </tr>
       `;
     }
@@ -697,24 +693,26 @@ function renderBoqTable() {
         </td>
         <td class="center">${row.unit}</td>
         <td class="num">
-          <input type="number" step="any" class="inline-input num-input" style="width:66px" value="${row.count}" onchange="updateBoqDimension(${idx}, 'count', this.value)" />
+          <input type="number" step="any" class="inline-input num-input" style="width:62px" value="${row.count}" onchange="updateBoqDimension(${idx}, 'count', this.value)" />
         </td>
         <td class="num">
-          <input type="number" step="any" class="inline-input num-input" style="width:72px" value="${row.length}" onchange="updateBoqDimension(${idx}, 'length', this.value)" />
+          <input type="number" step="any" class="inline-input num-input" style="width:68px" value="${row.length}" onchange="updateBoqDimension(${idx}, 'length', this.value)" />
         </td>
         <td class="num">
-          <input type="number" step="any" class="inline-input num-input" style="width:66px" value="${row.width}" onchange="updateBoqDimension(${idx}, 'width', this.value)" />
+          <input type="number" step="any" class="inline-input num-input" style="width:62px" value="${row.width}" onchange="updateBoqDimension(${idx}, 'width', this.value)" />
         </td>
         <td class="num">
-          <input type="number" step="any" class="inline-input num-input" style="width:66px" value="${row.height}" onchange="updateBoqDimension(${idx}, 'height', this.value)" />
+          <input type="number" step="any" class="inline-input num-input" style="width:62px" value="${row.height}" onchange="updateBoqDimension(${idx}, 'height', this.value)" />
         </td>
         <td class="num">
-          <input type="number" step="any" class="inline-input num-input" style="width:88px; font-weight:700;" value="${row.quantity}" onchange="updateBoqQuantityDirect(${idx}, this.value)" />
+          <input type="number" step="any" class="inline-input num-input" style="width:84px; font-weight:700;" value="${row.quantity}" onchange="updateBoqQuantityDirect(${idx}, this.value)" />
         </td>
-        <td class="num">${fmtNum(row.unit_direct)}</td>
+        <td class="num">${fmtNum(row.unit_vl)}</td>
+        <td class="num">${fmtNum(row.unit_nc)}</td>
+        <td class="num">${fmtNum(row.unit_m)}</td>
         <td class="num"><strong>${fmtNum(row.total_direct)}</strong></td>
         <td class="center no-print">
-          <button class="btn btn-danger btn-sm" onclick="removeBoqItem(${idx})" title="Xóa công tác">✕</button>
+          <button class="btn btn-danger btn-sm" onclick="removeBoqItem(${idx})">✕</button>
         </td>
       </tr>
     `;
@@ -723,12 +721,42 @@ function renderBoqTable() {
   html += `
     <tr class="total-row">
       <td colspan="9" class="num">TỔNG CHI PHÍ TRỰC TIẾP (T = VL + NC + M):</td>
-      <td class="num">—</td>
+      <td class="num">${fmtNum(c.b38.VL)}</td>
+      <td class="num">${fmtNum(c.b38.NC)}</td>
+      <td class="num">${fmtNum(c.b38.M)}</td>
       <td class="num">${fmtVND(c.b38.T)}</td>
       <td class="no-print"></td>
     </tr>
   `;
   tbody.innerHTML = html;
+}
+
+function moveSection(dir) {
+  const sections = [];
+  state.boq_items.forEach(it => {
+    if (!sections.includes(it.section)) sections.push(it.section);
+  });
+  if (sections.length < 2) return;
+  const targetSec = document.getElementById("addSectionInput").value || sections[sections.length - 1];
+  const idx = sections.indexOf(targetSec);
+  const swapIdx = idx === -1 ? (dir < 0 ? sections.length - 1 : 0) : idx + dir;
+  if (swapIdx < 0 || swapIdx >= sections.length || idx === -1) {
+    // Rotate sections order as quick demo if input doesn't match
+    const firstSec = sections[0];
+    const firstItems = state.boq_items.filter(x => x.section === firstSec);
+    const restItems = state.boq_items.filter(x => x.section !== firstSec);
+    state.boq_items = [...restItems, ...firstItems];
+  } else {
+    const temp = sections[idx];
+    sections[idx] = sections[swapIdx];
+    sections[swapIdx] = temp;
+    const reordered = [];
+    sections.forEach(s => {
+      state.boq_items.filter(x => x.section === s).forEach(x => reordered.push(x));
+    });
+    state.boq_items = reordered;
+  }
+  calculateAll();
 }
 
 function updateBoqField(idx, field, val) {
@@ -829,6 +857,189 @@ function removeEquipmentItem(idx) {
   calculateAll();
 }
 
+function renderActiveRatesTable() {
+  const c = state.computed;
+  const tbody = document.getElementById("activeRatesTbody");
+  const rows = [
+    {
+      stt: 1,
+      name: "Định mức Chi phí chung (C) tính trên chi phí trực tiếp",
+      basis: "Bảng 3.3 Phụ lục III Thông tư 36/2026/TT-BXD",
+      method: c.b38.cpcLookup.matched_label,
+      rate: c.b38.rate_cpc.toFixed(2) + "%"
+    },
+    {
+      stt: 2,
+      name: "Định mức Chi phí một số công việc không xác định được khối lượng từ thiết kế (TT)",
+      basis: "Bảng 3.5 Phụ lục III Thông tư 36/2026/TT-BXD",
+      method: "Tra trực tiếp theo loại công trình",
+      rate: c.b38.rate_tt.toFixed(2) + "%"
+    },
+    {
+      stt: 3,
+      name: "Định mức Thu nhập chịu thuế tính trước (TL) tính trên (T + C)",
+      basis: "Bảng 3.6 Phụ lục III Thông tư 36/2026/TT-BXD",
+      method: "Tra trực tiếp theo loại công trình",
+      rate: c.b38.rate_tl.toFixed(2) + "%"
+    },
+    {
+      stt: 4,
+      name: "Định mức Chi phí nhà tạm để ở và điều hành thi công (LT)",
+      basis: "Bảng 3.7, 3.8 PL III TT 36/2026 (Đã đính chính bởi QĐ 1538/QĐ-BXD)",
+      method: `Tra cận trên (${c.b38.ltLookup.matched_label}): LT = G_XDTT × ${c.b38.rate_lt}% × (1 + T_GTGT)`,
+      rate: c.b38.rate_lt.toFixed(2) + "%"
+    },
+    {
+      stt: 5,
+      name: "Định mức Chi phí Quản lý dự án (G_QLDA)",
+      basis: "Bảng 1.1 Phụ lục VIII Thông tư 38/2026/TT-BXD",
+      method: c.qlda.interp.formula,
+      rate: c.qlda.rate_pct.toFixed(4) + "%"
+    }
+  ];
+
+  c.consulting.forEach((tv, i) => {
+    rows.push({
+      stt: 6 + i,
+      name: tv.name,
+      basis: `Phụ lục VIII Thông tư 38/2026/TT-BXD (Tính trên ${tv.basis})`,
+      method: tv.formula,
+      rate: tv.rate_pct.toFixed(4) + "%"
+    });
+  });
+
+  tbody.innerHTML = rows.map(r => `
+    <tr>
+      <td class="center">${r.stt}</td>
+      <td><strong>${r.name}</strong></td>
+      <td>${r.basis}</td>
+      <td><code>${r.method}</code></td>
+      <td class="num"><strong>${r.rate}</strong></td>
+    </tr>
+  `).join("");
+}
+
+function renderNhanCongSheet() {
+  const c = state.computed;
+  const k_nc = Number(state.project_info.k_nc || 1.0);
+  const tbody = document.getElementById("nhanCongSheetTbody");
+  if (!tbody) return;
+  tbody.innerHTML = state.prices.nhan_cong.map((nc, idx) => {
+    const agg = c.aggResources[nc.id] || { total_qty: 0, total_cost: 0 };
+    const eff = Math.round(nc.price * k_nc);
+    return `
+      <tr>
+        <td class="center">${idx + 1}</td>
+        <td><span class="code-pill">${nc.id}</span></td>
+        <td><strong>${nc.name}</strong></td>
+        <td class="center">${nc.unit}</td>
+        <td class="num">
+          <input type="number" step="1000" class="inline-input num-input" style="width:125px" value="${nc.price}" onchange="updateResourcePrice('nhan_cong', ${idx}, this.value)" />
+        </td>
+        <td class="num">${k_nc.toFixed(2)}</td>
+        <td class="num"><strong>${fmtNum(eff)}</strong></td>
+        <td class="num">${fmtNum(agg.total_qty, 3)}</td>
+        <td class="num"><strong>${fmtNum(agg.total_cost)}</strong></td>
+      </tr>
+    `;
+  }).join("");
+}
+
+function renderMaySheet() {
+  const tbody = document.getElementById("maySheetTbody");
+  if (!tbody) return;
+  tbody.innerHTML = state.prices.may_thi_cong.map((m, idx) => {
+    const calc = m.tt37_calc || { c_kh: 0, c_sc: 0, c_k: 0, c_nl: 0, c_nc: 0, c_cm: m.price };
+    return `
+      <tr>
+        <td class="center">${idx + 1}</td>
+        <td><span class="code-pill">${m.id}</span></td>
+        <td><strong>${m.name}</strong> <span style="font-size:11px; color:var(--text-muted)">(${m.fuel_qty || 0} ${m.fuel_type || ''})</span></td>
+        <td class="num">${fmtNum(m.nguyen_gia || 0)}</td>
+        <td class="num">${fmtNum(m.so_ca_nam || 250)}</td>
+        <td class="num">${fmtNum(calc.c_kh)}</td>
+        <td class="num">${fmtNum(calc.c_sc)}</td>
+        <td class="num">${fmtNum(calc.c_k)}</td>
+        <td class="num">${fmtNum(calc.c_nl)}</td>
+        <td class="num">${fmtNum(calc.c_nc)}</td>
+        <td class="num" style="color:var(--accent-primary); font-weight:700;">${fmtNum(calc.c_cm)}</td>
+        <td class="num">
+          <input type="number" step="1000" class="inline-input num-input" style="width:115px; font-weight:700;" value="${m.price}" onchange="updateResourcePrice('may_thi_cong', ${idx}, this.value)" />
+        </td>
+      </tr>
+    `;
+  }).join("");
+}
+
+function recalcMachinesAndLink() {
+  state.fuel_prices.diesel = Number(document.getElementById("inpDieselPrice")?.value || 18500);
+  state.fuel_prices.gasoline = Number(document.getElementById("inpGasolinePrice")?.value || 19800);
+  state.fuel_prices.electric = Number(document.getElementById("inpElectricPrice")?.value || 2160);
+  calculateAll();
+}
+
+function applyCalculatedMachinesToGiaThang() {
+  state.prices.may_thi_cong.forEach(m => {
+    if (m.tt37_calc) {
+      m.price = m.tt37_calc.c_cm;
+    }
+  });
+  calculateAll();
+}
+
+function restoreAnnouncedMachinesToGiaThang() {
+  state.prices.may_thi_cong.forEach(m => {
+    if (m.announced_price) {
+      m.price = m.announced_price;
+    }
+  });
+  calculateAll();
+}
+
+function renderCuocVcSheet() {
+  const tbody = document.getElementById("cuocVcTbody");
+  if (!tbody) return;
+  tbody.innerHTML = state.prices.vat_lieu.map((vl, idx) => {
+    const trans = Number(vl.transport_cost || 0);
+    const sitePrice = Number(vl.price || 0) + trans;
+    return `
+      <tr>
+        <td class="center">${idx + 1}</td>
+        <td><span class="code-pill">${vl.id}</span></td>
+        <td>${vl.name}</td>
+        <td class="center">${vl.unit}</td>
+        <td class="num">${fmtNum(vl.price)}</td>
+        <td class="num">
+          <input type="number" step="0.001" class="inline-input num-input" style="width:85px" value="${vl.weight_ton || 0}" onchange="updateVlTransport(${idx}, 'weight_ton', this.value)" />
+        </td>
+        <td class="num">
+          <input type="number" step="1" class="inline-input num-input" style="width:75px" value="${vl.dist_km || 0}" onchange="updateVlTransport(${idx}, 'dist_km', this.value)" />
+        </td>
+        <td class="center">
+          <select class="inline-input" onchange="updateVlTransport(${idx}, 'road_class', this.value)">
+            <option value="loai_1" ${vl.road_class === 'loai_1' ? 'selected' : ''}>Đường Loại 1</option>
+            <option value="loai_2" ${vl.road_class === 'loai_2' ? 'selected' : ''}>Đường Loại 2</option>
+            <option value="loai_3" ${vl.road_class === 'loai_3' ? 'selected' : ''}>Đường Loại 3</option>
+            <option value="loai_4" ${vl.road_class === 'loai_4' ? 'selected' : ''}>Đường Loại 4</option>
+          </select>
+        </td>
+        <td class="num" style="color:var(--accent-secondary); font-weight:600;">${fmtNum(trans)}</td>
+        <td class="num"><strong>${fmtNum(sitePrice)}</strong></td>
+      </tr>
+    `;
+  }).join("");
+}
+
+function updateVlTransport(idx, field, val) {
+  state.prices.vat_lieu[idx][field] = field === "road_class" ? val : Number(val || 0);
+  calculateAll();
+}
+
+function applyTransportToMaterials() {
+  calculateAll();
+  switchTab("tab-gia-thang");
+}
+
 function renderResourcesTable() {
   const c = state.computed;
   const q = (document.getElementById("resourceSearchInput")?.value || "").toLowerCase();
@@ -850,7 +1061,10 @@ function renderResourcesTable() {
   tbody.innerHTML = filtered.map((r, idx) => {
     const agg = c.aggResources[r.id] || { total_qty: 0, total_cost: 0 };
     const k = r.type === "NC" ? state.project_info.k_nc : (r.type === "M" ? state.project_info.k_m : 1.0);
+    const trans = r.type === "VL" ? Number(r.transport_cost || 0) : 0;
+    const sitePrice = Math.round(Number(r.price || 0) * Number(k) + trans);
     const badgeClass = r.type === "VL" ? "badge-info" : (r.type === "NC" ? "badge-success" : "badge-warn");
+    const extraInfo = r.type === "VL" ? `+Cước: ${fmtNum(trans)}` : `×K=${Number(k).toFixed(2)}`;
     return `
       <tr>
         <td class="center">${idx + 1}</td>
@@ -859,12 +1073,13 @@ function renderResourcesTable() {
         <td>${r.name}</td>
         <td class="center">${r.unit}</td>
         <td class="num">
-          <input type="number" step="100" class="inline-input num-input" style="width:120px" value="${r.price}" onchange="updateResourcePrice('${r.arrKey}', ${r.idx}, this.value)" />
+          <input type="number" step="100" class="inline-input num-input" style="width:115px" value="${r.price}" onchange="updateResourcePrice('${r.arrKey}', ${r.idx}, this.value)" />
         </td>
-        <td class="num">${Number(k).toFixed(2)}</td>
+        <td class="num"><span style="font-size:11.5px; color:var(--text-muted)">${extraInfo}</span></td>
+        <td class="num"><strong>${fmtNum(sitePrice)}</strong></td>
         <td class="num">${fmtNum(agg.total_qty, 3)}</td>
         <td class="num"><strong>${fmtNum(agg.total_cost, 0)}</strong></td>
-        <td><span style="font-size:12px; color:var(--text-muted)">${r.source || ""}</span></td>
+        <td><span style="font-size:11.5px; color:var(--text-muted)">${r.source || ""}</span></td>
       </tr>
     `;
   }).join("");
@@ -886,7 +1101,7 @@ function renderUnitPriceAnalysis() {
       <tr class="section-row">
         <td class="center">${row.stt}</td>
         <td><span class="code-pill">${row.norm_code}</span></td>
-        <td>${row.name} <span style="font-weight:400; color:var(--text-muted)">(VL: ${fmtNum(row.unit_vl)} | NC: ${fmtNum(row.unit_nc)} | M: ${fmtNum(row.unit_m)})</span></td>
+        <td>${row.name} <span style="font-weight:400; color:var(--text-secondary)">(VL: ${fmtNum(row.unit_vl)} | NC: ${fmtNum(row.unit_nc)} | M: ${fmtNum(row.unit_m)})</span></td>
         <td class="center">${row.unit}</td>
         <td class="num">1,000</td>
         <td class="num">${fmtNum(row.quantity, 3)}</td>
@@ -901,7 +1116,7 @@ function renderUnitPriceAnalysis() {
           <tr>
             <td class="center" style="color:var(--text-muted)">•</td>
             <td><code>${comp.id}</code> <span class="badge badge-info" style="font-size:10px">${comp.type}</span></td>
-            <td style="padding-left:22px;">${comp.name}</td>
+            <td style="padding-left:20px;">${comp.name}</td>
             <td class="center">${comp.unit}</td>
             <td class="num">${fmtNum(comp.norm_qty, 4)}</td>
             <td class="num">${fmtNum(comp.total_qty, 3)}</td>
@@ -916,17 +1131,74 @@ function renderUnitPriceAnalysis() {
   tbody.innerHTML = html;
 }
 
+function renderDonGiaChiTietSheet() {
+  const c = state.computed;
+  const tbody = document.getElementById("donGiaChiTietTbody");
+  if (!tbody) return;
+  tbody.innerHTML = c.detailed_boq.map(r => `
+    <tr>
+      <td class="center">${r.stt}</td>
+      <td><span class="code-pill">${r.norm_code}</span></td>
+      <td><strong>${r.name}</strong></td>
+      <td class="center">${r.unit}</td>
+      <td class="num">${fmtNum(r.unit_vl)}</td>
+      <td class="num">${fmtNum(r.unit_nc)}</td>
+      <td class="num">${fmtNum(r.unit_m)}</td>
+      <td class="num"><strong>${fmtNum(r.unit_direct)}</strong></td>
+      <td class="num">${fmtNum(r.unit_c)}</td>
+      <td class="num">${fmtNum(r.unit_tt)}</td>
+      <td class="num">${fmtNum(r.unit_tl)}</td>
+      <td class="num" style="color:var(--accent-primary); font-weight:700;">${fmtNum(r.unit_full_before)}</td>
+      <td class="num"><strong>${fmtNum(r.unit_full_after)}</strong></td>
+    </tr>
+  `).join("");
+}
+
+function renderDuThauSheet() {
+  const c = state.computed;
+  const tbody = document.getElementById("duThauTbody");
+  if (!tbody) return;
+  let sumBefore = 0;
+  let sumAfter = 0;
+  let html = c.detailed_boq.map(r => {
+    sumBefore += r.total_bid_before;
+    sumAfter += r.total_bid_after;
+    return `
+      <tr>
+        <td class="center">${r.stt}</td>
+        <td><span class="code-pill">${r.norm_code}</span></td>
+        <td>${r.name}</td>
+        <td class="center">${r.unit}</td>
+        <td class="num">${fmtNum(r.quantity, 3)}</td>
+        <td class="num">${fmtNum(r.unit_full_before)}</td>
+        <td class="num">${fmtNum(r.unit_full_after)}</td>
+        <td class="num">${fmtNum(r.total_bid_before)}</td>
+        <td class="num"><strong>${fmtNum(r.total_bid_after)}</strong></td>
+      </tr>
+    `;
+  }).join("");
+
+  html += `
+    <tr class="grand-total-row">
+      <td colspan="7" class="num">TỔNG GIÁ DỰ THẦU XÂY LẮP (CHƯA GỒM NHÀ TẠM LT):</td>
+      <td class="num">${fmtVND(sumBefore)}</td>
+      <td class="num">${fmtVND(sumAfter)}</td>
+    </tr>
+  `;
+  tbody.innerHTML = html;
+}
+
 function renderBang38Table() {
   const b = state.computed.b38;
   document.getElementById("bang38Subtitle").textContent =
     `${state.project_info.project_name} — ${state.project_info.building_name}`;
 
   const rows = [
-    { stt: "I", name: "CHI PHÍ TRỰC TIẾP", formula: "T = VL + NC + M", sym: "T", val: b.T, note: "Tổng hợp từ Bảng Tiên lượng & Đơn giá chi tiết", bold: true },
-    { stt: "1", name: "Chi phí vật liệu", formula: "∑ (KL_i × ĐG_VL_i)", sym: "VL", val: b.VL, note: "Theo công bố giá VLXD địa phương & TT 38/2026" },
-    { stt: "2", name: "Chi phí nhân công", formula: `∑ (KL_i × ĐG_NC_i) × K_NC (${state.project_info.k_nc})`, sym: "NC", val: b.NC, note: "Đơn giá nhân công theo Thông tư 37/2026/TT-BXD" },
+    { stt: "I", name: "CHI PHÍ TRỰC TIẾP", formula: "T = VL + NC + M", sym: "T", val: b.T, note: "Tổng hợp từ Sheet Công trình & Giá tháng", bold: true },
+    { stt: "1", name: "Chi phí vật liệu (Đã gồm cước vận chuyển)", formula: "∑ (KL_i × ĐG_VL_i)", sym: "VL", val: b.VL, note: "Theo công bố giá VLXD địa phương & TT 38/2026" },
+    { stt: "2", name: "Chi phí nhân công", formula: `∑ (KL_i × ĐG_NC_i) × K_NC (${state.project_info.k_nc})`, sym: "NC", val: b.NC, note: "Đơn giá nhân công trực tiếp theo Thông tư 37/2026/TT-BXD" },
     { stt: "3", name: "Chi phí máy và thiết bị thi công", formula: `∑ (KL_i × ĐG_M_i) × K_M (${state.project_info.k_m})`, sym: "M", val: b.M, note: "Bảng giá ca máy theo Thông tư 37/2026/TT-BXD" },
-    { stt: "II", name: "CHI PHÍ GIÁN TIẾP", formula: "GT = C + LT + TT", sym: "GT", val: b.C + b.TT + b.LT_TRUOC_THUE, note: "Theo Điều 13 Nghị định 206/2026/NĐ-CP & TT 36/2026", bold: true },
+    { stt: "II", name: "CHI PHÍ GIÁN TIẾP (Chưa gồm nhà tạm)", formula: "GT = C + TT", sym: "GT", val: b.C + b.TT, note: "Theo Điều 13 Nghị định 206/2026/NĐ-CP & TT 36/2026", bold: true },
     { stt: "1", name: "Chi phí chung", formula: `T × ${b.rate_cpc}%`, sym: "C", val: b.C, note: `Bảng 3.3 PL III TT 36/2026 (${b.cpcLookup.matched_label})` },
     { stt: "2", name: "Chi phí một số công việc không xác định được khối lượng từ thiết kế", formula: `T × ${b.rate_tt}%`, sym: "TT", val: b.TT, note: "Bảng 3.5 Phụ lục III Thông tư 36/2026/TT-BXD" },
     { stt: "III", name: "THU NHẬP CHỊU THUẾ TÍNH TRƯỚC", formula: `(T + C) × ${b.rate_tl}%`, sym: "TL", val: b.TL, note: "Bảng 3.6 Phụ lục III Thông tư 36/2026/TT-BXD", bold: true },
@@ -949,12 +1221,54 @@ function renderBang38Table() {
   `).join("");
 }
 
-function renderTotalEstimateTable() {
+function renderBang31AndTotalEstimate() {
   const c = state.computed;
+  const b = c.b38;
   const t = c.totals;
   const totalAfter = t.TOTAL.after || 1;
 
-  // Render visual cost breakdown bar
+  // 1. Bảng 3.1 Tách dòng Chi phí XD công trình chính và Chi phí nhà tạm chuẩn G8 20/08/2026
+  const b31Body = document.getElementById("bang31SplitTbody");
+  if (b31Body) {
+    b31Body.innerHTML = `
+      <tr>
+        <td class="center">1</td>
+        <td><strong>Chi phí xây dựng công trình chính, phụ trợ (${state.project_info.building_name})</strong></td>
+        <td class="num">${fmtNum(b.G_XDTT)}</td>
+        <td class="num">${fmtNum(b.GTGT_XD)}</td>
+        <td class="num"><strong>${fmtNum(b.G_XD_SAU_THUE_CHUA_LT)}</strong></td>
+        <td>Tổng của T + C + TT + TL (Bảng 3.8 TT 36/2026/TT-BXD)</td>
+      </tr>
+      <tr>
+        <td class="center">2</td>
+        <td><strong>Chi phí nhà tạm tại hiện trường để ở và điều hành thi công (${b.rate_lt}%)</strong></td>
+        <td class="num">${fmtNum(b.LT_TRUOC_THUE)}</td>
+        <td class="num">${fmtNum(b.LT_GTGT)}</td>
+        <td class="num"><strong>${fmtNum(b.LT_SAU_THUE)}</strong></td>
+        <td>Tách dòng riêng theo mẫu Bảng 3.1 TT 36/2026 trên Dự toán G8 (20/08/2026)</td>
+      </tr>
+      <tr class="total-row">
+        <td class="center">TỔNG</td>
+        <td><strong>TỔNG CHI PHÍ XÂY DỰNG (G_XD = 1 + 2)</strong></td>
+        <td class="num">${fmtNum(b.G_XD_TOTAL_BEFORE)}</td>
+        <td class="num">${fmtNum(b.G_XD_TOTAL_VAT)}</td>
+        <td class="num">${fmtNum(b.G_XD_TOTAL_AFTER)}</td>
+        <td>Chuyển sang khoản mục I của Bảng TH kinh phí</td>
+      </tr>
+    `;
+  }
+
+  // Ghi chú Công văn 12637/BXD-KTQLXD
+  const noteEl = document.getElementById("cv12637NoteBanner");
+  if (noteEl) {
+    if (c.qlda.include_lt_in_qlda_tv) {
+      noteEl.innerHTML = `<span class="badge badge-info">Tùy chọn G8: CÓ NHÀ TẠM</span> Đang tính Chi phí QLDA & Tư vấn ĐTXD trên G_XD trước thuế <strong>bao gồm cả chi phí nhà tạm</strong> (${fmtVND(b.G_XD_TOTAL_BEFORE)}) theo Phụ lục III TT 36/2026/TT-BXD.`;
+    } else {
+      noteEl.innerHTML = `<span class="badge badge-warn">Công văn 12637/BXD-KTQLXD (11/08/2026)</span> Đang tính Chi phí QLDA & Tư vấn ĐTXD trên G_XDTT = T + GT + TL <strong>KHÔNG bao gồm chi phí nhà tạm</strong> (${fmtVND(b.G_XDTT)}) theo hướng dẫn của Bộ Xây dựng gửi SXD Sơn La.`;
+    }
+  }
+
+  // Visual bar
   const segments = [
     { label: "Chi phí xây dựng (G_XD)", val: t.G_XD.after, color: "#0b4f6c" },
     { label: "Chi phí thiết bị (G_TB)", val: t.G_TB.after, color: "#0284c7" },
@@ -984,12 +1298,11 @@ function renderTotalEstimateTable() {
     {
       stt: "I",
       name: "CHI PHÍ XÂY DỰNG (G_XD)",
-      basis: "Bảng 3.8 Phụ lục III TT 36/2026 & QĐ 1538/QĐ-BXD",
+      basis: "Bảng 3.1 & 3.8 Phụ lục III TT 36/2026 & QĐ 1538/QĐ-BXD",
       rate: "—",
       before: t.G_XD.before,
       vat: t.G_XD.vat,
-      after: t.G_XD.after,
-      section: true
+      after: t.G_XD.after
     },
     {
       stt: "II",
@@ -998,8 +1311,7 @@ function renderTotalEstimateTable() {
       rate: "—",
       before: t.G_TB.before,
       vat: t.G_TB.vat,
-      after: t.G_TB.after,
-      section: true
+      after: t.G_TB.after
     },
     {
       stt: "III",
@@ -1008,8 +1320,7 @@ function renderTotalEstimateTable() {
       rate: c.qlda.rate_pct.toFixed(4) + "%",
       before: t.G_QLDA.before,
       vat: t.G_QLDA.vat,
-      after: t.G_QLDA.after,
-      section: true
+      after: t.G_QLDA.after
     },
     {
       stt: "IV",
@@ -1019,7 +1330,6 @@ function renderTotalEstimateTable() {
       before: t.G_TV.before,
       vat: t.G_TV.vat,
       after: t.G_TV.after,
-      section: true,
       children: c.consulting
     },
     {
@@ -1030,7 +1340,6 @@ function renderTotalEstimateTable() {
       before: t.G_K.before,
       vat: t.G_K.vat,
       after: t.G_K.after,
-      section: true,
       children: c.other_costs
     },
     {
@@ -1041,7 +1350,6 @@ function renderTotalEstimateTable() {
       before: t.G_DP.before,
       vat: t.G_DP.vat,
       after: t.G_DP.after,
-      section: true,
       children: [
         {
           code: "DP.01",
@@ -1086,7 +1394,7 @@ function renderTotalEstimateTable() {
           <tr>
             <td class="center">${idx + 1}</td>
             <td style="padding-left:20px;">${ch.name}</td>
-            <td><span style="font-size:12px; color:var(--text-muted)">${ch.basis}</span></td>
+            <td><span style="font-size:11.5px; color:var(--text-muted)">${ch.basis}</span></td>
             <td class="num">${Number(ch.rate_pct).toFixed(3)}%</td>
             <td class="num">${fmtNum(ch.before_tax)}</td>
             <td class="num">${fmtNum(ch.vat)}</td>
@@ -1113,6 +1421,100 @@ function renderTotalEstimateTable() {
   document.getElementById("totalEstimateTbody").innerHTML = html;
 }
 
+function renderSettlementTables() {
+  const c = state.computed;
+  if (!c) return;
+  const pct = Math.min(Math.max(Number(document.getElementById("inpSettlementPct")?.value || 100), 0), 100) / 100.0;
+  const b = c.b38;
+
+  // Mẫu 03.c/QT (Quyết toán A-B)
+  const qtBefore = Math.round(b.G_XD_TOTAL_BEFORE * pct);
+  const qtVat = Math.round(b.G_XD_TOTAL_VAT * pct);
+  const qtAfter = qtBefore + qtVat;
+
+  const tb03c = document.getElementById("mau03cQtTbody");
+  if (tb03c) {
+    tb03c.innerHTML = `
+      <tr>
+        <td class="center">1</td>
+        <td><strong>Giá trị Hợp đồng xây lắp đã ký kết (Bao gồm Chi phí nhà tạm)</strong></td>
+        <td class="num">${fmtNum(b.G_XD_TOTAL_BEFORE)}</td>
+        <td class="num">${fmtNum(b.G_XD_TOTAL_VAT)}</td>
+        <td class="num"><strong>${fmtNum(b.G_XD_TOTAL_AFTER)}</strong></td>
+        <td>Theo dự toán gói thầu được duyệt</td>
+      </tr>
+      <tr>
+        <td class="center">2</td>
+        <td><strong>Giá trị khối lượng công việc hoàn thành được nghiệm thu (${(pct * 100).toFixed(0)}%)</strong></td>
+        <td class="num">${fmtNum(qtBefore)}</td>
+        <td class="num">${fmtNum(qtVat)}</td>
+        <td class="num" style="color:var(--accent-success); font-weight:700;">${fmtNum(qtAfter)}</td>
+        <td>Tổng hợp từ Bảng Mẫu số 03.a/TT Nghị định 254/2025/NĐ-CP</td>
+      </tr>
+      <tr class="grand-total-row">
+        <td class="center">3</td>
+        <td><strong>GIÁ TRỊ ĐỀ NGHỊ QUYẾT TOÁN HỢP ĐỒNG A - B (MẪU 03.c/QT)</strong></td>
+        <td class="num">${fmtNum(qtBefore)}</td>
+        <td class="num">${fmtNum(qtVat)}</td>
+        <td class="num">${fmtNum(qtAfter)}</td>
+        <td>Đủ điều kiện giải ngân vốn đầu tư công (NĐ 254/2025/NĐ-CP)</td>
+      </tr>
+    `;
+  }
+
+  // Mẫu 03.a/TT (Bảng xác định giá trị KL công việc hoàn thành)
+  const tb03a = document.getElementById("mau03aTtTbody");
+  if (tb03a) {
+    let sumHd = 0;
+    let sumTh = 0;
+    let html = c.detailed_boq.map(r => {
+      const valHd = r.total_bid_after;
+      const valTh = Math.round(valHd * pct);
+      sumHd += valHd;
+      sumTh += valTh;
+      return `
+        <tr>
+          <td class="center">${r.stt}</td>
+          <td><span class="code-pill">${r.norm_code}</span></td>
+          <td>${r.name}</td>
+          <td class="center">${r.unit}</td>
+          <td class="num">${fmtNum(valHd)}</td>
+          <td class="num">0</td>
+          <td class="num"><strong>${fmtNum(valTh)}</strong></td>
+          <td class="num"><strong>${fmtNum(valTh)}</strong></td>
+        </tr>
+      `;
+    }).join("");
+
+    html += `
+      <tr class="total-row">
+        <td colspan="4" class="num">TỔNG CỘNG MẪU 03.a/TT (CHƯA GỒM NHÀ TẠM LT):</td>
+        <td class="num">${fmtVND(sumHd)}</td>
+        <td class="num">0 đ</td>
+        <td class="num">${fmtVND(sumTh)}</td>
+        <td class="num">${fmtVND(sumTh)}</td>
+      </tr>
+    `;
+    tb03a.innerHTML = html;
+  }
+}
+
+function toggleIncludeLtInQldaTv(checked) {
+  state.project_info.include_lt_in_qlda_tv = Boolean(checked);
+  calculateAll();
+}
+
+function recalcF5() {
+  calculateAll();
+}
+
+window.addEventListener("keydown", e => {
+  if (e.key === "F5") {
+    e.preventDefault();
+    recalcF5();
+  }
+});
+
 function renderBang33Reference() {
   const b33 = state.regulations.tt36_phu_luc_3.bang_3_3_cpc_du_toan.rates;
   const labels = {
@@ -1138,11 +1540,6 @@ function renderBang33Reference() {
 
 function renderNormDatabase() {
   const q = (document.getElementById("normSearchInput")?.value || "").toLowerCase();
-  const resMap = {};
-  state.prices.vat_lieu.forEach(r => resMap[r.id] = r.name);
-  state.prices.nhan_cong.forEach(r => resMap[r.id] = r.name);
-  state.prices.may_thi_cong.forEach(r => resMap[r.id] = r.name);
-
   const filtered = state.norms.filter(n => {
     if (!q) return true;
     return n.code.toLowerCase().includes(q) || n.name.toLowerCase().includes(q) || n.category.toLowerCase().includes(q);
@@ -1157,12 +1554,12 @@ function renderNormDatabase() {
     return `
       <tr>
         <td><span class="code-pill">${n.code}</span></td>
-        <td><span style="font-size:12px; color:var(--text-secondary)">${n.category}</span></td>
+        <td><span style="font-size:11.5px; color:var(--text-secondary)">${n.category}</span></td>
         <td><strong>${n.name}</strong></td>
         <td class="center">${n.unit}</td>
-        <td><code style="font-size:11.5px;">${parts}</code></td>
+        <td><code style="font-size:11px;">${parts}</code></td>
         <td class="center no-print">
-          <button class="btn btn-primary btn-sm" onclick="quickAddNormToBoq('${n.code}')">+ Đưa vào BOQ</button>
+          <button class="btn btn-primary btn-sm" onclick="quickAddNormToBoq('${n.code}')">+ Chèn vào G8</button>
         </td>
       </tr>
     `;
@@ -1186,7 +1583,7 @@ function quickAddNormToBoq(code) {
     quantity: 10
   });
   calculateAll();
-  switchTab("tab-2");
+  switchTab("tab-cong-trinh");
 }
 
 function runInteractiveInterpolation() {
@@ -1212,10 +1609,10 @@ function runInteractiveInterpolation() {
   document.getElementById("interpResultBox").innerHTML = `
     <div><strong>Bảng tra:</strong> ${tbl.title} (${tbl.unit})</div>
     <div style="margin-top:4px;"><strong>Cận dưới (G_b):</strong> ${res.gb} tỷ (${res.nb}%) &nbsp;|&nbsp; <strong>Cận trên (G_a):</strong> ${res.ga} tỷ (${res.na}%)</div>
-    <div style="margin-top:4px;"><strong>Công thức nội suy:</strong> <code>${res.formula}</code></div>
-    <div style="margin-top:6px; font-size:15px;">
+    <div style="margin-top:4px;"><strong>Công thức nội suy G8:</strong> <code>${res.formula}</code></div>
+    <div style="margin-top:6px; font-size:14px;">
       ⇒ <strong>Định mức nội suy N_t = <span style="color:var(--accent-primary)">${res.rate.toFixed(4)}%</span></strong>
-      &nbsp; (Thành tiền trước thuế tương ứng: <strong>${fmtVND(valMoney)}</strong>)
+      &nbsp; (Thành tiền trước thuế: <strong>${fmtVND(valMoney)}</strong>)
     </div>
   `;
 }
@@ -1282,7 +1679,10 @@ function updateProjectInfoFromUI() {
 
 function loadPreset(presetKey) {
   const p = EMBEDDED_PRESETS.presets[presetKey] || EMBEDDED_PRESETS.presets.dan_dung_tru_so;
-  state.project_info = JSON.parse(JSON.stringify(p.project_info));
+  state.project_info = {
+    ...JSON.parse(JSON.stringify(p.project_info)),
+    include_lt_in_qlda_tv: document.getElementById("chkIncludeLtInQldaTv")?.checked !== false
+  };
   state.boq_items = JSON.parse(JSON.stringify(p.boq_items));
   state.equipment_items = JSON.parse(JSON.stringify(p.equipment_items));
   syncProjectInfoToUI();
@@ -1302,13 +1702,14 @@ function toggleTheme() {
   const html = document.documentElement;
   const next = html.getAttribute("data-theme") === "dark" ? "light" : "dark";
   html.setAttribute("data-theme", next);
-  document.getElementById("themeToggleBtn").textContent = next === "dark" ? "☀️ Giao diện Sáng" : "🌙 Giao diện Tối";
+  document.getElementById("themeToggleBtn").textContent = next === "dark" ? "☀️ Sáng" : "🌙 Tối";
 }
 
 function exportProjectJSON() {
   const payload = {
     exported_at: new Date().toISOString(),
-    legal_version: "ND206_TT36_TT37_TT38_2026",
+    software: "DU_TOAN_G8_VERSION_2026",
+    legal_version: "ND144_ND254_ND206_TT36_TT37_TT38_QD1538_CV12637",
     project_info: state.project_info,
     boq_items: state.boq_items,
     equipment_items: state.equipment_items,
@@ -1317,7 +1718,7 @@ function exportProjectJSON() {
   const blob = new Blob([JSON.stringify(payload, null, 2)], { type: "application/json" });
   const a = document.createElement("a");
   a.href = URL.createObjectURL(blob);
-  a.download = "Ho_So_Du_Toan_2026.json";
+  a.download = "Cong_Trinh_Du_Toan_G8_2026.json";
   a.click();
 }
 
@@ -1335,7 +1736,7 @@ function importProjectJSON(event) {
       syncProjectInfoToUI();
       calculateAll();
     } catch (err) {
-      alert("File JSON không hợp lệ: " + err.message);
+      alert("File G8 JSON không hợp lệ: " + err.message);
     }
   };
   reader.readAsText(file);
@@ -1344,50 +1745,18 @@ function importProjectJSON(event) {
 function exportExcelWorkbook() {
   const c = state.computed;
   const pi = state.project_info;
-
   const esc = s => String(s ?? "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
 
-  // Build XML Spreadsheet 2003 with multiple worksheets
   let xml = `<?xml version="1.0" encoding="UTF-8"?>
 <?mso-application progid="Excel.Sheet"?>
 <Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet"
  xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet">
  <Styles>
-  <Style ss:ID="Header"><Font ss:Bold="1" ss:Color="#FFFFFF"/><Interior ss:Color="#0F172A" ss:Pattern="Solid"/></Style>
+  <Style ss:ID="Header"><Font ss:Bold="1" ss:Color="#FFFFFF"/><Interior ss:Color="#0F2942" ss:Pattern="Solid"/></Style>
   <Style ss:ID="Bold"><Font ss:Bold="1"/></Style>
   <Style ss:ID="Num"><NumberFormat ss:Format="#,##0"/></Style>
  </Styles>
- <Worksheet ss:Name="01_TH_DU_TOAN_CT">
-  <Table>
-   <Row><Cell ss:StyleID="Bold"><Data ss:Type="String">${esc(pi.project_name)}</Data></Cell></Row>
-   <Row><Cell><Data ss:Type="String">${esc(pi.building_name)}</Data></Cell></Row>
-   <Row><Cell ss:StyleID="Header"><Data ss:Type="String">Khoản mục chi phí</Data></Cell><Cell ss:StyleID="Header"><Data ss:Type="String">Trước thuế (VNĐ)</Data></Cell><Cell ss:StyleID="Header"><Data ss:Type="String">Thuế GTGT (VNĐ)</Data></Cell><Cell ss:StyleID="Header"><Data ss:Type="String">Sau thuế (VNĐ)</Data></Cell></Row>
-   <Row><Cell><Data ss:Type="String">I. Chi phí xây dựng (G_XD)</Data></Cell><Cell ss:StyleID="Num"><Data ss:Type="Number">${c.totals.G_XD.before}</Data></Cell><Cell ss:StyleID="Num"><Data ss:Type="Number">${c.totals.G_XD.vat}</Data></Cell><Cell ss:StyleID="Num"><Data ss:Type="Number">${c.totals.G_XD.after}</Data></Cell></Row>
-   <Row><Cell><Data ss:Type="String">II. Chi phí thiết bị (G_TB)</Data></Cell><Cell ss:StyleID="Num"><Data ss:Type="Number">${c.totals.G_TB.before}</Data></Cell><Cell ss:StyleID="Num"><Data ss:Type="Number">${c.totals.G_TB.vat}</Data></Cell><Cell ss:StyleID="Num"><Data ss:Type="Number">${c.totals.G_TB.after}</Data></Cell></Row>
-   <Row><Cell><Data ss:Type="String">III. Chi phí quản lý dự án (G_QLDA)</Data></Cell><Cell ss:StyleID="Num"><Data ss:Type="Number">${c.totals.G_QLDA.before}</Data></Cell><Cell ss:StyleID="Num"><Data ss:Type="Number">${c.totals.G_QLDA.vat}</Data></Cell><Cell ss:StyleID="Num"><Data ss:Type="Number">${c.totals.G_QLDA.after}</Data></Cell></Row>
-   <Row><Cell><Data ss:Type="String">IV. Chi phí tư vấn đầu tư xây dựng (G_TV)</Data></Cell><Cell ss:StyleID="Num"><Data ss:Type="Number">${c.totals.G_TV.before}</Data></Cell><Cell ss:StyleID="Num"><Data ss:Type="Number">${c.totals.G_TV.vat}</Data></Cell><Cell ss:StyleID="Num"><Data ss:Type="Number">${c.totals.G_TV.after}</Data></Cell></Row>
-   <Row><Cell><Data ss:Type="String">V. Chi phí khác (G_K)</Data></Cell><Cell ss:StyleID="Num"><Data ss:Type="Number">${c.totals.G_K.before}</Data></Cell><Cell ss:StyleID="Num"><Data ss:Type="Number">${c.totals.G_K.vat}</Data></Cell><Cell ss:StyleID="Num"><Data ss:Type="Number">${c.totals.G_K.after}</Data></Cell></Row>
-   <Row><Cell><Data ss:Type="String">VI. Chi phí dự phòng (G_DP)</Data></Cell><Cell ss:StyleID="Num"><Data ss:Type="Number">${c.totals.G_DP.before}</Data></Cell><Cell ss:StyleID="Num"><Data ss:Type="Number">${c.totals.G_DP.vat}</Data></Cell><Cell ss:StyleID="Num"><Data ss:Type="Number">${c.totals.G_DP.after}</Data></Cell></Row>
-   <Row><Cell ss:StyleID="Bold"><Data ss:Type="String">TỔNG DỰ TOÁN XÂY DỰNG CÔNG TRÌNH</Data></Cell><Cell ss:StyleID="Num"><Data ss:Type="Number">${c.totals.TOTAL.before}</Data></Cell><Cell ss:StyleID="Num"><Data ss:Type="Number">${c.totals.TOTAL.vat}</Data></Cell><Cell ss:StyleID="Num"><Data ss:Type="Number">${c.totals.TOTAL.after}</Data></Cell></Row>
-  </Table>
- </Worksheet>
- <Worksheet ss:Name="02_BANG_3_8_CHI_PHI_XD">
-  <Table>
-   <Row><Cell ss:StyleID="Header"><Data ss:Type="String">Ký hiệu</Data></Cell><Cell ss:StyleID="Header"><Data ss:Type="String">Khoản mục chi phí xây dựng</Data></Cell><Cell ss:StyleID="Header"><Data ss:Type="String">Giá trị (VNĐ)</Data></Cell></Row>
-   <Row><Cell><Data ss:Type="String">VL</Data></Cell><Cell><Data ss:Type="String">Chi phí vật liệu</Data></Cell><Cell ss:StyleID="Num"><Data ss:Type="Number">${c.b38.VL}</Data></Cell></Row>
-   <Row><Cell><Data ss:Type="String">NC</Data></Cell><Cell><Data ss:Type="String">Chi phí nhân công</Data></Cell><Cell ss:StyleID="Num"><Data ss:Type="Number">${c.b38.NC}</Data></Cell></Row>
-   <Row><Cell><Data ss:Type="String">M</Data></Cell><Cell><Data ss:Type="String">Chi phí máy thi công</Data></Cell><Cell ss:StyleID="Num"><Data ss:Type="Number">${c.b38.M}</Data></Cell></Row>
-   <Row><Cell ss:StyleID="Bold"><Data ss:Type="String">T</Data></Cell><Cell ss:StyleID="Bold"><Data ss:Type="String">Chi phí trực tiếp (T = VL + NC + M)</Data></Cell><Cell ss:StyleID="Num"><Data ss:Type="Number">${c.b38.T}</Data></Cell></Row>
-   <Row><Cell><Data ss:Type="String">C</Data></Cell><Cell><Data ss:Type="String">Chi phí chung (${c.b38.rate_cpc}%)</Data></Cell><Cell ss:StyleID="Num"><Data ss:Type="Number">${c.b38.C}</Data></Cell></Row>
-   <Row><Cell><Data ss:Type="String">TL</Data></Cell><Cell><Data ss:Type="String">Thu nhập chịu thuế tính trước (${c.b38.rate_tl}%)</Data></Cell><Cell ss:StyleID="Num"><Data ss:Type="Number">${c.b38.TL}</Data></Cell></Row>
-   <Row><Cell><Data ss:Type="String">TT</Data></Cell><Cell><Data ss:Type="String">Chi phí CV không xác định khối lượng từ TK (${c.b38.rate_tt}%)</Data></Cell><Cell ss:StyleID="Num"><Data ss:Type="Number">${c.b38.TT}</Data></Cell></Row>
-   <Row><Cell ss:StyleID="Bold"><Data ss:Type="String">G_XDTT</Data></Cell><Cell ss:StyleID="Bold"><Data ss:Type="String">Chi phí xây dựng trước thuế (chưa gồm nhà tạm)</Data></Cell><Cell ss:StyleID="Num"><Data ss:Type="Number">${c.b38.G_XDTT}</Data></Cell></Row>
-   <Row><Cell><Data ss:Type="String">GTGT</Data></Cell><Cell><Data ss:Type="String">Thuế GTGT xây dựng (${c.b38.vat_pct}%)</Data></Cell><Cell ss:StyleID="Num"><Data ss:Type="Number">${c.b38.GTGT_XD}</Data></Cell></Row>
-   <Row><Cell><Data ss:Type="String">LT</Data></Cell><Cell><Data ss:Type="String">Chi phí nhà tạm sau thuế theo QĐ 1538/QĐ-BXD (${c.b38.rate_lt}%)</Data></Cell><Cell ss:StyleID="Num"><Data ss:Type="Number">${c.b38.LT_SAU_THUE}</Data></Cell></Row>
-   <Row><Cell ss:StyleID="Bold"><Data ss:Type="String">G_XD</Data></Cell><Cell ss:StyleID="Bold"><Data ss:Type="String">TỔNG CHI PHÍ XÂY DỰNG SAU THUẾ</Data></Cell><Cell ss:StyleID="Num"><Data ss:Type="Number">${c.b38.G_XD_TOTAL_AFTER}</Data></Cell></Row>
-  </Table>
- </Worksheet>
- <Worksheet ss:Name="03_TIEN_LUONG_BOQ">
+ <Worksheet ss:Name="Cong_Trinh">
   <Table>
    <Row>
     <Cell ss:StyleID="Header"><Data ss:Type="String">STT</Data></Cell>
@@ -1413,12 +1782,41 @@ function exportExcelWorkbook() {
    </Row>`).join("")}
   </Table>
  </Worksheet>
+ <Worksheet ss:Name="THKP_Hang_Muc_B38">
+  <Table>
+   <Row><Cell ss:StyleID="Header"><Data ss:Type="String">Ký hiệu</Data></Cell><Cell ss:StyleID="Header"><Data ss:Type="String">Khoản mục chi phí xây dựng</Data></Cell><Cell ss:StyleID="Header"><Data ss:Type="String">Giá trị (VNĐ)</Data></Cell></Row>
+   <Row><Cell><Data ss:Type="String">VL</Data></Cell><Cell><Data ss:Type="String">Chi phí vật liệu</Data></Cell><Cell ss:StyleID="Num"><Data ss:Type="Number">${c.b38.VL}</Data></Cell></Row>
+   <Row><Cell><Data ss:Type="String">NC</Data></Cell><Cell><Data ss:Type="String">Chi phí nhân công</Data></Cell><Cell ss:StyleID="Num"><Data ss:Type="Number">${c.b38.NC}</Data></Cell></Row>
+   <Row><Cell><Data ss:Type="String">M</Data></Cell><Cell><Data ss:Type="String">Chi phí máy thi công</Data></Cell><Cell ss:StyleID="Num"><Data ss:Type="Number">${c.b38.M}</Data></Cell></Row>
+   <Row><Cell ss:StyleID="Bold"><Data ss:Type="String">T</Data></Cell><Cell ss:StyleID="Bold"><Data ss:Type="String">Chi phí trực tiếp (T = VL + NC + M)</Data></Cell><Cell ss:StyleID="Num"><Data ss:Type="Number">${c.b38.T}</Data></Cell></Row>
+   <Row><Cell><Data ss:Type="String">C</Data></Cell><Cell><Data ss:Type="String">Chi phí chung (${c.b38.rate_cpc}%)</Data></Cell><Cell ss:StyleID="Num"><Data ss:Type="Number">${c.b38.C}</Data></Cell></Row>
+   <Row><Cell><Data ss:Type="String">TL</Data></Cell><Cell><Data ss:Type="String">Thu nhập chịu thuế tính trước (${c.b38.rate_tl}%)</Data></Cell><Cell ss:StyleID="Num"><Data ss:Type="Number">${c.b38.TL}</Data></Cell></Row>
+   <Row><Cell><Data ss:Type="String">TT</Data></Cell><Cell><Data ss:Type="String">Chi phí CV không xác định khối lượng từ TK (${c.b38.rate_tt}%)</Data></Cell><Cell ss:StyleID="Num"><Data ss:Type="Number">${c.b38.TT}</Data></Cell></Row>
+   <Row><Cell ss:StyleID="Bold"><Data ss:Type="String">G_XDTT</Data></Cell><Cell ss:StyleID="Bold"><Data ss:Type="String">Chi phí xây dựng trước thuế (chưa gồm nhà tạm)</Data></Cell><Cell ss:StyleID="Num"><Data ss:Type="Number">${c.b38.G_XDTT}</Data></Cell></Row>
+   <Row><Cell><Data ss:Type="String">GTGT</Data></Cell><Cell><Data ss:Type="String">Thuế GTGT xây dựng (${c.b38.vat_pct}%)</Data></Cell><Cell ss:StyleID="Num"><Data ss:Type="Number">${c.b38.GTGT_XD}</Data></Cell></Row>
+   <Row><Cell><Data ss:Type="String">LT</Data></Cell><Cell><Data ss:Type="String">Chi phí nhà tạm sau thuế theo QĐ 1538/QĐ-BXD (${c.b38.rate_lt}%)</Data></Cell><Cell ss:StyleID="Num"><Data ss:Type="Number">${c.b38.LT_SAU_THUE}</Data></Cell></Row>
+   <Row><Cell ss:StyleID="Bold"><Data ss:Type="String">G_XD</Data></Cell><Cell ss:StyleID="Bold"><Data ss:Type="String">TỔNG CHI PHÍ XÂY DỰNG SAU THUẾ</Data></Cell><Cell ss:StyleID="Num"><Data ss:Type="Number">${c.b38.G_XD_TOTAL_AFTER}</Data></Cell></Row>
+  </Table>
+ </Worksheet>
+ <Worksheet ss:Name="TH_Kinh_Phi_G8">
+  <Table>
+   <Row><Cell ss:StyleID="Bold"><Data ss:Type="String">${esc(pi.project_name)}</Data></Cell></Row>
+   <Row><Cell ss:StyleID="Header"><Data ss:Type="String">Khoản mục chi phí</Data></Cell><Cell ss:StyleID="Header"><Data ss:Type="String">Trước thuế (VNĐ)</Data></Cell><Cell ss:StyleID="Header"><Data ss:Type="String">Thuế GTGT (VNĐ)</Data></Cell><Cell ss:StyleID="Header"><Data ss:Type="String">Sau thuế (VNĐ)</Data></Cell></Row>
+   <Row><Cell><Data ss:Type="String">I. Chi phí xây dựng (G_XD)</Data></Cell><Cell ss:StyleID="Num"><Data ss:Type="Number">${c.totals.G_XD.before}</Data></Cell><Cell ss:StyleID="Num"><Data ss:Type="Number">${c.totals.G_XD.vat}</Data></Cell><Cell ss:StyleID="Num"><Data ss:Type="Number">${c.totals.G_XD.after}</Data></Cell></Row>
+   <Row><Cell><Data ss:Type="String">II. Chi phí thiết bị (G_TB)</Data></Cell><Cell ss:StyleID="Num"><Data ss:Type="Number">${c.totals.G_TB.before}</Data></Cell><Cell ss:StyleID="Num"><Data ss:Type="Number">${c.totals.G_TB.vat}</Data></Cell><Cell ss:StyleID="Num"><Data ss:Type="Number">${c.totals.G_TB.after}</Data></Cell></Row>
+   <Row><Cell><Data ss:Type="String">III. Chi phí quản lý dự án (G_QLDA)</Data></Cell><Cell ss:StyleID="Num"><Data ss:Type="Number">${c.totals.G_QLDA.before}</Data></Cell><Cell ss:StyleID="Num"><Data ss:Type="Number">${c.totals.G_QLDA.vat}</Data></Cell><Cell ss:StyleID="Num"><Data ss:Type="Number">${c.totals.G_QLDA.after}</Data></Cell></Row>
+   <Row><Cell><Data ss:Type="String">IV. Chi phí tư vấn đầu tư xây dựng (G_TV)</Data></Cell><Cell ss:StyleID="Num"><Data ss:Type="Number">${c.totals.G_TV.before}</Data></Cell><Cell ss:StyleID="Num"><Data ss:Type="Number">${c.totals.G_TV.vat}</Data></Cell><Cell ss:StyleID="Num"><Data ss:Type="Number">${c.totals.G_TV.after}</Data></Cell></Row>
+   <Row><Cell><Data ss:Type="String">V. Chi phí khác (G_K)</Data></Cell><Cell ss:StyleID="Num"><Data ss:Type="Number">${c.totals.G_K.before}</Data></Cell><Cell ss:StyleID="Num"><Data ss:Type="Number">${c.totals.G_K.vat}</Data></Cell><Cell ss:StyleID="Num"><Data ss:Type="Number">${c.totals.G_K.after}</Data></Cell></Row>
+   <Row><Cell><Data ss:Type="String">VI. Chi phí dự phòng (G_DP)</Data></Cell><Cell ss:StyleID="Num"><Data ss:Type="Number">${c.totals.G_DP.before}</Data></Cell><Cell ss:StyleID="Num"><Data ss:Type="Number">${c.totals.G_DP.vat}</Data></Cell><Cell ss:StyleID="Num"><Data ss:Type="Number">${c.totals.G_DP.after}</Data></Cell></Row>
+   <Row><Cell ss:StyleID="Bold"><Data ss:Type="String">TỔNG DỰ TOÁN XÂY DỰNG CÔNG TRÌNH</Data></Cell><Cell ss:StyleID="Num"><Data ss:Type="Number">${c.totals.TOTAL.before}</Data></Cell><Cell ss:StyleID="Num"><Data ss:Type="Number">${c.totals.TOTAL.vat}</Data></Cell><Cell ss:StyleID="Num"><Data ss:Type="Number">${c.totals.TOTAL.after}</Data></Cell></Row>
+  </Table>
+ </Worksheet>
 </Workbook>`;
 
   const blob = new Blob([xml], { type: "application/vnd.ms-excel" });
   const a = document.createElement("a");
   a.href = URL.createObjectURL(blob);
-  a.download = "Du_Toan_Xay_Dung_2026.xls";
+  a.download = "Du_Toan_G8_Version_2026.xls";
   a.click();
 }
 
@@ -1432,7 +1830,7 @@ window.addEventListener("DOMContentLoaded", () => {
 """
 
 app_js_content = (
-    "// TỰ ĐỘNG SINH BỞI build_web_bundle.py - DỮ LIỆU PHÁP LÝ 2026\n"
+    "// TỰ ĐỘNG SINH BỞI build_web_bundle.py - DỰ TOÁN G8 VERSION 2026\n"
     f"const EMBEDDED_REGULATIONS = {json.dumps(regulations, ensure_ascii=False)};\n"
     f"const EMBEDDED_PRICES = {json.dumps(prices, ensure_ascii=False)};\n"
     f"const EMBEDDED_NORMS = {json.dumps(norms, ensure_ascii=False)};\n"
@@ -1443,7 +1841,6 @@ app_js_content = (
 (ROOT / "app.js").write_text(app_js_content, encoding="utf-8")
 print("Wrote", ROOT / "app.js")
 
-# Build self-contained HTML artifact
 index_html = (ROOT / "index.html").read_text(encoding="utf-8")
 styles_css = (ROOT / "styles.css").read_text(encoding="utf-8")
 

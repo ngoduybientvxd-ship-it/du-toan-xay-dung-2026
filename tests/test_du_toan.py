@@ -15,6 +15,8 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "scripts"))
 
 from du_toan_engine import (
+    calculate_machine_shift_price_tt37,
+    calculate_material_transport_cost,
     calculate_project_estimate,
     interpolate_rate_tt38,
     load_all_data,
@@ -112,6 +114,59 @@ class TestDuToan2026Engine(unittest.TestCase):
         self.assertAlmostEqual(b38["rate_tl"], 6.0)
         self.assertAlmostEqual(b38["rate_tt_other"], 2.0)
 
+    def test_g8_machine_shift_tt37_and_transport(self):
+        """Kiểm tra tính Giá ca máy (TT 37/2026/TT-BXD) và Cước vận chuyển (Cước VC) theo chuẩn Dự toán G8."""
+        m001 = next(m for m in self.data["prices"]["may_thi_cong"] if m["id"] == "M001")
+        nc_map = {n["id"]: n["price"] for n in self.data["prices"]["nhan_cong"]}
+        fuel_prices = {
+            "diesel_price_vnd_liter": 18500,
+            "electricity_price_vnd_kwh": 2160,
+            "gasoline_price_vnd_liter": 19800,
+        }
+        m_calc = calculate_machine_shift_price_tt37(m001, fuel_prices, nc_map)
+        self.assertGreater(m_calc["c_kh"], 0)
+        self.assertGreater(m_calc["c_nl"], 0)
+        self.assertGreater(m_calc["c_nc"], 0)
+        self.assertEqual(
+            m_calc["calculated_shift_price"],
+            m_calc["c_kh"] + m_calc["c_sc"] + m_calc["c_k"] + m_calc["c_nl"] + m_calc["c_nc"],
+        )
+
+        # Kiểm tra cước vận chuyển cát xây dựng VL004
+        vl004 = next(v for v in self.data["prices"]["vat_lieu"] if v["id"] == "VL004")
+        road_rates = {"loai_1": 2400, "loai_2": 3200, "loai_3": 4200}
+        t_calc = calculate_material_transport_cost(vl004, road_rates)
+        self.assertGreater(t_calc["transport_cost"], 0)
+        self.assertEqual(t_calc["site_price"], t_calc["base_price"] + t_calc["transport_cost"])
+
+    def test_g8_cv12637_toggle(self):
+        """Kiểm tra tùy chọn 'Có nhà tạm' khi tính G_QLDA và G_TV theo Công văn 12637/BXD-KTQLXD (G8 20/08/2026)."""
+        preset = self.data["presets"]["presets"]["dan_dung_tru_so"]
+        info_with_lt = dict(preset["project_info"], include_lt_in_qlda_tv=True)
+        info_no_lt = dict(preset["project_info"], include_lt_in_qlda_tv=False)
+
+        res_with_lt = calculate_project_estimate(
+            info_with_lt,
+            preset["boq_items"],
+            preset["equipment_items"],
+            self.data["prices"],
+            self.data["norms"],
+            self.data["regulations"],
+        )
+        res_no_lt = calculate_project_estimate(
+            info_no_lt,
+            preset["boq_items"],
+            preset["equipment_items"],
+            self.data["prices"],
+            self.data["norms"],
+            self.data["regulations"],
+        )
+        self.assertGreater(
+            res_with_lt["total_summary"]["G_QLDA"]["before_tax"],
+            res_no_lt["total_summary"]["G_QLDA"]["before_tax"],
+        )
+
 
 if __name__ == "__main__":
     unittest.main(verbosity=2)
+

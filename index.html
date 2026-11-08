@@ -3,58 +3,87 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>DỰ TOÁN XD 2026 — Hệ thống Tính Dự toán Xây dựng Công trình Nguồn vốn Nhà nước</title>
+  <title>DỰ TOÁN G8 VERSION 2026 — Hệ thống Lập Dự toán, Dự thầu & Quyết toán Xây dựng Công trình</title>
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-  <!-- TOPBAR -->
+  <!-- TOPBAR G8 -->
   <header class="app-topbar">
     <div class="brand-block">
-      <div class="brand-emblem">DT26</div>
+      <div class="brand-emblem">G8</div>
       <div>
-        <div class="brand-title">HỆ THỐNG TÍNH DỰ TOÁN XÂY DỰNG CÔNG TRÌNH NGUỒN VỐN NHÀ NƯỚC (2026)</div>
+        <div class="brand-title">PHẦN MỀM DỰ TOÁN - DỰ THẦU - QUYẾT TOÁN G8 VERSION 2026 (CHUYÊN GIA NGUỒN VỐN NHÀ NƯỚC)</div>
         <div class="brand-subtitle">
-          Luật XD 135/2025/QH15 • Nghị định 206/2026/NĐ-CP • Thông tư 36, 37, 38/2026/TT-BXD • Đính chính QĐ 1538/QĐ-BXD
+          NĐ 144/2025 & 254/2025/NĐ-CP • Luật XD 135/2025/QH15 • NĐ 206/2026/NĐ-CP • TT 36, 37, 38, 40/2026/TT-BXD • QĐ 1538/QĐ-BXD • CV 12637/BXD-KTQLXD
         </div>
       </div>
     </div>
     <div class="topbar-actions">
-      <select id="presetSelect" class="form-control" style="min-width: 255px; background:#1e293b; color:#fff; border-color:#334155;" onchange="loadPreset(this.value)">
-        <option value="dan_dung_tru_so">Mẫu 1: Công trình Dân dụng — Trụ sở làm việc 3 tầng</option>
-        <option value="cong_nghiep_nha_xuong">Mẫu 2: Công trình Công nghiệp — Nhà xưởng khung thép 3.600m²</option>
+      <select id="presetSelect" class="form-control" style="min-width: 265px; background:#0f172a; color:#fff; border-color:#38bdf8;" onchange="loadPreset(this.value)">
+        <option value="dan_dung_tru_so">Công trình mẫu 1: Dân dụng — Trụ sở làm việc 3 tầng</option>
+        <option value="cong_nghiep_nha_xuong">Công trình mẫu 2: Công nghiệp — Nhà xưởng khung thép 3.600m²</option>
       </select>
-      <button class="btn btn-success" onclick="exportExcelWorkbook()" title="Xuất file Excel (.xls) đầy đủ 8 sheet dự toán">
-        ⬇ Xuất Hồ Sơ Excel (.xls)
+      <button class="btn btn-warn" onclick="recalcF5()" title="Phím tắt F5: Tính lại toàn bộ công trình theo cấu hình thông tư">
+        ⚡ Tính lại (F5)
       </button>
-      <button class="btn" onclick="exportProjectJSON()" title="Lưu dự án ra file JSON">
-        💾 Lưu JSON
+      <button class="btn btn-success" onclick="exportExcelWorkbook()" title="Xuất sang Excel (.xls) đầy đủ các Sheet chuẩn Dự toán G8">
+        ⬇ Xuất Excel G8 (.xls)
       </button>
-      <label class="btn" style="margin:0;" title="Nạp hồ sơ dự án từ file JSON">
-        📂 Mở JSON
+      <button class="btn" onclick="exportProjectJSON()" title="Lưu hồ sơ công trình G8 (.json)">
+        💾 Lưu File G8
+      </button>
+      <label class="btn" style="margin:0;" title="Mở công trình G8 (.json)">
+        📂 Mở File G8
         <input type="file" id="importJsonInput" accept=".json" style="display:none" onchange="importProjectJSON(event)" />
       </label>
-      <button class="btn" onclick="window.print()" title="In hồ sơ dự toán / Xuất PDF">
-        🖨 In / PDF
-      </button>
-      <button class="btn" id="themeToggleBtn" onclick="toggleTheme()" title="Chuyển đổi giao diện Sáng / Tối">
-        🌙 Giao diện Tối
-      </button>
+      <button class="btn" onclick="window.print()">🖨 In Hồ Sơ</button>
+      <button class="btn" id="themeToggleBtn" onclick="toggleTheme()">🌙 Tối</button>
     </div>
   </header>
+
+  <!-- G8 CONFIGURATION RIBBON BAR -->
+  <div class="g8-ribbon">
+    <div class="g8-ribbon-item">
+      <span class="g8-ribbon-label">Tỉnh / TP:</span>
+      <span class="g8-ribbon-badge">Định mức Bộ XD (Theo K1 Đ12 NĐ 144/2025/NĐ-CP)</span>
+    </div>
+    <div class="g8-ribbon-item">
+      <span class="g8-ribbon-label">Bộ Định mức:</span>
+      <span class="g8-ribbon-badge">38/2026/TT-BXD (Phần XD, LĐ, KS, SC)</span>
+    </div>
+    <div class="g8-ribbon-item">
+      <span class="g8-ribbon-label">Thông tư CPXD:</span>
+      <span class="g8-ribbon-badge">36/2026/TT-BXD & QĐ 1538/QĐ-BXD</span>
+    </div>
+    <div class="g8-ribbon-item">
+      <span class="g8-ribbon-label">Nhân công & Máy:</span>
+      <span class="g8-ribbon-badge">37/2026/TT-BXD</span>
+    </div>
+    <div class="g8-ribbon-item">
+      <span class="g8-ribbon-label">QLDA & Tư vấn:</span>
+      <span class="g8-ribbon-badge">PL VIII 38/2026/TT-BXD + CV 12637/BXD-KTQLXD</span>
+    </div>
+    <div class="g8-ribbon-item" style="margin-left:auto;">
+      <label style="display:inline-flex; align-items:center; gap:5px; font-weight:700; color:var(--accent-primary); cursor:pointer;" title="Theo cập nhật 20/08/2026 của Dự toán G8 hướng dẫn Công văn 12637/BXD-KTQLXD ngày 11/08/2026">
+        <input type="checkbox" id="chkIncludeLtInQldaTv" checked onchange="toggleIncludeLtInQldaTv(this.checked)" />
+        Tính QLDA & Tư vấn bao gồm Chi phí nhà tạm (Tùy chọn CV 12637/BXD-KTQLXD)
+      </label>
+    </div>
+  </div>
 
   <!-- KPI STRIP -->
   <section class="kpi-strip">
     <div class="kpi-card highlight">
       <div class="kpi-label">
         <span>TỔNG DỰ TOÁN CÔNG TRÌNH (SAU THUẾ)</span>
-        <span class="badge badge-info">G_DTXD</span>
+        <span class="badge badge-info">TH KINH PHÍ</span>
       </div>
       <div class="kpi-value" id="kpiTotalAfterTax">0 đ</div>
       <div class="kpi-sub" id="kpiTotalBeforeTax">Trước thuế: 0 đ</div>
     </div>
     <div class="kpi-card">
       <div class="kpi-label">
-        <span>CHI PHÍ XÂY DỰNG (G_XD)</span>
+        <span>CHI PHÍ XÂY DỰNG HẠNG MỤC (G_XD)</span>
         <span class="badge badge-success" id="kpiCpcBadge">CPC 7.3%</span>
       </div>
       <div class="kpi-value" id="kpiGxdAfterTax">0 đ</div>
@@ -63,7 +92,7 @@
     <div class="kpi-card">
       <div class="kpi-label">
         <span>CHI PHÍ THIẾT BỊ (G_TB)</span>
-        <span class="badge badge-info">TB Công trình</span>
+        <span class="badge badge-info">TB ĐỒNG BỘ</span>
       </div>
       <div class="kpi-value" id="kpiGtbAfterTax">0 đ</div>
       <div class="kpi-sub" id="kpiGtbBeforeTax">Trước thuế: 0 đ</div>
@@ -79,7 +108,7 @@
     <div class="kpi-card">
       <div class="kpi-label">
         <span>TƯ VẤN ĐTXD (G_TV) & KHÁC (G_K)</span>
-        <span class="badge badge-info">Nội suy tự động</span>
+        <span class="badge badge-info">NỘI SUY G8</span>
       </div>
       <div class="kpi-value" id="kpiGtvGkAfterTax">0 đ</div>
       <div class="kpi-sub" id="kpiGtvGkSub">TV: 0 đ | K: 0 đ</div>
@@ -87,52 +116,143 @@
     <div class="kpi-card">
       <div class="kpi-label">
         <span>CHI PHÍ DỰ PHÒNG (G_DP)</span>
-        <span class="badge badge-warn" id="kpiGdpBadge">DP1 + DP2</span>
+        <span class="badge badge-warn">DP1 + DP2</span>
       </div>
       <div class="kpi-value" id="kpiGdpAfterTax">0 đ</div>
       <div class="kpi-sub" id="kpiGdpBeforeTax">Trước thuế: 0 đ</div>
     </div>
   </section>
 
-  <!-- NAVIGATION TABS -->
-  <nav class="nav-tabs">
-    <button class="nav-tab active" data-tab="tab-1" onclick="switchTab('tab-1')">
-      1. Thông tin & Tham số <span class="tab-badge">NĐ 206/2026</span>
+  <!-- G8 SHEET TABS -->
+  <nav class="nav-tabs" id="g8SheetTabs">
+    <button class="nav-tab active" data-tab="tab-cong-trinh" onclick="switchTab('tab-cong-trinh')">
+      1. Công trình <span class="tab-badge" id="badgeBoqCount">27</span>
     </button>
-    <button class="nav-tab" data-tab="tab-2" onclick="switchTab('tab-2')">
-      2. Tiên lượng & Khối lượng (BOQ) <span class="tab-badge" id="badgeBoqCount">0</span>
+    <button class="nav-tab" data-tab="tab-dau-vao" onclick="switchTab('tab-dau-vao')">
+      2. Đầu vào <span class="tab-badge">Cấu hình G8</span>
     </button>
-    <button class="nav-tab" data-tab="tab-3" onclick="switchTab('tab-3')">
-      3. Giá VL - NC - Máy <span class="tab-badge" id="badgeResCount">50</span>
+    <button class="nav-tab" data-tab="tab-nhan-cong" onclick="switchTab('tab-nhan-cong')">
+      3. Nhân công <span class="tab-badge">TT 37/2026</span>
     </button>
-    <button class="nav-tab" data-tab="tab-4" onclick="switchTab('tab-4')">
-      4. Phân tích Vật tư & Đơn giá <span class="tab-badge">TT 38/2026</span>
+    <button class="nav-tab" data-tab="tab-may" onclick="switchTab('tab-may')">
+      4. Máy thi công <span class="tab-badge">TT 37/2026</span>
     </button>
-    <button class="nav-tab" data-tab="tab-5" onclick="switchTab('tab-5')">
-      5. TH Dự toán Chi phí XD (Bảng 3.8) <span class="tab-badge">QĐ 1538</span>
+    <button class="nav-tab" data-tab="tab-cuoc-vc" onclick="switchTab('tab-cuoc-vc')">
+      5. Cước VC <span class="tab-badge">Cung đường</span>
     </button>
-    <button class="nav-tab" data-tab="tab-6" onclick="switchTab('tab-6')">
-      6. Tổng hợp Dự toán Công trình <span class="tab-badge">6 Khoản mục</span>
+    <button class="nav-tab" data-tab="tab-gia-thang" onclick="switchTab('tab-gia-thang')">
+      6. Giá tháng <span class="tab-badge" id="badgeResCount">50</span>
     </button>
-    <button class="nav-tab" data-tab="tab-7" onclick="switchTab('tab-7')">
-      7. Tra cứu Định mức & Nội suy <span class="tab-badge">PL VIII TT38</span>
+    <button class="nav-tab" data-tab="tab-hao-phi" onclick="switchTab('tab-hao-phi')">
+      7. Hao phí vật tư <span class="tab-badge">TT 38/2026</span>
+    </button>
+    <button class="nav-tab" data-tab="tab-don-gia-ct" onclick="switchTab('tab-don-gia-ct')">
+      8. Đơn giá chi tiết <span class="tab-badge">Chiết tính</span>
+    </button>
+    <button class="nav-tab" data-tab="tab-du-thau" onclick="switchTab('tab-du-thau')">
+      9. Dự thầu <span class="tab-badge">HSDT</span>
+    </button>
+    <button class="nav-tab" data-tab="tab-thkp-hm" onclick="switchTab('tab-thkp-hm')">
+      10. THKP Hạng mục <span class="tab-badge">Bảng 3.8</span>
+    </button>
+    <button class="nav-tab" data-tab="tab-th-kinh-phi" onclick="switchTab('tab-th-kinh-phi')">
+      11. TH kinh phí & Nội suy <span class="tab-badge">G_DTXD</span>
+    </button>
+    <button class="nav-tab" data-tab="tab-quyet-toan" onclick="switchTab('tab-quyet-toan')">
+      12. KL hoàn thành (NĐ 254) <span class="tab-badge">Mẫu 03a/03c</span>
     </button>
   </nav>
 
-  <!-- MAIN WORKSPACE -->
+  <!-- WORKSPACE -->
   <main class="workspace">
-    <!-- TAB 1: THÔNG TIN & THAM SỐ DỰ ÁN -->
-    <section id="tab-1" class="tab-panel active">
-      <div class="legal-banner">
-        <strong>Căn cứ pháp lý áp dụng (Cập nhật năm 2026):</strong> Luật Xây dựng số <strong>135/2025/QH15</strong>; Nghị định <strong>206/2026/NĐ-CP</strong> ngày 15/06/2026; Thông tư <strong>36/2026/TT-BXD</strong> (đã cập nhật đính chính theo Quyết định <strong>1538/QĐ-BXD</strong> ngày 28/08/2026); Thông tư <strong>37/2026/TT-BXD</strong> và Định mức xây dựng <strong>Thông tư 38/2026/TT-BXD</strong>. Phạm vi trọng tâm phiên hiện tại: <strong>Công trình Dân dụng & Công nghiệp</strong>.
+    <!-- SHEET 1: CÔNG TRÌNH (BOQ + QUẢN LÝ HẠNG MỤC + THIẾT BỊ) -->
+    <section id="tab-cong-trinh" class="tab-panel active">
+      <div class="card">
+        <div class="card-header">
+          <div>
+            <div class="card-title">SHEET CÔNG TRÌNH — Bảng Tiên lượng & Quản lý Hạng mục chuẩn Dự toán G8 Version 2026</div>
+            <div class="card-subtitle">Tra mã hiệu Định mức 38/2026/TT-BXD (Phần XD mã A, Lắp đặt mã B), nhập diễn giải kích thước và di chuyển Hạng mục Lên/Xuống</div>
+          </div>
+          <div style="display:flex; gap:6px; flex-wrap:wrap;" class="no-print">
+            <select id="addNormSelect" class="form-control" style="min-width:290px;"></select>
+            <input type="text" id="addSectionInput" class="form-control" placeholder="Tên Hạng mục..." value="I. PHẦN MÓNG & CÔNG TÁC NGẦM" style="width:210px;" />
+            <button class="btn btn-primary" onclick="addBoqItem()">+ Tra mã công tác</button>
+            <button class="btn" onclick="moveSection(-1)" title="Di chuyển hạng mục đang chọn lên trên (Chuẩn G8 20/08/2026)">↑ HM Lên</button>
+            <button class="btn" onclick="moveSection(1)" title="Di chuyển hạng mục đang chọn xuống dưới (Chuẩn G8 20/08/2026)">↓ HM Xuống</button>
+          </div>
+        </div>
+        <div class="card-body" style="padding:0;">
+          <div class="table-responsive">
+            <table class="eng-table">
+              <thead>
+                <tr>
+                  <th class="center" style="width:42px;">STT</th>
+                  <th style="width:92px;">Mã số ĐM</th>
+                  <th>Tên công tác xây dựng / Diễn giải khối lượng</th>
+                  <th class="center" style="width:55px;">ĐVT</th>
+                  <th class="num" style="width:74px;">Số cấu kiện</th>
+                  <th class="num" style="width:74px;">Dài (m)</th>
+                  <th class="num" style="width:74px;">Rộng (m)</th>
+                  <th class="num" style="width:74px;">Cao/Dày</th>
+                  <th class="num" style="width:95px;">Khối lượng</th>
+                  <th class="num" style="width:105px;">ĐG Vật liệu</th>
+                  <th class="num" style="width:100px;">ĐG Nhân công</th>
+                  <th class="num" style="width:100px;">ĐG Máy</th>
+                  <th class="num" style="width:128px;">Thành tiền TT (đ)</th>
+                  <th class="center no-print" style="width:44px;">Xóa</th>
+                </tr>
+              </thead>
+              <tbody id="boqTbody"></tbody>
+            </table>
+          </div>
+        </div>
       </div>
 
+      <!-- DANH MỤC THIẾT BỊ CÔNG TRÌNH -->
+      <div class="card">
+        <div class="card-header">
+          <div>
+            <div class="card-title">Hạng mục Thiết bị Công trình & Thiết bị Công nghệ (G_TB — Chương II Thông tư 36/2026/TT-BXD)</div>
+            <div class="card-subtitle">Tự động liên kết sang Sheet TH kinh phí để tính G_TB, G_QLDA và Tư vấn giám sát lắp đặt thiết bị (Bảng 2.25)</div>
+          </div>
+          <div class="no-print">
+            <button class="btn btn-primary btn-sm" onclick="addEquipmentItem()">+ Thêm thiết bị công trình</button>
+          </div>
+        </div>
+        <div class="card-body" style="padding:0;">
+          <div class="table-responsive">
+            <table class="eng-table">
+              <thead>
+                <tr>
+                  <th class="center" style="width:48px;">STT</th>
+                  <th>Tên thiết bị công trình / Hệ thống kỹ thuật đồng bộ</th>
+                  <th class="center" style="width:85px;">ĐVT</th>
+                  <th class="num" style="width:95px;">Số lượng</th>
+                  <th class="num" style="width:145px;">Đơn giá trước thuế (đ)</th>
+                  <th class="num" style="width:145px;">Thành tiền trước thuế (đ)</th>
+                  <th class="num" style="width:125px;">Thuế GTGT (đ)</th>
+                  <th class="num" style="width:150px;">Thành tiền sau thuế (đ)</th>
+                  <th class="center no-print" style="width:48px;">Xóa</th>
+                </tr>
+              </thead>
+              <tbody id="equipmentTbody"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SHEET 2: ĐẦU VÀO (CẤU HÌNH DỰ ÁN, HỆ SỐ XÂY LẮP & GIÁ NHIÊN LIỆU) -->
+    <section id="tab-dau-vao" class="tab-panel">
+      <div class="legal-banner">
+        <strong>Hướng dẫn Sheet Đầu vào trên Dự toán G8 Version 2026:</strong> Theo Khoản 1 Điều 12 Nghị định <strong>144/2025/NĐ-CP</strong>, các Tỉnh/TP không còn ban hành sách đơn giá XDCT địa phương. G8 tính trực tiếp từ <strong>Định mức 38/2026/TT-BXD</strong> kết hợp với Đơn giá Nhân công & Giá Ca máy xác định theo <strong>Thông tư 37/2026/TT-BXD</strong> tại Sheet này.
+      </div>
       <div class="grid-2">
         <div class="card">
           <div class="card-header">
             <div>
-              <div class="card-title">I. Thông tin hành chính & Phân loại công trình</div>
-              <div class="card-subtitle">Quyết định trực tiếp đến hệ số Chi phí chung (Bảng 3.3), Thu nhập chịu thuế (Bảng 3.6), QLDA & Tư vấn (PL VIII TT38)</div>
+              <div class="card-title">Bảng 1: Thông tin chung Công trình & Hệ số Chi phí Xây lắp</div>
+              <div class="card-subtitle">Tương ứng hộp thoại "Thông tin chung" & "Hệ số chi phí xây lắp" trong Menu Công trình của Dự toán G8</div>
             </div>
           </div>
           <div class="card-body">
@@ -141,7 +261,7 @@
               <input type="text" id="inpProjectName" class="form-control" oninput="updateProjectInfoFromUI()" />
             </div>
             <div class="form-group">
-              <label class="form-label">Tên công trình / Hạng mục công trình</label>
+              <label class="form-label">Tên công trình / Hạng mục</label>
               <input type="text" id="inpBuildingName" class="form-control" oninput="updateProjectInfoFromUI()" />
             </div>
             <div class="grid-2">
@@ -150,25 +270,25 @@
                 <input type="text" id="inpInvestor" class="form-control" oninput="updateProjectInfoFromUI()" />
               </div>
               <div class="form-group">
-                <label class="form-label">Địa điểm xây dựng & Vùng đơn giá</label>
+                <label class="form-label">Tỉnh/TP & Khu vực áp dụng đơn giá</label>
                 <input type="text" id="inpLocation" class="form-control" oninput="updateProjectInfoFromUI()" />
               </div>
             </div>
             <div class="grid-2">
               <div class="form-group">
-                <label class="form-label">Loại công trình (Theo TT 36/2026 & TT 38/2026)</label>
+                <label class="form-label">Nhóm loại công trình (TT 36/2026 & TT 38/2026)</label>
                 <select id="inpBuildingType" class="form-control" onchange="updateProjectInfoFromUI()">
-                  <option value="dan_dung">1. Công trình Dân dụng (Trụ sở, Trường học, Bệnh viện, Chung cư...)</option>
+                  <option value="dan_dung">1. Công trình Dân dụng</option>
                   <option value="dan_dung_di_tich">1b. Tu bổ, phục hồi di tích lịch sử - văn hóa</option>
-                  <option value="cong_nghiep">2. Công trình Công nghiệp (Nhà xưởng, Nhà máy, Kho vận...)</option>
-                  <option value="cong_nghiep_ham">2b. Công tác đào hầm thủy điện, hầm lò công nghiệp</option>
-                  <option value="giao_thong">3. Công trình Giao thông (Mở rộng giai đoạn tiếp theo)</option>
-                  <option value="nong_nghiep">4. Công trình Nông nghiệp & PTNT (Mở rộng giai đoạn tiếp theo)</option>
-                  <option value="ha_tang_ky_thuat">5. Công trình Hạ tầng kỹ thuật (Mở rộng giai đoạn tiếp theo)</option>
+                  <option value="cong_nghiep">2. Công trình Công nghiệp</option>
+                  <option value="cong_nghiep_ham">2b. Công tác đào hầm thủy điện, hầm lò</option>
+                  <option value="giao_thong">3. Công trình Giao thông</option>
+                  <option value="nong_nghiep">4. Công trình Nông nghiệp & PTNT</option>
+                  <option value="ha_tang_ky_thuat">5. Công trình Hạ tầng kỹ thuật</option>
                 </select>
               </div>
               <div class="form-group">
-                <label class="form-label">Cấp công trình (Phục vụ tra định mức thiết kế)</label>
+                <label class="form-label">Cấp công trình</label>
                 <select id="inpBuildingGrade" class="form-control" onchange="updateProjectInfoFromUI()">
                   <option value="dac_biet">Cấp Đặc biệt</option>
                   <option value="cap_1">Cấp I</option>
@@ -178,17 +298,6 @@
                 </select>
               </div>
             </div>
-          </div>
-        </div>
-
-        <div class="card">
-          <div class="card-header">
-            <div>
-              <div class="card-title">II. Thiết lập kỹ thuật, Thuế GTGT & Dự phòng phí</div>
-              <div class="card-subtitle">Tự động tra định mức cận trên (Bảng 3.3, 3.7 TT36) và nội suy tuyến tính (Phụ lục VIII TT38)</div>
-            </div>
-          </div>
-          <div class="card-body">
             <div class="grid-2">
               <div class="form-group">
                 <label class="form-label">Hình thức lập dự án & Bước thiết kế</label>
@@ -203,60 +312,90 @@
                 <input type="number" step="0.5" min="0.1" id="inpTmdtGxdTy" class="form-control" oninput="updateProjectInfoFromUI()" />
               </div>
             </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <div>
+              <div class="card-title">Bảng 2 & 3: Thông số Nhiên liệu Năng lượng & Liên kết Nhân công - Máy (TT 37/2026/TT-BXD)</div>
+              <div class="card-subtitle">Nhập giá Xăng, Dầu Diesel, Điện để tính Giá ca máy tại Sheet Máy và tự động Link sang Sheet Giá tháng</div>
+            </div>
+          </div>
+          <div class="card-body">
             <div class="grid-3">
               <div class="form-group">
-                <label class="form-label">Thuế suất GTGT (%)</label>
-                <input type="number" step="0.5" min="0" max="15" id="inpVatRate" class="form-control" oninput="updateProjectInfoFromUI()" />
+                <label class="form-label">Giá Dầu Diesel 0.05S (đ/lít - Trước VAT)</label>
+                <input type="number" step="100" id="inpDieselPrice" class="form-control" value="18500" oninput="recalcMachinesAndLink()" />
               </div>
               <div class="form-group">
-                <label class="form-label">Hệ số điều chỉnh Nhân công (K_NC)</label>
-                <input type="number" step="0.01" min="0.5" max="3.0" id="inpKnc" class="form-control" oninput="updateProjectInfoFromUI()" />
+                <label class="form-label">Giá Xăng RON95-III (đ/lít - Trước VAT)</label>
+                <input type="number" step="100" id="inpGasolinePrice" class="form-control" value="19800" oninput="recalcMachinesAndLink()" />
               </div>
               <div class="form-group">
-                <label class="form-label">Hệ số điều chỉnh Máy thi công (K_M)</label>
-                <input type="number" step="0.01" min="0.5" max="3.0" id="inpKm" class="form-control" oninput="updateProjectInfoFromUI()" />
+                <label class="form-label">Giá Điện sản xuất (đ/kWh - Cập nhật 11/2026)</label>
+                <input type="number" step="10" id="inpElectricPrice" class="form-control" value="2160" oninput="recalcMachinesAndLink()" />
               </div>
             </div>
             <div class="grid-3">
               <div class="form-group">
-                <label class="form-label">Dự phòng khối lượng phát sinh DP1 (%)</label>
-                <input type="number" step="0.5" min="0" max="20" id="inpDp1Rate" class="form-control" oninput="updateProjectInfoFromUI()" />
+                <label class="form-label">Thuế suất GTGT (%)</label>
+                <input type="number" step="0.5" id="inpVatRate" class="form-control" oninput="updateProjectInfoFromUI()" />
+              </div>
+              <div class="form-group">
+                <label class="form-label">Hệ số Nhân công (K_NC)</label>
+                <input type="number" step="0.01" id="inpKnc" class="form-control" oninput="updateProjectInfoFromUI()" />
+              </div>
+              <div class="form-group">
+                <label class="form-label">Hệ số Máy thi công (K_M)</label>
+                <input type="number" step="0.01" id="inpKm" class="form-control" oninput="updateProjectInfoFromUI()" />
+              </div>
+            </div>
+            <div class="grid-3">
+              <div class="form-group">
+                <label class="form-label">Dự phòng khối lượng DP1 (%)</label>
+                <input type="number" step="0.5" id="inpDp1Rate" class="form-control" oninput="updateProjectInfoFromUI()" />
               </div>
               <div class="form-group">
                 <label class="form-label">Dự phòng trượt giá DP2 (%)</label>
-                <input type="number" step="0.5" min="0" max="20" id="inpDp2Rate" class="form-control" oninput="updateProjectInfoFromUI()" />
+                <input type="number" step="0.5" id="inpDp2Rate" class="form-control" oninput="updateProjectInfoFromUI()" />
               </div>
               <div class="form-group">
                 <label class="form-label">Đặc thù tuyến / vùng</label>
                 <select id="inpSpecialZone" class="form-control" onchange="updateProjectInfoFromUI()">
-                  <option value="normal">Công trình thông thường (Nhà tạm 1,1% ≤15 tỷ)</option>
-                  <option value="linear">Công trình theo tuyến (Nhà tạm 2,2% ≤15 tỷ)</option>
-                  <option value="mountain">Miền núi / Hải đảo (Hệ số QLDA × 1,25)</option>
+                  <option value="normal">Công trình thông thường (LT 1,1%)</option>
+                  <option value="linear">Công trình theo tuyến (LT 2,2%)</option>
+                  <option value="mountain">Miền núi / Hải đảo (QLDA × 1,25)</option>
                 </select>
               </div>
+            </div>
+            <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:8px; padding-top:10px; border-top:1px solid var(--border-light);">
+              <button class="btn btn-primary" onclick="applyCalculatedMachinesToGiaThang()">
+                🔗 Link Máy (Áp giá Ca máy tính theo TT 37/2026 sang Sheet Giá tháng)
+              </button>
+              <button class="btn btn-success" onclick="restoreAnnouncedMachinesToGiaThang()">
+                📋 Lắp lại giá Ca máy công bố Tỉnh/TP
+              </button>
             </div>
           </div>
         </div>
       </div>
 
-      <!-- SUMMARY OF ACTIVE RATES -->
+      <!-- BẢNG TỔNG HỢP CÁC TỶ LỆ ĐỊNH MỨC ĐANG ÁP DỤNG -->
       <div class="card">
         <div class="card-header">
-          <div>
-            <div class="card-title">III. Bảng tổng hợp các định mức tỷ lệ (%) đang kích hoạt tự động cho dự án</div>
-            <div class="card-subtitle">Đối chiếu trực tiếp Thông tư 36/2026/TT-BXD (Đính chính tại QĐ 1538/QĐ-BXD) và Phụ lục VIII Thông tư 38/2026/TT-BXD</div>
-          </div>
+          <div class="card-title">Bảng kiểm soát Hệ số Chi phí Xây lắp & Tỷ lệ Nội suy đang kích hoạt trong G8</div>
         </div>
-        <div class="card-body">
+        <div class="card-body" style="padding:0;">
           <div class="table-responsive">
-            <table class="eng-table" id="activeRatesTable">
+            <table class="eng-table">
               <thead>
                 <tr>
-                  <th style="width:50px" class="center">STT</th>
+                  <th class="center" style="width:50px;">STT</th>
                   <th>Khoản mục định mức tỷ lệ</th>
-                  <th>Căn cứ bảng tra pháp lý (2026)</th>
-                  <th>Phương pháp xác định</th>
-                  <th class="num">Giá trị định mức (%)</th>
+                  <th>Căn cứ pháp lý (2026)</th>
+                  <th>Diễn giải tra bảng / Công thức nội suy G8</th>
+                  <th class="num" style="width:130px;">Định mức (%)</th>
                 </tr>
               </thead>
               <tbody id="activeRatesTbody"></tbody>
@@ -266,54 +405,16 @@
       </div>
     </section>
 
-    <!-- TAB 2: TIÊN LƯỢNG & KHỐI LƯỢNG (BOQ) + THIẾT BỊ -->
-    <section id="tab-2" class="tab-panel">
-      <div class="card">
-        <div class="card-header">
-          <div>
-            <div class="card-title">Bảng Tiên lượng & Bóc tách Khối lượng Xây dựng (BOQ)</div>
-            <div class="card-subtitle">Chỉnh sửa trực tiếp kích thước (Số cấu kiện × Dài × Rộng × Cao × Hệ số) hoặc nhập trực tiếp Khối lượng tổng</div>
-          </div>
-          <div style="display:flex; gap:8px; flex-wrap:wrap;" class="no-print">
-            <select id="addNormSelect" class="form-control" style="min-width:300px;"></select>
-            <input type="text" id="addSectionInput" class="form-control" placeholder="Hạng mục (VD: I. PHẦN MÓNG)" value="I. PHẦN BỔ SUNG" style="width:180px;" />
-            <button class="btn btn-primary" onclick="addBoqItem()">+ Thêm công tác định mức</button>
-          </div>
-        </div>
-        <div class="card-body" style="padding:0;">
-          <div class="table-responsive">
-            <table class="eng-table">
-              <thead>
-                <tr>
-                  <th class="center" style="width:44px;">STT</th>
-                  <th style="width:95px;">Mã ĐM (TT38)</th>
-                  <th>Tên công tác xây dựng / Diễn giải tiên lượng</th>
-                  <th class="center" style="width:58px;">ĐVT</th>
-                  <th class="num" style="width:78px;">Số lượng</th>
-                  <th class="num" style="width:78px;">Dài (m)</th>
-                  <th class="num" style="width:78px;">Rộng (m)</th>
-                  <th class="num" style="width:78px;">Cao/Dày</th>
-                  <th class="num" style="width:98px;">Khối lượng</th>
-                  <th class="num" style="width:110px;">Đơn giá TT (đ)</th>
-                  <th class="num" style="width:130px;">Thành tiền TT (đ)</th>
-                  <th class="center no-print" style="width:48px;">Xóa</th>
-                </tr>
-              </thead>
-              <tbody id="boqTbody"></tbody>
-            </table>
-          </div>
-        </div>
+    <!-- SHEET 3: NHÂN CÔNG (THÔNG TƯ 37/2026/TT-BXD) -->
+    <section id="tab-nhan-cong" class="tab-panel">
+      <div class="legal-banner">
+        <strong>Điểm mới cốt lõi của Thông tư 37/2026/TT-BXD trên Dự toán G8 Version 2026:</strong> Giá nhân công xây dựng được áp trực tiếp theo đơn giá nhân công từng cấp bậc thợ do Tỉnh/TP công bố (không còn tính vòng qua công thức <em>Giá NC bình quân × Hệ số cấp bậc / Hệ số bình quân</em> như Thông tư 13/2021 cũ).
       </div>
-
-      <!-- EQUIPMENT TABLE -->
       <div class="card">
         <div class="card-header">
           <div>
-            <div class="card-title">Danh mục Chi phí Thiết bị công trình & Thiết bị công nghệ (G_TB)</div>
-            <div class="card-subtitle">Theo Chương II Thông tư 36/2026/TT-BXD — Làm cơ sở tính G_TB, G_QLDA và Tư vấn giám sát lắp đặt thiết bị (Bảng 2.25)</div>
-          </div>
-          <div class="no-print">
-            <button class="btn btn-primary btn-sm" onclick="addEquipmentItem()">+ Thêm thiết bị</button>
+            <div class="card-title">SHEET NHÂN CÔNG — Bảng xác định Đơn giá Nhân công Xây dựng trực tiếp theo Thông tư 37/2026/TT-BXD</div>
+            <div class="card-subtitle">Điều chỉnh đơn giá công bố tại đây sẽ tự động liên kết sang Sheet Máy (lương thợ lái máy) và Sheet Giá tháng</div>
           </div>
         </div>
         <div class="card-body" style="padding:0;">
@@ -321,34 +422,109 @@
             <table class="eng-table">
               <thead>
                 <tr>
-                  <th class="center" style="width:50px;">STT</th>
-                  <th>Tên thiết bị công trình / Hệ thống kỹ thuật</th>
-                  <th class="center" style="width:90px;">ĐVT</th>
-                  <th class="num" style="width:100px;">Số lượng</th>
-                  <th class="num" style="width:150px;">Đơn giá trước thuế (đ)</th>
-                  <th class="num" style="width:150px;">Thành tiền trước thuế (đ)</th>
-                  <th class="num" style="width:130px;">Thuế GTGT (đ)</th>
-                  <th class="num" style="width:155px;">Thành tiền sau thuế (đ)</th>
-                  <th class="center no-print" style="width:50px;">Xóa</th>
+                  <th class="center" style="width:55px;">STT</th>
+                  <th style="width:95px;">Mã hiệu NC</th>
+                  <th>Nhóm nhân công & Cấp bậc thợ (Theo Thông tư 37/2026/TT-BXD)</th>
+                  <th class="center" style="width:80px;">ĐVT</th>
+                  <th class="num" style="width:155px;">Đơn giá công bố (đ/công)</th>
+                  <th class="num" style="width:110px;">Hệ số K_NC</th>
+                  <th class="num" style="width:160px;">Đơn giá áp dụng (đ/công)</th>
+                  <th class="num" style="width:140px;">Tổng hao phí (công)</th>
+                  <th class="num" style="width:160px;">Thành tiền NC (đ)</th>
                 </tr>
               </thead>
-              <tbody id="equipmentTbody"></tbody>
+              <tbody id="nhanCongSheetTbody"></tbody>
             </table>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- TAB 3: GIÁ VẬT LIỆU - NHÂN CÔNG - MÁY THI CÔNG -->
-    <section id="tab-3" class="tab-panel">
+    <!-- SHEET 4: MÁY THI CÔNG (THÔNG TƯ 37/2026/TT-BXD) -->
+    <section id="tab-may" class="tab-panel">
       <div class="card">
         <div class="card-header">
           <div>
-            <div class="card-title">Bảng Giá Vật liệu, Nhân công, Máy thi công & Tổng hợp Hao phí Vật tư toàn công trình</div>
-            <div class="card-subtitle">Theo Thông tư 37/2026/TT-BXD và Công bố giá VLXD địa phương — Thay đổi đơn giá tại đây sẽ tự động cập nhật toàn bộ đơn giá chi tiết & tổng dự toán</div>
+            <div class="card-title">SHEET MÁY — Bảng tính Giá Ca máy và Thiết bị thi công theo Thông tư 37/2026/TT-BXD</div>
+            <div class="card-subtitle">Công thức: Giá ca máy = Khấu hao + Sửa chữa + Chi phí khác + Nhiên liệu năng lượng (từ Sheet Đầu vào) + Tiền lương thợ điều khiển (từ Sheet Nhân công)</div>
+          </div>
+          <div style="display:flex; gap:8px;" class="no-print">
+            <button class="btn btn-primary btn-sm" onclick="applyCalculatedMachinesToGiaThang()">🔗 Đưa Giá Ca máy tính toán sang Sheet Giá tháng</button>
+            <button class="btn btn-sm" onclick="restoreAnnouncedMachinesToGiaThang()">📋 Dùng Giá Ca máy công bố</button>
+          </div>
+        </div>
+        <div class="card-body" style="padding:0;">
+          <div class="table-responsive">
+            <table class="eng-table">
+              <thead>
+                <tr>
+                  <th class="center" style="width:45px;">STT</th>
+                  <th style="width:75px;">Mã Máy</th>
+                  <th>Tên máy và thiết bị thi công</th>
+                  <th class="num" style="width:125px;">Nguyên giá (đ)</th>
+                  <th class="num" style="width:75px;">Số ca/năm</th>
+                  <th class="num" style="width:105px;">CP Khấu hao</th>
+                  <th class="num" style="width:100px;">CP Sửa chữa</th>
+                  <th class="num" style="width:95px;">CP Khác</th>
+                  <th class="num" style="width:115px;">CP Nhiên liệu</th>
+                  <th class="num" style="width:110px;">CP Thợ điều khiển</th>
+                  <th class="num" style="width:130px;">Giá Ca máy TT37</th>
+                  <th class="num" style="width:130px;">Giá đang áp dụng</th>
+                </tr>
+              </thead>
+              <tbody id="maySheetTbody"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SHEET 5: CƯỚC VẬN CHUYỂN (CƯỚC VC) -->
+    <section id="tab-cuoc-vc" class="tab-panel">
+      <div class="card">
+        <div class="card-header">
+          <div>
+            <div class="card-title">SHEET CƯỚC VC — Bảng tính Cước vận chuyển Vật liệu đến chân công trình</div>
+            <div class="card-subtitle">Nhập Cự ly vận chuyển (km) và Loại đường (Loại 1: 2.400 đ/T.km | Loại 2: 2.850 đ/T.km | Loại 3: 3.400 đ/T.km | Loại 4: 4.200 đ/T.km)</div>
+          </div>
+          <div class="no-print">
+            <button class="btn btn-primary btn-sm" onclick="applyTransportToMaterials()">🚛 Cập nhật Cước vận chuyển vào Giá Vật liệu</button>
+          </div>
+        </div>
+        <div class="card-body" style="padding:0;">
+          <div class="table-responsive">
+            <table class="eng-table">
+              <thead>
+                <tr>
+                  <th class="center" style="width:48px;">STT</th>
+                  <th style="width:85px;">Mã VL</th>
+                  <th>Tên vật liệu xây dựng</th>
+                  <th class="center" style="width:65px;">ĐVT</th>
+                  <th class="num" style="width:130px;">Giá gốc / Giá TB (đ)</th>
+                  <th class="num" style="width:115px;">Trọng lượng (Tấn/ĐVT)</th>
+                  <th class="num" style="width:100px;">Cự ly VC (km)</th>
+                  <th class="center" style="width:120px;">Cấp đường</th>
+                  <th class="num" style="width:125px;">Cước VC (đ/ĐVT)</th>
+                  <th class="num" style="width:145px;">Giá đến hiện trường (đ)</th>
+                </tr>
+              </thead>
+              <tbody id="cuocVcTbody"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SHEET 6: GIÁ THÁNG (GiaTB) -->
+    <section id="tab-gia-thang" class="tab-panel">
+      <div class="card">
+        <div class="card-header">
+          <div>
+            <div class="card-title">SHEET GIÁ THÁNG (GiaTB) — Tổng hợp Vật liệu, Nhân công, Máy & Giá thông báo toàn công trình</div>
+            <div class="card-subtitle">Chỉnh sửa trực tiếp Giá thông báo của từng loại Vật liệu, Nhân công, Máy thi công</div>
           </div>
           <div style="display:flex; gap:8px;">
-            <input type="text" id="resourceSearchInput" class="form-control" placeholder="Tìm mã hoặc tên VL, NC, Máy..." oninput="renderResourcesTable()" style="width:240px;" />
+            <input type="text" id="resourceSearchInput" class="form-control" placeholder="Tìm mã hoặc tên VL, NC, Máy..." oninput="renderResourcesTable()" style="width:230px;" />
             <select id="resourceFilterType" class="form-control" onchange="renderResourcesTable()">
               <option value="ALL">Tất cả (VL + NC + Máy)</option>
               <option value="VL">Vật liệu (VL)</option>
@@ -362,16 +538,17 @@
             <table class="eng-table">
               <thead>
                 <tr>
-                  <th class="center" style="width:50px;">STT</th>
-                  <th style="width:85px;">Mã VT</th>
-                  <th class="center" style="width:75px;">Nhóm</th>
+                  <th class="center" style="width:48px;">STT</th>
+                  <th style="width:82px;">Mã VT</th>
+                  <th class="center" style="width:70px;">Nhóm</th>
                   <th>Tên Vật liệu / Nhân công / Máy thi công</th>
-                  <th class="center" style="width:70px;">ĐVT</th>
-                  <th class="num" style="width:140px;">Đơn giá gốc (đ)</th>
-                  <th class="num" style="width:110px;">Hệ số K</th>
-                  <th class="num" style="width:140px;">Tổng hao phí dự án</th>
-                  <th class="num" style="width:155px;">Tổng thành tiền (đ)</th>
-                  <th>Nguồn công bố / Căn cứ</th>
+                  <th class="center" style="width:65px;">ĐVT</th>
+                  <th class="num" style="width:135px;">Giá thông báo (đ)</th>
+                  <th class="num" style="width:105px;">Cước VC / Hệ số</th>
+                  <th class="num" style="width:135px;">Giá hiện trường (đ)</th>
+                  <th class="num" style="width:130px;">Tổng hao phí</th>
+                  <th class="num" style="width:150px;">Thành tiền (đ)</th>
+                  <th>Nguồn công bố</th>
                 </tr>
               </thead>
               <tbody id="resourcesTbody"></tbody>
@@ -381,18 +558,18 @@
       </div>
     </section>
 
-    <!-- TAB 4: PHÂN TÍCH VẬT TƯ & ĐƠN GIÁ CHI TIẾT -->
-    <section id="tab-4" class="tab-panel">
+    <!-- SHEET 7: HAO PHÍ VẬT TƯ -->
+    <section id="tab-hao-phi" class="tab-panel">
       <div class="card">
         <div class="card-header">
           <div>
-            <div class="card-title">Bảng Phân tích Vật tư & Chiết tính Đơn giá Xây dựng Chi tiết</div>
-            <div class="card-subtitle">Chiết tính hao phí Vật liệu (VL), Nhân công (NC), Máy thi công (M) cho từng công tác theo Định mức Thông tư 38/2026/TT-BXD</div>
+            <div class="card-title">SHEET HAO PHÍ VẬT TƯ — Phân tích Hao phí Định mức Vật liệu, Nhân công, Máy (Thông tư 38/2026/TT-BXD)</div>
+            <div class="card-subtitle">Thể hiện chi tiết định mức hao phí và khối lượng vật tư cần dùng cho từng công tác trong Sheet Công trình</div>
           </div>
           <div>
-            <label style="font-size:13px; display:inline-flex; align-items:center; gap:6px; cursor:pointer;">
+            <label style="font-size:12.5px; display:inline-flex; align-items:center; gap:6px; cursor:pointer;">
               <input type="checkbox" id="toggleShowComponents" checked onchange="renderUnitPriceAnalysis()" />
-              Hiển thị chi tiết từng dòng hao phí vật tư (VL, NC, M)
+              Hiển thị chi tiết từng dòng hao phí VL, NC, M
             </label>
           </div>
         </div>
@@ -401,15 +578,15 @@
             <table class="eng-table">
               <thead>
                 <tr>
-                  <th class="center" style="width:55px;">STT</th>
-                  <th style="width:100px;">Mã ĐM / VT</th>
-                  <th>Tên công tác xây dựng / Thành phần hao phí (VL, NC, M)</th>
+                  <th class="center" style="width:50px;">STT</th>
+                  <th style="width:95px;">Mã ĐM / VT</th>
+                  <th>Tên công tác xây dựng / Thành phần hao phí vật tư</th>
                   <th class="center" style="width:65px;">ĐVT</th>
                   <th class="num" style="width:95px;">Định mức</th>
-                  <th class="num" style="width:110px;">Khối lượng</th>
-                  <th class="num" style="width:130px;">Đơn giá (đ)</th>
-                  <th class="num" style="width:140px;">Đơn giá công tác (đ)</th>
-                  <th class="num" style="width:150px;">Thành tiền toàn KL (đ)</th>
+                  <th class="num" style="width:110px;">Khối lượng HP</th>
+                  <th class="num" style="width:125px;">Đơn giá (đ)</th>
+                  <th class="num" style="width:135px;">Đơn giá công tác (đ)</th>
+                  <th class="num" style="width:150px;">Thành tiền (đ)</th>
                 </tr>
               </thead>
               <tbody id="unitPriceAnalysisTbody"></tbody>
@@ -419,15 +596,83 @@
       </div>
     </section>
 
-    <!-- TAB 5: BẢNG 3.8 TỔNG HỢP DỰ TOÁN CHI PHÍ XÂY DỰNG -->
-    <section id="tab-5" class="tab-panel">
+    <!-- SHEET 8: ĐƠN GIÁ CHI TIẾT (CHIẾT TÍNH) -->
+    <section id="tab-don-gia-ct" class="tab-panel">
+      <div class="card">
+        <div class="card-header">
+          <div>
+            <div class="card-title">SHEET ĐƠN GIÁ CHI TIẾT (CHIẾT TÍNH) — Bảng Đơn giá Xây dựng Chi tiết Đầy đủ Công trình</div>
+            <div class="card-subtitle">Bao gồm Vật liệu (VL), Nhân công (NC), Máy (M), Trực tiếp (T), Chi phí chung (C), Công việc KĐKL từ TK (TT), Thu nhập chịu thuế tính trước (TL) và Thuế GTGT</div>
+          </div>
+        </div>
+        <div class="card-body" style="padding:0;">
+          <div class="table-responsive">
+            <table class="eng-table">
+              <thead>
+                <tr>
+                  <th class="center" style="width:45px;">STT</th>
+                  <th style="width:90px;">Mã hiệu ĐM</th>
+                  <th>Tên công tác xây dựng</th>
+                  <th class="center" style="width:60px;">ĐVT</th>
+                  <th class="num" style="width:105px;">ĐG Vật liệu</th>
+                  <th class="num" style="width:100px;">ĐG Nhân công</th>
+                  <th class="num" style="width:100px;">ĐG Máy</th>
+                  <th class="num" style="width:110px;">Trực tiếp (T)</th>
+                  <th class="num" style="width:95px;">CP Chung (C)</th>
+                  <th class="num" style="width:95px;">CP TT khác</th>
+                  <th class="num" style="width:95px;">TN chịu thuế (TL)</th>
+                  <th class="num" style="width:120px;">ĐG Trước thuế</th>
+                  <th class="num" style="width:125px;">ĐG Sau thuế</th>
+                </tr>
+              </thead>
+              <tbody id="donGiaChiTietTbody"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SHEET 9: DỰ THẦU -->
+    <section id="tab-du-thau" class="tab-panel">
+      <div class="card">
+        <div class="card-header">
+          <div>
+            <div class="card-title">SHEET DỰ THẦU — Bảng Tổng hợp Giá Dự thầu Xây lắp (Biểu mẫu Hồ sơ Dự thầu)</div>
+            <div class="card-subtitle">Tính theo Đơn giá xây dựng chi tiết đầy đủ (Trước thuế và Sau thuế GTGT) cho từng hạng mục công việc</div>
+          </div>
+        </div>
+        <div class="card-body" style="padding:0;">
+          <div class="table-responsive">
+            <table class="eng-table">
+              <thead>
+                <tr>
+                  <th class="center" style="width:48px;">STT</th>
+                  <th style="width:95px;">Mã hiệu</th>
+                  <th>Danh mục công việc mời thầu / Dự thầu</th>
+                  <th class="center" style="width:65px;">ĐVT</th>
+                  <th class="num" style="width:105px;">Khối lượng mời thầu</th>
+                  <th class="num" style="width:135px;">Đơn giá dự thầu trước thuế (đ)</th>
+                  <th class="num" style="width:140px;">Đơn giá dự thầu sau thuế (đ)</th>
+                  <th class="num" style="width:150px;">Thành tiền trước thuế (đ)</th>
+                  <th class="num" style="width:155px;">Thành tiền sau thuế (đ)</th>
+                </tr>
+              </thead>
+              <tbody id="duThauTbody"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SHEET 10: THKP HẠNG MỤC (BẢNG 3.8 TT 36/2026 & QĐ 1538/QĐ-BXD) -->
+    <section id="tab-thkp-hm" class="tab-panel">
       <div class="legal-banner">
-        <strong>Lưu ý pháp lý quan trọng (Quyết định 1538/QĐ-BXD ngày 28/08/2026):</strong> Bộ Xây dựng đã đính chính công thức tính <strong>Chi phí nhà tạm để ở và điều hành thi công (LT)</strong> tại Bảng 3.8 và Bảng 3.9 Phụ lục III Thông tư 36/2026/TT-BXD thành: <code>LT = G_XDTT × Tỷ lệ × (1 + T_GTGT)</code>. Bảng dưới đây áp dụng chính xác mẫu Bảng 3.8 sau đính chính.
+        <strong>Chuẩn Dự toán G8 Version 2026 (Thông tư 36/2026/TT-BXD & Quyết định 1538/QĐ-BXD ngày 28/08/2026):</strong> Chi phí xây dựng nhà tạm để ở và điều hành thi công được đưa xuống dưới dòng Chi phí xây dựng sau thuế theo công thức đính chính: <code>LT = G_XDTT × Tỷ lệ × (1 + T_GTGT)</code>.
       </div>
       <div class="card">
         <div class="card-header">
           <div>
-            <div class="card-title">BẢNG 3.8 — BẢNG TỔNG HỢP DỰ TOÁN CHI PHÍ XÂY DỰNG (Theo Phụ lục III Thông tư 36/2026/TT-BXD & QĐ 1538/QĐ-BXD)</div>
+            <div class="card-title">SHEET THKP HẠNG MỤC — BẢNG 3.8 TỔNG HỢP DỰ TOÁN CHI PHÍ XÂY DỰNG (Thông tư 36/2026/TT-BXD & QĐ 1538/QĐ-BXD)</div>
             <div class="card-subtitle" id="bang38Subtitle">Hạng mục công trình</div>
           </div>
         </div>
@@ -437,10 +682,10 @@
               <thead>
                 <tr>
                   <th class="center" style="width:60px;">STT</th>
-                  <th>Khoản mục chi phí</th>
-                  <th style="width:240px;">Cách tính / Công thức chuẩn</th>
+                  <th>Khoản mục chi phí xây dựng</th>
+                  <th style="width:240px;">Công thức xác định</th>
                   <th class="center" style="width:85px;">Ký hiệu</th>
-                  <th class="num" style="width:170px;">Giá trị (Đồng)</th>
+                  <th class="num" style="width:170px;">Thành tiền (Đồng)</th>
                   <th>Ghi chú căn cứ pháp lý</th>
                 </tr>
               </thead>
@@ -451,13 +696,41 @@
       </div>
     </section>
 
-    <!-- TAB 6: TỔNG HỢP DỰ TOÁN XÂY DỰNG CÔNG TRÌNH -->
-    <section id="tab-6" class="tab-panel">
+    <!-- SHEET 11: TH CHI PHÍ XD (BẢNG 3.1) & TH KINH PHÍ (DỰ TOÁN CÔNG TRÌNH) + NỘI SUY -->
+    <section id="tab-th-kinh-phi" class="tab-panel">
+      <!-- BẢNG 3.1 TÁCH CHI PHÍ NHÀ TẠM CHUẨN G8 20/08/2026 -->
       <div class="card">
         <div class="card-header">
           <div>
-            <div class="card-title">Tỷ trọng Cơ cấu 6 Khoản mục Dự toán Xây dựng Công trình (G_DTXD)</div>
-            <div class="card-subtitle">Theo Điều 11, Điều 12 Nghị định 206/2026/NĐ-CP và Bảng 3.1 Phụ lục III Thông tư 36/2026/TT-BXD</div>
+            <div class="card-title">SHEET TH CHI PHÍ XD (Mẫu Bảng 3.1 Thông tư 36/2026/TT-BXD — Cập nhật G8 ngày 20/08/2026)</div>
+            <div class="card-subtitle">Tách riêng dòng "Chi phí xây dựng công trình chính, phụ trợ" và dòng "Chi phí nhà tạm tại hiện trường để ở và điều hành thi công"</div>
+          </div>
+        </div>
+        <div class="card-body" style="padding:0;">
+          <div class="table-responsive">
+            <table class="eng-table">
+              <thead>
+                <tr>
+                  <th class="center" style="width:55px;">STT</th>
+                  <th>Nội dung chi phí xây dựng trong Tổng hợp Dự toán</th>
+                  <th class="num" style="width:170px;">Chi phí trước thuế (đ)</th>
+                  <th class="num" style="width:150px;">Thuế GTGT (đ)</th>
+                  <th class="num" style="width:170px;">Chi phí sau thuế (đ)</th>
+                  <th>Ghi chú chuẩn Dự toán G8 2026</th>
+                </tr>
+              </thead>
+              <tbody id="bang31SplitTbody"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- BIỂU ĐỒ TỶ TRỌNG -->
+      <div class="card">
+        <div class="card-header">
+          <div>
+            <div class="card-title">Cơ cấu 6 Khoản mục Dự toán Xây dựng Công trình (G_DTXD)</div>
+            <div class="card-subtitle" id="cv12637NoteBanner">Đang áp dụng tùy chọn tính QLDA & Tư vấn theo Phụ lục III TT 36/2026/TT-BXD</div>
           </div>
         </div>
         <div class="card-body">
@@ -466,11 +739,12 @@
         </div>
       </div>
 
+      <!-- BẢNG TH KINH PHÍ (6 KHOẢN MỤC) -->
       <div class="card">
         <div class="card-header">
           <div>
-            <div class="card-title">BẢNG TỔNG HỢP DỰ TOÁN XÂY DỰNG CÔNG TRÌNH (ĐẦY ĐỦ 6 KHOẢN MỤC CHI PHÍ)</div>
-            <div class="card-subtitle">Đơn vị tính: Đồng Việt Nam (Làm tròn đến hàng đơn vị)</div>
+            <div class="card-title">SHEET TH KINH PHÍ — BẢNG TỔNG HỢP DỰ TOÁN XÂY DỰNG CÔNG TRÌNH (6 KHOẢN MỤC)</div>
+            <div class="card-subtitle">Theo Nghị định 206/2026/NĐ-CP, Thông tư 36/2026/TT-BXD, Phụ lục VIII Thông tư 38/2026/TT-BXD & Công văn 12637/BXD-KTQLXD</div>
           </div>
         </div>
         <div class="card-body" style="padding:0;">
@@ -478,7 +752,7 @@
             <table class="eng-table">
               <thead>
                 <tr>
-                  <th class="center" style="width:60px;">STT</th>
+                  <th class="center" style="width:55px;">STT</th>
                   <th>Nội dung khoản mục chi phí</th>
                   <th style="width:230px;">Cách tính / Căn cứ định mức</th>
                   <th class="num" style="width:95px;">Tỷ lệ (%)</th>
@@ -493,10 +767,8 @@
           </div>
         </div>
       </div>
-    </section>
 
-    <!-- TAB 7: TRA CỨU ĐỊNH MỨC & MÁY TÍNH NỘI SUY TUYẾN TÍNH -->
-    <section id="tab-7" class="tab-panel">
+      <!-- MÁY TÍNH NỘI SUY & BẢNG TRA -->
       <div class="grid-2">
         <div class="card">
           <div class="card-header">
@@ -539,15 +811,15 @@
                 <input type="number" step="0.25" min="0.1" value="12.5" id="calcGtInput" class="form-control" oninput="runInteractiveInterpolation()" />
               </div>
             </div>
-            <div id="interpResultBox" class="legal-banner" style="margin-top:12px; margin-bottom:0;"></div>
+            <div id="interpResultBox" class="legal-banner" style="margin-top:10px; margin-bottom:0;"></div>
           </div>
         </div>
 
         <div class="card">
           <div class="card-header">
             <div>
-              <div class="card-title">Bảng tra Định mức Chi phí chung (Bảng 3.3) & Nhà tạm (Bảng 3.7) — TT 36/2026/TT-BXD</div>
-              <div class="card-subtitle">Các cột có dấu "≤" tra theo cận trên (không nội suy tuyến tính)</div>
+              <div class="card-title">Bảng 3.3 Định mức Chi phí chung (TT 36/2026/TT-BXD)</div>
+              <div class="card-subtitle">Cận biên thấp nhất là ≤ 40 tỷ đồng, sau đó đến ≤ 60 tỷ đồng (Tăng định mức cho công trình vừa và nhỏ so với TT 11/2021 cũ)</div>
             </div>
           </div>
           <div class="card-body" style="padding:0;">
@@ -572,16 +844,83 @@
           </div>
         </div>
       </div>
+    </section>
 
-      <!-- NORM DATABASE BROWSER -->
+    <!-- SHEET 12: KL HOÀN THÀNH & QUYẾT TOÁN THEO NGHỊ ĐỊNH 254/2025/NĐ-CP -->
+    <section id="tab-quyet-toan" class="tab-panel">
+      <div class="legal-banner">
+        <strong>Biểu mẫu Thanh Quyết toán Vốn Đầu tư công mới nhất trên Dự toán G8 (Nghị định 254/2025/NĐ-CP):</strong><br/>
+        • <strong>Mẫu số 03.a/TT</strong> (Bảng xác định giá trị khối lượng công việc hoàn thành): Gộp chung công việc thực hiện thông qua hợp đồng và không thông qua hợp đồng, tập trung quản lý theo Giá trị hợp đồng / Dự toán được duyệt và Giá trị đề nghị thanh toán.<br/>
+        • <strong>Mẫu số 03.c/QT</strong> (Bảng tính giá trị quyết toán hợp đồng A - B giữa Chủ đầu tư và Nhà thầu).
+      </div>
+
       <div class="card">
         <div class="card-header">
           <div>
-            <div class="card-title">Thư viện Định mức Dự toán Xây dựng Công trình — Thông tư 38/2026/TT-BXD (Phụ lục II & Phụ lục III)</div>
-            <div class="card-subtitle">Tra cứu nhanh hao phí Vật liệu, Nhân công, Máy thi công và thêm trực tiếp vào Bảng Tiên lượng (BOQ)</div>
+            <div class="card-title">MẪU SỐ 03.c/QT — BẢNG TÍNH GIÁ TRỊ QUYẾT TOÁN HỢP ĐỒNG A - B (Theo Nghị định 254/2025/NĐ-CP)</div>
+            <div class="card-subtitle">Tổng hợp giá trị hợp đồng, giá trị nghiệm thu hoàn thành và nghĩa vụ thanh toán giữa Chủ đầu tư và Nhà thầu</div>
+          </div>
+        </div>
+        <div class="card-body" style="padding:0;">
+          <div class="table-responsive">
+            <table class="eng-table">
+              <thead>
+                <tr>
+                  <th class="center" style="width:60px;">STT</th>
+                  <th>Chỉ tiêu giá trị quyết toán hợp đồng (Mẫu 03.c/QT)</th>
+                  <th class="num" style="width:180px;">Giá trị trước thuế (đ)</th>
+                  <th class="num" style="width:160px;">Thuế GTGT (đ)</th>
+                  <th class="num" style="width:180px;">Giá trị sau thuế (đ)</th>
+                  <th>Ghi chú theo Nghị định 254/2025/NĐ-CP</th>
+                </tr>
+              </thead>
+              <tbody id="mau03cQtTbody"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <div>
+            <div class="card-title">MẪU SỐ 03.a/TT — BẢNG XÁC ĐỊNH GIÁ TRỊ KHỐI LƯỢNG CÔNG VIỆC HOÀN THÀNH (Nghị định 254/2025/NĐ-CP)</div>
+            <div class="card-subtitle">Điều chỉnh tỷ lệ % nghiệm thu hoàn thành kỳ này để tính ngay giá trị đề nghị giải ngân vốn đầu tư công</div>
+          </div>
+          <div style="display:flex; gap:8px; align-items:center;" class="no-print">
+            <span style="font-size:12.5px; font-weight:600;">Tỷ lệ hoàn thành nghiệm thu đợt này (%):</span>
+            <input type="number" id="inpSettlementPct" class="form-control" style="width:90px;" value="100" min="1" max="100" oninput="renderSettlementTables()" />
+          </div>
+        </div>
+        <div class="card-body" style="padding:0;">
+          <div class="table-responsive">
+            <table class="eng-table">
+              <thead>
+                <tr>
+                  <th class="center" style="width:48px;">STT</th>
+                  <th style="width:95px;">Mã công tác</th>
+                  <th>Nội dung công việc thực hiện theo Hợp đồng / Dự toán</th>
+                  <th class="center" style="width:65px;">ĐVT</th>
+                  <th class="num" style="width:155px;">Giá trị theo Hợp đồng / Dự toán (đ)</th>
+                  <th class="num" style="width:155px;">Lũy kế giá trị đến hết kỳ trước (đ)</th>
+                  <th class="num" style="width:155px;">Giá trị thực hiện kỳ này (đ)</th>
+                  <th class="num" style="width:160px;">Lũy kế giá trị đến hết kỳ này (đ)</th>
+                </tr>
+              </thead>
+              <tbody id="mau03aTtTbody"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- THƯ VIỆN TRA CỨU ĐỊNH MỨC TT38 -->
+      <div class="card">
+        <div class="card-header">
+          <div>
+            <div class="card-title">Thư viện Tra cứu Nhanh Định mức 38/2026/TT-BXD (Phụ lục II & Phụ lục III)</div>
+            <div class="card-subtitle">Tìm kiếm theo Mã hiệu (AB, AC, AF, AK, BA, BB...) hoặc Tên công tác để chèn nhanh vào Sheet Công trình</div>
           </div>
           <div>
-            <input type="text" id="normSearchInput" class="form-control" placeholder="Tìm mã hiệu (AB, AC, AF, AK...) hoặc tên công tác..." oninput="renderNormDatabase()" style="width:320px;" />
+            <input type="text" id="normSearchInput" class="form-control" placeholder="Tìm mã hiệu hoặc tên công tác..." oninput="renderNormDatabase()" style="width:300px;" />
           </div>
         </div>
         <div class="card-body" style="padding:0;">
@@ -590,11 +929,11 @@
               <thead>
                 <tr>
                   <th style="width:95px;">Mã hiệu ĐM</th>
-                  <th style="width:240px;">Nhóm chương định mức</th>
-                  <th>Tên công tác xây dựng & Lắp đặt</th>
+                  <th style="width:230px;">Chương định mức</th>
+                  <th>Tên công tác xây dựng & lắp đặt</th>
                   <th class="center" style="width:65px;">ĐVT</th>
-                  <th>Chi tiết định mức hao phí (VL / NC / M)</th>
-                  <th class="center no-print" style="width:110px;">Thao tác</th>
+                  <th>Thành phần hao phí định mức (VL / NC / M)</th>
+                  <th class="center no-print" style="width:115px;">Thao tác G8</th>
                 </tr>
               </thead>
               <tbody id="normDatabaseTbody"></tbody>
@@ -604,6 +943,19 @@
       </div>
     </section>
   </main>
+
+  <!-- G8 BOTTOM STATUS BAR -->
+  <footer class="g8-bottom-bar no-print">
+    <div style="display:flex; align-items:center; gap:14px;">
+      <span><strong style="color:#38bdf8;">DỰ TOÁN G8 VERSION 2026</strong></span>
+      <span>• Định mức: <strong>38/2026/TT-BXD</strong></span>
+      <span>• Chi phí XD: <strong>36/2026/TT-BXD (Đính chính QĐ 1538/QĐ-BXD)</strong></span>
+      <span>• Quyết toán: <strong>Mẫu 03.a/TT & 03.c/QT Nghị định 254/2025/NĐ-CP</strong></span>
+    </div>
+    <div id="g8BottomSummary" style="font-family:var(--font-mono); font-weight:700; color:#4ade80;">
+      G_XD: 0 đ | G_DTXD: 0 đ
+    </div>
+  </footer>
 
   <script src="app.js"></script>
 </body>
